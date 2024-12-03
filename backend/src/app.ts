@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import { createServer } from "http";
 import { database } from './configurations/database';
 import { errorUtilities } from "./utilities";
+import { PORT } from "./configurations/envKeys";
 
 const app = express();
 
@@ -61,8 +62,6 @@ app.get("/", (request: Request, response: Response) => {
 
 // Error handler
 app.use(errorUtilities.globalErrorHandler);
-
-const PORT = 3000
 
 /**
  * Server

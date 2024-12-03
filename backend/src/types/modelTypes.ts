@@ -9,13 +9,15 @@ export interface UserAttributes {
     isVerified: boolean;
     role: string;
     refreshToken: string;
+    numberOfMoviesAdded: number;
 }
 
 export interface MovieAttributes {
     id: string;
     title: string;
-    publishedYear: number;
+    publishedDate: Date;
     description: string;
     moviePoster: string;
     movieProducer: string;
+    ownerId: string;
   }

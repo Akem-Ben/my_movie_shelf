@@ -7,6 +7,7 @@ import validator from "validator";
 import { Op } from "sequelize";
 import { UserAttributes } from "../../types/modelTypes";
 
+
 const userRegistrationService = errorUtilities.withErrorHandling(
   async (userPayload: Record<string, any>): Promise<any> => {
     const responseHandler: ResponseDetails = {
@@ -106,9 +107,9 @@ const userLoginService = errorUtilities.withErrorHandling(async (loginPayload: R
         throw errorUtilities.createError("Invalid email/username", 400);
       }
 
-    if(!existingUser.isVerified){
-        throw errorUtilities.createError(`User is not verified. Click on the link in the verification mail sent to ${existingUser.email} or request for another verification mail`, 400);
-    }
+    // if(!existingUser.isVerified){
+    //     throw errorUtilities.createError(`User is not verified. Click on the link in the verification mail sent to ${existingUser.email} or request for another verification mail`, 400);
+    // }
 
     const verifyPassword = await generalHelpers.validatePassword(
       password,

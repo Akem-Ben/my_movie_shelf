@@ -7,6 +7,8 @@ export interface UserAttributes {
     email: string;
     password:string;
     isVerified: boolean;
+    role: string;
+    refreshToken: string;
 }
 
 export interface MovieAttributes {

@@ -51,7 +51,7 @@ const userDatabaseHelper = {
     }
   },
 
-  getOne: async (filter: any, projection?: any) => {
+  getOne: async (filter: Record<string, any>, projection?: any) => {
     try {
       const user = await User.findOne({
         where: filter,
@@ -80,11 +80,10 @@ const userDatabaseHelper = {
     try {
       return {
         email: userData.email,
-        name: userData.name,
+        fullName: userData.fullName,
         role: userData.role,
         phone: userData.phone,
         isVerified: userData.isVerified,
-        isBlacklisted: userData.isBlacklisted,
         refreshToken: userData.refreshToken,
       };
     } catch (error: any) {

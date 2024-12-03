@@ -25,11 +25,19 @@ const sendMail = async (
       from: `${GMAIL_USER}`,
       to,
       subject,
-      html: `<div style="text-align: center; padding: 25px; border-radius: 5px; border: 2px solid #27AE60;">
-              <h1>Welcome to My Movie Shelf</h1>
-              <p>${message}</p>
-              ${actionLink ? `<a href="${actionLink}" style="text-decoration: none; color: white; display: inline-block; background-color: #27AE60; padding: 10px 20px; border-radius: 10px;">${actionText}</a>` : ""}
-             </div>`,
+      html: `
+        <div style="width: 60%; margin: 0 auto; text-align: center; padding: 20px; border-radius: 10px; border: 2px solid gold; background-color: #fffaf0; font-family: Arial, sans-serif;">
+          <h3 style="font-size: 24px; color: #d2691e; margin-bottom: 10px;">Welcome to My Movie Shelf</h3>
+          <p style="font-size: 18px; color: #8b4513; margin: 10px 0;">
+            ${message}
+          </p>
+          ${actionLink ? `<a href="${actionLink}" style="text-decoration: none; color: white; display: inline-block; background-color: #27AE60; padding: 10px 20px; border-radius: 10px;">${actionText}</a>` : ""}
+          <p style="font-size: 18px; color: #2e8b57; margin: 10px 0;">
+            Thank You<br />
+            <strong style="color: #ff4500;">My Movie Shelf Team</strong>
+          </p>
+        </div>
+        `
     };
 
     const response = await transport.sendMail(mailOptions);
@@ -45,3 +53,11 @@ const sendMail = async (
   export default {
     sendMail
   }
+
+
+
+
+  // <img 
+  // src="https://res.cloudinary.com/dixoaggbe/image/upload/v1731841849/thumbs_up_gif.gif" 
+  // alt="Thumbs up" 
+  // style="width: 100px; height: auto; margin: 20px 0;" />

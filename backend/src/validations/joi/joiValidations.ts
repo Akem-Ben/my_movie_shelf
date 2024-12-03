@@ -25,7 +25,7 @@ const inputValidator = (schema: Joi.Schema):any => {
   };
 
 //User Auth
-const userRegisterSchemaViaEmail = Joi.object({
+const userRegisterSchema = Joi.object({
   fullName: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).pattern(PASSWORD_PATTERN).required().messages({
@@ -37,13 +37,13 @@ const userRegisterSchemaViaEmail = Joi.object({
 });
 
 
-const loginUserSchemaViaEmail = Joi.object({
-    email: Joi.string().required().email(),
+const loginUserSchema = Joi.object({
+    loginKey: Joi.string().required(),
     password: Joi.string().required()
 })
 
 export default {
-  userRegisterSchemaViaEmail,
-  loginUserSchemaViaEmail,
+  userRegisterSchema,
+  loginUserSchema,
   inputValidator
 }

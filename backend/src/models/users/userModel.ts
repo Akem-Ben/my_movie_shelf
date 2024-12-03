@@ -44,6 +44,11 @@ User.init(
         allowNull: false
     },
 
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -56,6 +61,13 @@ User.init(
         },
       },
     },
+
+    refreshToken: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+
+    
 
   },
   {

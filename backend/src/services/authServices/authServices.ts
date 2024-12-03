@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { USERS_APP_BASE_URL } from "../../configurations/envKeys";
 import { userDatabase, generalHelpers } from "../../helpers";
 import { ResponseDetails } from "../../types/generalTypes";
@@ -29,6 +30,7 @@ const userRegistrationService = errorUtilities.withErrorHandling(
 
     const signupPayload = {
       ...userPayload,
+      id: v4(),
       isVerified: false,
       role: "user",
       password: await generalHelpers.hashPassword(password),
@@ -67,3 +69,7 @@ const userRegistrationService = errorUtilities.withErrorHandling(
     return responseHandler;
   }
 );
+
+export default {
+    userRegistrationService,
+}

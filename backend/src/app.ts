@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import { HttpError } from "http-errors";
-// import apiRouter from "./routes";
+import apiRouter from "./routes";
 import dotenv from "dotenv";
 import { createServer } from "http";
 import { database } from "./configurations/database";
@@ -51,7 +51,7 @@ database
   });
 
 // Routes
-// app.use("/api", apiRouter);
+app.use("/api", apiRouter);
 
 // Health Check Endpoint
 app.get("/", (request: Request, response: Response) => {

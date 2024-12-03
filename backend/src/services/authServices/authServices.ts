@@ -12,7 +12,7 @@ const userRegistrationService = errorUtilities.withErrorHandling(
       message: "",
     };
 
-    const { email, password, phone } = userPayload;
+    const { email, password, phone, userName } = userPayload;
 
     if (!validator.isEmail(email))
       throw errorUtilities.createError("Invalid email", 400);
@@ -20,13 +20,21 @@ const userRegistrationService = errorUtilities.withErrorHandling(
     if (!validator.isMobilePhone(phone, "any"))
       throw errorUtilities.createError("Invalid phone number", 400);
 
-    const existingUser = await userDatabase.userDatabaseHelper.getOne(email);
+    const existingUserEmail = await userDatabase.userDatabaseHelper.getOne({ email });
 
-    if (existingUser)
+    if (existingUserEmail)
       throw errorUtilities.createError(
         "User already exists with this email",
         400
       );
+
+      const existingUserName = await userDatabase.userDatabaseHelper.getOne({ userName });
+
+      if (existingUserName)
+        throw errorUtilities.createError(
+          "This username is unavailable, please choose another",
+          400
+        );
 
     const signupPayload = {
       ...userPayload,

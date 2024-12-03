@@ -51,7 +51,7 @@ const userDatabaseHelper = {
     }
   },
 
-  getOne: async (filter: any, projection?: any) => {
+  getOne: async (filter: Record<string, any>, projection?: any) => {
     try {
       const user = await User.findOne({
         where: filter,

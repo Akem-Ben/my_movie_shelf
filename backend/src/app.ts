@@ -10,6 +10,7 @@ import { HttpError } from "http-errors";
 import dotenv from 'dotenv';
 import { createServer } from "http";
 import { database } from './configurations/database';
+import { errorUtilities } from "./utilities";
 
 const app = express();
 
@@ -59,7 +60,7 @@ app.get("/", (request: Request, response: Response) => {
 
 
 // Error handler
-// app.use(errorUtilities.globalErrorHandler);
+app.use(errorUtilities.globalErrorHandler);
 
 const PORT = 3000
 

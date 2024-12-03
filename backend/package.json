@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "my_movie_shelf",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

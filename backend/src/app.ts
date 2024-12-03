@@ -44,7 +44,7 @@ app.use(cookieParser());
 
 // Health Check Endpoint
 app.get("/", (request: Request, response: Response) => {
-  response.send("Welcome to Deep Tech Industries' Backend Server. 👋");
+  response.send("Welcome to My Movie Shelf Backend Server. 👋");
 });
 
 

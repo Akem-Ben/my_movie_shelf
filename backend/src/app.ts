@@ -5,9 +5,11 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
+import { HttpError } from "http-errors";
 // import apiRouter from "./routes";
 import dotenv from 'dotenv';
 import { createServer } from "http";
+import { database } from './configurations/database';
 
 const app = express();
 
@@ -37,6 +39,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Database
+database
+  .sync({})
+  .then(() => {
+    console.log("Database is connected");
+  })
+  .catch((err: HttpError) => {
+    console.log(err);
+  });
 
 // Routes
 // app.use("/api", apiRouter);
@@ -57,7 +67,7 @@ const PORT = 3000
  * Server
  */
 server.listen(PORT, () => {
-  console.log(`server running on Port ${PORT}`);
+  console.log(`Welcome to my movie shelf, server running on Port ${PORT}`);
 });
 
 export default app;

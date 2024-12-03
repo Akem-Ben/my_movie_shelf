@@ -18,10 +18,9 @@ Movie.init(
       allowNull: false,
     },
 
-    publishedYear: {
-      type: DataTypes.NUMBER,
-      allowNull: false,
-      defaultValue: false
+    publishedDate: {
+      type: DataTypes.DATE,
+      allowNull: false
     },
 
     description: {
@@ -33,6 +32,11 @@ Movie.init(
       type: DataTypes.STRING,
       allowNull: false,
 
+    },
+
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false
     },
 
     movieProducer: {

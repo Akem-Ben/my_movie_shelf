@@ -1,3 +1,4 @@
+import { Transaction } from "sequelize";
 import User from "../../models/users/userModel";
 
 const userDatabaseHelper = {
@@ -11,7 +12,7 @@ const userDatabaseHelper = {
     }
   },
 
-  updateOne: async (filter: any, update: any) => {
+  updateOne: async (filter: any, update: any, transaction?: Transaction) => {
     try {
       const user = await User.findOne({ where: filter });
       if (!user) throw new Error("User not found");
@@ -21,6 +22,7 @@ const userDatabaseHelper = {
       throw new Error(`Error updating User: ${error.message}`);
     }
   },
+  
 
   updateMany: async (filter: any, update: any) => {
     try {
@@ -85,6 +87,7 @@ const userDatabaseHelper = {
         phone: userData.phone,
         isVerified: userData.isVerified,
         refreshToken: userData.refreshToken,
+        noOfMovies: userData.numberOfMoviesAdded
       };
     } catch (error: any) {
       throw new Error(`Error fetching Users: ${error.message}`);

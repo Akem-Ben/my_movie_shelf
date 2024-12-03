@@ -42,8 +42,19 @@ const loginUserSchema = Joi.object({
     password: Joi.string().required()
 })
 
+
+const createMovieSchema = Joi.object({
+  title: Joi.string().required(),
+  publishedDate: Joi.date().required(),
+  description: Joi.string().required(),
+  moviePoster: Joi.string().required(),
+  movieProducer: Joi.string().required()
+})
+
+
 export default {
   userRegisterSchema,
   loginUserSchema,
+  createMovieSchema,
   inputValidator
 }

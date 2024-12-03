@@ -1,15 +1,17 @@
+import { Transaction } from "sequelize";
 import Movie from "../../models/movie/movieModel";
 
 const movieDatabaseHelper = {
 
-  create: async (data: any) => {
+  create: async (data: any, transaction?: Transaction) => {
     try {
-      const newMovie = await Movie.create(data);
+      const newMovie = await Movie.create(data, { transaction });
       return newMovie;
     } catch (error: any) {
       throw new Error(`Error creating Movie: ${error.message}`);
     }
   },
+  
 
   updateOne: async (filter: any, update: any) => {
     try {

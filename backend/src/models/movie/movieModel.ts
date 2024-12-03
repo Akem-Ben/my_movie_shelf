@@ -7,31 +7,39 @@ export class Movie extends Model<MovieAttributes> {}
 
 Movie.init(
   {
+
     id: {
     type: DataTypes.UUID,
     primaryKey: true,
     },
+
     title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     publishedYear: {
       type: DataTypes.NUMBER,
       allowNull: false,
       defaultValue: false
     },
+
     description: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     moviePoster: {
       type: DataTypes.STRING,
       allowNull: false,
+
     },
-    movieAuthor: {
+
+    movieProducer: {
       type: DataTypes.STRING,
       allowNull: false
     }
+    
   },
   {
     sequelize: database,

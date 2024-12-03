@@ -7,9 +7,9 @@ import logger from "morgan";
 import cookieParser from "cookie-parser";
 import { HttpError } from "http-errors";
 // import apiRouter from "./routes";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import { createServer } from "http";
-import { database } from './configurations/database';
+import { database } from "./configurations/database";
 import { errorUtilities } from "./utilities";
 import { PORT } from "./configurations/envKeys";
 
@@ -17,7 +17,7 @@ const app = express();
 
 const server = createServer(app);
 
-dotenv.config()
+dotenv.config();
 
 // Set security HTTP headers to disable 'powered by Express' header feature
 app.disable("x-powered-by");
@@ -53,12 +53,10 @@ database
 // Routes
 // app.use("/api", apiRouter);
 
-
 // Health Check Endpoint
 app.get("/", (request: Request, response: Response) => {
   response.send("Welcome to My Movie Shelf Backend Server. 👋");
 });
-
 
 // Error handler
 app.use(errorUtilities.globalErrorHandler);
@@ -67,7 +65,7 @@ app.use(errorUtilities.globalErrorHandler);
  * Server
  */
 server.listen(PORT, () => {
-  console.log(`Welcome to my movie shelf, server running on Port ${PORT}`);
+  console.log(`Welcome to my movie shelf 👋, server running on Port ${PORT}`);
 });
 
 export default app;

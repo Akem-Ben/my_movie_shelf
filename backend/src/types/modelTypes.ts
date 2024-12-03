@@ -1,6 +1,7 @@
 export interface UserAttributes {
     id: string;
     profileImage: string;
+    phone: string;
     fullName: string;
     userName: string;
     email: string;
@@ -14,5 +15,5 @@ export interface MovieAttributes {
     publishedYear: number;
     description: string;
     moviePoster: string;
-    movieAuthor: string;
+    movieProducer: string;
   }

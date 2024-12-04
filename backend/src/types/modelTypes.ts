@@ -20,4 +20,5 @@ export interface MovieAttributes {
     moviePoster: string;
     movieProducer: string;
     ownerId: string;
+    genre: string;
   }

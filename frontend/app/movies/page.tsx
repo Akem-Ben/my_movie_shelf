@@ -1,9 +1,11 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Skeleton, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
-import './globals.css';
+// import './globals.css';
 import { ArrowLeft, ArrowRight } from '@mui/icons-material';
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";

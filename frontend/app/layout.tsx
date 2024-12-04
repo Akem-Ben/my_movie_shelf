@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className="bg-gray-100 dark:bg-gray-900">
+      <body className="bg-gray-100 dark:bg-[#093545]">
         <AuthProvider>
           <AlertProvider>
             <CartProvider>

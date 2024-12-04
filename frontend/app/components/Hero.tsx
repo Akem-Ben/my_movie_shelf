@@ -3,11 +3,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import heroImg from '../../public/hero.jpg';
+import heroImg from '../../public/landingPage/movie.jpeg';
 
 const Hero: React.FC = () => {
   return (
-    <section className=" flex items-center justify-center w-full lg:h-[87vh] h-[90vh] overflow-hidden bg-gray-800">
+    <section className=" flex items-center justify-center w-full lg:h-[100vh] h-[90vh] overflow-hidden bg-gray-800">
       <div className="absolute inset-0">
         <Image
           src={heroImg}
@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Discover Amazing Products
+          Welcome to My Movie Shelf
         </motion.h1>
 
         <motion.p
@@ -34,27 +34,36 @@ const Hero: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Your one-stop shop for unique and quality items.
+          Your one-stop shelf for your movies
         </motion.p>
 
         <div className="mt-6 flex justify-center space-x-4">
           <motion.a
-            href="#products"
-            className="px-6 py-3 text-lg font-semibold text-gray-800 bg-white rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:bg-gray-300 hover:scale-105"
+            href="/signup"
+            className="px-6 py-3 text-lg font-semibold text-white bg-[#2BD17E] rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:border hover:rounded-lg hover:bg-transparent hover:scale-105"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Shop Now
+            Signup Now
           </motion.a>
           <motion.a
-            href="#about"
-            className="px-6 py-3 text-lg font-semibold border border-white rounded-lg transition duration-300 ease-in-out transform hover:bg-white hover:text-gray-800 hover:scale-105"
+            href="/signin"
+            className="px-6 py-3 text-lg font-semibold border border-white rounded-lg transition duration-300 ease-in-out transform hover:bg-[#2BD17E] hover:text-white hover:scale-105"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Learn More
+            Login
+          </motion.a>
+          <motion.a
+             href="#products"
+             className="px-6 py-3 text-lg font-semibold text-white bg-[#2BD17E] rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:border hover:rounded-lg hover:bg-transparent hover:scale-105"
+             initial={{ opacity: 0, y: 50 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            View Movies
           </motion.a>
         </div>
       </div>

@@ -60,12 +60,12 @@ export const generalAuthFunction = async (
 
         const userDetails:any = await userDatabase.userDatabaseHelper.getOne(filter, projection)
 
-        if(!userDetails.isVerified){
-            return response.status(403).json({
-              status: 'error',
-              message: `Account not verified, please verify your account before you can access this resource`
-            })
-        }
+        // if(!userDetails.isVerified){
+        //     return response.status(403).json({
+        //       status: 'error',
+        //       message: `Account not verified, please verify your account before you can access this resource`
+        //     })
+        // }
 
         const compareRefreshTokens = refreshToken === userDetails.refreshToken
 
@@ -112,12 +112,12 @@ export const generalAuthFunction = async (
 
     const userDetails:any = await userDatabase.userDatabaseHelper.getOne(filter, projection)
 
-    if(userDetails.isBlacklisted){
-        return response.status(403).json({
-          status: 'error',
-          message: `Account Blocked, contact admin on info@naijamade.com`
-        })
-    }
+    // if(!userDetails.isVerified){
+    //     return response.status(403).json({
+    //       status: 'error',
+    //       message: `Account not verified, please verify your account`
+    //     })
+    // }
 
       request.user = verifiedUser;
 

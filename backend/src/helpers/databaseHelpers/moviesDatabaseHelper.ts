@@ -33,9 +33,9 @@ const movieDatabaseHelper = {
     }
   },
 
-  deleteOne: async (filter: any) => {
+  deleteOne: async (filter: any, transaction?: Transaction) => {
     try {
-      const movie = await Movie.findOne({ where: filter });
+      const movie = await Movie.findOne({ where: filter, transaction });
       if (!movie) throw new Error("Movie not found");
       await movie.destroy();
       return movie;
@@ -82,11 +82,11 @@ const movieDatabaseHelper = {
     try {
       return {
         id: movieData.id,
-        title: movieData.email,
-        publishedYear: movieData.fullName,
-        description: movieData.role,
-        moviePoster: movieData.phone,
-        movieProducer: movieData.isVerified
+        title: movieData.title,
+        publishedYear: movieData.publishedYear,
+        description: movieData.description,
+        moviePoster: movieData.moviePoster,
+        movieProducer: movieData.movieProducer
       };
     } catch (error: any) {
       throw new Error(`Error fetching Movies: ${error.message}`);

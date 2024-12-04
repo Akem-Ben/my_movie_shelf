@@ -19,7 +19,7 @@ Movie.init(
     },
 
     publishedDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
 

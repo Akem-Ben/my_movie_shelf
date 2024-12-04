@@ -15,7 +15,7 @@ export interface UserAttributes {
 export interface MovieAttributes {
     id: string;
     title: string;
-    publishedDate: Date;
+    publishedDate: number;
     description: string;
     moviePoster: string;
     movieProducer: string;

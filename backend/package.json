@@ -5,6 +5,7 @@
   "scripts": {
     "compile": "tsc -w",
     "build": "tsc",
+    "start": "node build/app.js",
     "test": "node --max-old-space-size=4096 __tests__ -i --colors --verbose --detectOpenHandles --coverage --forceExit --testTimeout=500000",
     "test:watch": "jest --watch",
     "dev": "nodemon",

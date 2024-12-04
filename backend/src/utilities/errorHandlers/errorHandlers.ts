@@ -11,7 +11,7 @@ const createError = (message: string, statusCode: number) => ({
     message: 'Something went wrong, please try again later.',
     statusCode: 500,
     timestamp: new Date(),
-    details: error.message,
+    // details: error,
     isOperational: false
   });
 
@@ -21,6 +21,7 @@ const withErrorHandling = (fn: Function) => async (...args: any) => {
       return await fn(...args);
     } catch (error: any) {
 
+      console.log('err', error)
       if (error.isOperational) {
         return createError(error.message, error.statusCode);
       }

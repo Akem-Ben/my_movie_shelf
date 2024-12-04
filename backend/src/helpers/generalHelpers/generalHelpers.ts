@@ -4,6 +4,7 @@ import { APP_SECRET } from '../../configurations/envKeys';
 import { ResponseDetails } from "../../types/generalTypes";
 import { errorUtilities } from '../../utilities';
 import { QueryParameters } from '../../types/generalTypes';
+import { Op } from "sequelize";
 
 /**
  * Hash Password:
@@ -134,20 +135,20 @@ const refreshUserToken = async (
 
 
   //This function is used to manage queries (request.query) for the application  
-  export const queryFilter = async (queryItem: QueryParameters) => {
+  const queryFilter = async (searchTerm: string): Promise<Record<string, any>>  => {
+    const query: Record<string, any> | any = {};
 
-    const query: Record<string, any> = {};
-  
-    if (queryItem?.title) {
-      query["title"] = queryItem.title.toLowerCase();
-    }
-    
-    if (queryItem?.publishedYear) {
-      query["publishedYear"] = queryItem.publishedYear;
-    }
-    
-    if (queryItem?.movieProducer) {
-      query["movieProducer"] = queryItem.movieProducer;
+    if (searchTerm) {
+      if (!isNaN(Number(searchTerm))) {
+        query[Op.or] = [
+          { publishedDate: Number(searchTerm) },
+        ];
+      } else {
+        query[Op.or] = [
+          { title: { [Op.iLike]: `%${searchTerm.toLowerCase()}%` } },
+          { movieProducer: { [Op.iLike]: `%${searchTerm.toLowerCase()}%` } },
+        ];
+      }
     }
   
     return query;
@@ -160,5 +161,6 @@ export default {
   generateTokens,
   refreshUserToken,
   dateFormatter,
-  verifyRegistrationToken
+  verifyRegistrationToken,
+  queryFilter
 };

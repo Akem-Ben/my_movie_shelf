@@ -19,143 +19,179 @@ const createMovie = async (
       movie.data
     );
   };
+
+    const fetchSingleMovie = async (
+    request: JwtPayload,
+    response: Response
+  ): Promise<any> => {
+    const { movieId } = request.params;
+
+    console.log('id', movieId)
   
-//   const updateProduct = async (
-//     request: JwtPayload,
-//     response: Response
-//   ): Promise<any> => {
-//     const userId = request.user.id;
+    const movieSearch = await moviesServices.getSingleMovie({
+      movieId,
+    });
   
-//     const { productId } = request.params
+    return responseUtilities.responseHandler(
+      response,
+      movieSearch.message,
+      movieSearch.statusCode,
+      movieSearch.details,
+      movieSearch.data
+    );
+  };
   
-//     const updatedProduct = await vendorProductServices.updateProductService({
-//       ...request.body,
-//       userId,
-//       productId
-//     });
+    const allDatabaseMovies = async (
+    request: JwtPayload,
+    response: Response
+  ): Promise<any> => {
+
   
-//     return responseUtilities.responseHandler(
-//       response,
-//       updatedProduct.message,
-//       updatedProduct.statusCode,
-//       updatedProduct.details,
-//       updatedProduct.data
-//     );
-//   };
+    const { query } = request
+
+    console.log('query', query)
   
-//   const vendorSingleProduct = async (
-//     request: JwtPayload,
-//     response: Response
-//   ): Promise<any> => {
-//     const { productId } = request.params;
+    const movies = await moviesServices.getAllMoviesInDatabase(
+      query
+    );
   
-//     const product = await vendorProductServices.getVendorSingleProduct({
-//       productId,
-//     });
-  
-//     return responseUtilities.responseHandler(
-//       response,
-//       product.message,
-//       product.statusCode,
-//       product.details,
-//       product.data
-//     );
-//   };
-  
-//   const allVendorProductsForAShop = async (
-//     request: JwtPayload,
-//     response: Response
-//   ): Promise<any> => {
-//     const user_id = request.user.id;
-  
-//     const { shopId } = request.params;
-  
-//     const { query } = request
-  
-//     const products = await vendorProductServices.getAllVendorProductsForAShop(
-//       {shopId, query}
-//     );
-  
-//     return responseUtilities.responseHandler(
-//       response,
-//       products.message,
-//       products.statusCode,
-//       products.details,
-//       products.data
-//     );
-//   };
-  
-//   const deleteVendorSingleProduct = async (
-//     request: JwtPayload,
-//     response: Response
-//   ): Promise<any> => {
-//     const userId = request.user.id;
-  
-//     const { shopId } = request.params
-  
-//     const result = await vendorProductServices.deleteSingleVendorProduct({
-//       ...request.body,
-//       userId,
-//       shopId
-//     });
-  
-//     return responseUtilities.responseHandler(
-//       response,
-//       result.message,
-//       result.statusCode,
-//       result.details,
-//       result.data
-//     );
-//   };
-  
-//   const deleteManyVendorShopProducts = async (
-//     request: JwtPayload,
-//     response: Response
-//   ): Promise<any> => {
-//     const userId = request.user.id;
-  
-//     const { shopId } = request.params
-  
-//     const result = await vendorProductServices.deleteManyVendorProductsForAShop({
-//       ...request.body,
-//       userId,
-//       shopId
-//     });
-  
-//     return responseUtilities.responseHandler(
-//       response,
-//       result.message,
-//       result.statusCode,
-//       result.details,
-//       result.data
-//     );
-//   };
+    return responseUtilities.responseHandler(
+      response,
+      movies.message,
+      movies.statusCode,
+      movies.details,
+      movies.data
+    );
+  };
 
 
-//   const updateVendorProductImage = async (
-//     request: JwtPayload,
-//     response: Response
-//   ): Promise<any> => {
+  const updateMovie = async (
+    request: JwtPayload,
+    response: Response
+  ): Promise<any> => {
+    const userId = request.user.id;
   
-//     const updatedProductImage = await vendorProductServices.updateProductImage(
-//       request
-//     );
+    const { movieId } = request.params
   
-//     return responseUtilities.responseHandler(
-//       response,
-//       updatedProductImage.message,
-//       updatedProductImage.statusCode,
-//       updatedProductImage.data
-//     );
-//   };
+    const updatedMovie = await moviesServices.updateMovieService({
+      ...request.body,
+      userId,
+      movieId
+    });
+  
+    return responseUtilities.responseHandler(
+      response,
+      updatedMovie.message,
+      updatedMovie.statusCode,
+      updatedMovie.details,
+      updatedMovie.data
+    );
+  };
+  
+  const allUserMovies = async (
+    request: JwtPayload,
+    response: Response
+  ): Promise<any> => {
+
+  
+    const { query } = request
+
+    const userId = request.user.id
+  
+    const movies = await moviesServices.getUserMovies({
+      userId,
+      query
+    });
+  
+    return responseUtilities.responseHandler(
+      response,
+      movies.message,
+      movies.statusCode,
+      movies.details,
+      movies.data
+    );
+  };
+
+  
+  const deleteSingleUserMovie = async (
+    request: JwtPayload,
+    response: Response
+  ): Promise<any> => {
+    const userId = request.user.id;
+  
+    const { movieId } = request.params
+  
+    const result = await moviesServices.deleteSingleMovie({
+      userId,
+      movieId
+    });
+  
+    return responseUtilities.responseHandler(
+      response,
+      result.message,
+      result.statusCode,
+      result.details,
+      result.data
+    );
+  };
+  
+
+  // const deleteManyMovies = async (
+  //   request: JwtPayload,
+  //   response: Response
+  // ): Promise<any> => {
+  //   const userId = request.user.id;
+  
+  //   const { shopId } = request.params
+  
+  //   const result = await vendorProductServices.deleteManyVendorProductsForAShop({
+  //     ...request.body,
+  //     userId,
+  //     shopId
+  //   });
+  
+  //   return responseUtilities.responseHandler(
+  //     response,
+  //     result.message,
+  //     result.statusCode,
+  //     result.details,
+  //     result.data
+  //   );
+  // };
+
+
+  const updateMovieImage = async (
+    request: JwtPayload,
+    response: Response
+  ): Promise<any> => {
+    try {
+      const updatedMovieImage = await moviesServices.updateMovieImageService(
+        request
+      );
+  
+      return responseUtilities.responseHandler(
+        response,
+        updatedMovieImage.message,
+        updatedMovieImage.statusCode,
+        updatedMovieImage.data
+      );
+    } catch (error: any) {
+      console.error("Error in updateMovieImage Controller:", error.message);
+      return response.status(500).json({
+        message: "Internal Server Error",
+        error: error.message,
+      });
+    }
+  };
   
   export default {
     createMovie,
-    // updateProduct,
-    // vendorSingleProduct,
-    // allVendorProductsForAShop,
-    // deleteVendorSingleProduct,
-    // deleteManyVendorShopProducts,
+    fetchSingleMovie,
+    allDatabaseMovies,
+    updateMovie,
+    allUserMovies,
+    deleteSingleUserMovie,
+    updateMovieImage
     // changeVendorProductStatus,
     // updateVendorProductImage,
   };

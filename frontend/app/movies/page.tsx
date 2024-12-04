@@ -1,9 +1,11 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Skeleton, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
-import './globals.css';
+// import './globals.css';
 import { ArrowLeft, ArrowRight } from '@mui/icons-material';
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
@@ -80,7 +82,7 @@ return (
         />
 
       <FormControl variant="outlined" className="w-full sm:w-1/4 ml-2 dark:bg-gray-800 dark:text-white">
-        <InputLabel className="dark:text-gray-300">Category</InputLabel>
+        <InputLabel className="dark:text-gray-300">Filter by Movie Grenre</InputLabel>
         <Select
           value={selectedCategory}
           onChange={handleCategoryChange}
@@ -101,12 +103,13 @@ return (
           <MenuItem value="">
             <em className='text-gray-400'>All</em>
           </MenuItem>
-          <MenuItem value="fruits">Fruits</MenuItem>
-          <MenuItem value="beverages">Beverages</MenuItem>
-          <MenuItem value="breads">Breads</MenuItem>
-          <MenuItem value="condiments">Condiments</MenuItem>
-          <MenuItem value="grains">Grains</MenuItem>
-          <MenuItem value="snacks">Snacks</MenuItem>
+          <MenuItem value="fruits">action</MenuItem>
+          <MenuItem value="beverages">romance</MenuItem>
+          <MenuItem value="breads">sci-fi</MenuItem>
+          <MenuItem value="condiments">thriler</MenuItem>
+          <MenuItem value="grains">other</MenuItem>
+          <MenuItem value="snacks">drama</MenuItem>
+          <MenuItem value="snacks">k-drama</MenuItem>
         </Select>
       </FormControl>
 

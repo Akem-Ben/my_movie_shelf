@@ -18,10 +18,10 @@ export default function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className={`px-4 lg:px-[7rem] relative z-10 flex justify-between items-center p-4 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out ${isMenuOpen ? 'h-[50vh]' : ''}`}>
+    <header className={`px-4 lg:px-[7rem] relative z-10 flex justify-between items-center p-4 bg-white dark:bg-[#093545] shadow-lg transition-all duration-300 ease-in-out ${isMenuOpen ? 'h-[50vh]' : ''}`}>
       <h1 className="text-2xl font-extrabold text-gray-800 dark:text-white transition-colors duration-300 ease-in-out">
         <Link href='/'>
-          Ecommerce
+          My-Movie-Shelf
         </Link>
       </h1>
       

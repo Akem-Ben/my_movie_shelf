@@ -5,7 +5,7 @@ import { SunIcon } from '@heroicons/react/16/solid';
 import React, { useEffect, useState } from 'react';
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -22,7 +22,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300 ease-in-out transform hover:scale-105"
+      className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-[#093545] transition-colors duration-300 ease-in-out transform hover:scale-105"
       aria-label="Toggle Theme"
     >
       {theme === 'light' ? (

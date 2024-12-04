@@ -25,16 +25,10 @@ const SignIn: React.FC = () => {
 
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: `url(${hero.src})` }}
-    >
-      <motion.div
-        className="bg-gray-800/50 dark:bg-gray-800/80 p-6 rounded-lg shadow-lg max-w-md w-full"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-      >
-        <h2 className="text-3xl font-bold mb-4 text-center text-white">Sign In</h2>
+      className="relative min-h-screen flex items-center justify-center">
+      <div
+        className="rounded-lg max-w-md w-full">
+        <h1 className="text-3xl font-bold mb-4 text-center text-white">Sign In</h1>
 
         <Formik
           initialValues={{ email: '', password: '' }}
@@ -108,7 +102,7 @@ const SignIn: React.FC = () => {
             <Facebook />
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

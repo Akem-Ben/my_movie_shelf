@@ -16,15 +16,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className="bg-gray-100 dark:bg-[#093545]">
+      <body className="bg-[#093545]">
         <AuthProvider>
           <AlertProvider>
             <CartProvider>
+            <div className={`${!isRootPage && 'pt-[6rem]'} `}>
               {!isRootPage && <Header />}
               <main className='inconsolata'>
                 {children}
               </main>
               {!isRootPage && <Footer />}
+              </div>
             </CartProvider>
           </AlertProvider>
         </AuthProvider>

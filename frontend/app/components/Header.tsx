@@ -6,6 +6,7 @@ import Cart from './Cart';
 import Link from 'next/link';
 import { Person, Menu, Facebook, Twitter, Instagram, X } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import Button from './Button';
 
 export default function Header() {
   const { isAuthenticated, logout } = useAuth();
@@ -18,8 +19,8 @@ export default function Header() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className={`px-4 lg:px-[7rem] relative z-10 flex justify-between items-center p-4 bg-white dark:bg-[#093545] shadow-lg transition-all duration-300 ease-in-out ${isMenuOpen ? 'h-[50vh]' : ''}`}>
-      <h1 className="text-2xl font-extrabold text-gray-800 dark:text-white transition-colors duration-300 ease-in-out">
+    <header className={`px-4 lg:px-[7rem] z-10 top-0 flex fixed mb-4 w-full justify-between items-center p-4 bg-[#093545] shadow-lg transition-all duration-300 ease-in-out ${isMenuOpen ? 'h-[50vh]' : ''}`}>
+      <h1 className="text-2xl font-extrabold text-white transition-colors duration-300 ease-in-out">
         <Link href='/'>
           My-Movie-Shelf
         </Link>
@@ -41,14 +42,17 @@ export default function Header() {
           ✕
         </button>
 
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
         <Cart />
 
         {!isAuthenticated ? (
-          <div className="flex flex-col items-center space-y-2 lg:flex-row lg:space-y-0 lg:space-x-4">
-            <Link href="/signup">
-              <button onClick={closeMenu} className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-10 lg:mt-0 w-full lg:w-auto">Sign Up</button>
+          <div className="flex items-center space-y-2 lg:flex-row lg:space-y-0 lg:space-x-4">
+            <Link href="/signin">
+            <Button title={'Login'} />
             </Link>
+              <Button onClick={function (): void {
+              throw new Error('Function not implemented.');
+            } } title={'Click'} />
           </div>
         ) : (
           <div className="relative mt-4 lg:mt-0">

@@ -1,13 +1,13 @@
-
-
+import { Pencil, Trash2, Heart } from "lucide-react";
 
 type MovieCardProp = {
     imageSrc: string;
     title: string;
     date: string;
+    owner?: boolean;
 }
 
-const MovieCard: React.FC<MovieCardProp> = ({ imageSrc, title, date }) =>{
+const MovieCard: React.FC<MovieCardProp> = ({ imageSrc, title, date, owner }) =>{
   return (
     <>
       <div
@@ -21,9 +21,14 @@ const MovieCard: React.FC<MovieCardProp> = ({ imageSrc, title, date }) =>{
           <h2 className="text-xl text-white font-bold mb-2">
             {title}
           </h2>
+          <div className="flex items-center justify-between pr-4">
           <h4 className="text-lg text-white font-light mb-2">
             {title}
           </h4>
+          <div className="flex gap-4">
+            <Heart className="text-white" style={{ width: "1rem", height: "1rem" }}/> {owner && <Pencil className="text-white" style={{ width: "1rem", height: "1rem" }}/>} {owner && <Trash2 className="text-white" style={{ width: "1rem", height: "1rem" }}/>}
+          </div>
+          </div>
       </div>
     </>
   );

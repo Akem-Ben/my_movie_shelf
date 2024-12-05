@@ -853,6 +853,14 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(22 163 74 / var(--tw-bg-opacity));
 }
+.bg-red-700{
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
+}
+.bg-red-800{
+  --tw-bg-opacity: 1;
+  background-color: rgb(153 27 27 / var(--tw-bg-opacity));
+}
 .bg-\[url\(\'\/footer\/Vectors\.png\'\)\]{
   background-image: url('/footer/Vectors.png');
 }
@@ -927,6 +935,9 @@ video {
 }
 .pt-\[6rem\]{
   padding-top: 6rem;
+}
+.pr-4{
+  padding-right: 1rem;
 }
 .text-left{
   text-align: left;

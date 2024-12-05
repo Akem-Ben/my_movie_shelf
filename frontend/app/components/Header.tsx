@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
-import Cart from './Cart';
+import Cart from './Favourites';
 import Link from 'next/link';
 import { Person, Menu, Facebook, Twitter, Instagram, X } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';

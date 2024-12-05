@@ -21,10 +21,13 @@ const SignUp: React.FC = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password')], 'Passwords must match')
-      .required('Confirm Password is required'),
+      .required('Please retype your password'),
+      fullname: Yup.string().required('Please Enter your Fullname'),
+      username: Yup.string().required('Please choose a username'),
+      phone: Yup.number().required('Phone number is required')
   });
 
   return (
@@ -48,7 +51,7 @@ const SignUp: React.FC = () => {
           </h1>
 
           <Formik
-            initialValues={{ loginKey: "", password: "", remember: false }}
+            initialValues={{ email: "", fullname: "", username: "", password: "", phone: "" }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true);
@@ -63,13 +66,41 @@ const SignUp: React.FC = () => {
               <Form className="flex flex-col space-y-4">
                 <div className="relative">
                   <Field
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Field
                     type="text"
-                    name="loginKey"
-                    placeholder="Email or Username"
+                    name="fullname"
+                    placeholder="Fullname"
                     className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
-                    name="loginKey"
+                    name="fullname"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Field
+                    type="text"
+                    name="username"
+                    placeholder="Choose a Username"
+                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                  />
+                  <ErrorMessage
+                    name="username"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -89,15 +120,16 @@ const SignUp: React.FC = () => {
                   />
                 </div>
 
+                
                 <div className="relative">
                   <Field
                     type="password"
-                    name="password"
-                    placeholder="Password"
+                    name="confirmPassword"
+                    placeholder="confirm Password"
                     className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
-                    name="password"
+                    name="confirmPassword"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -105,13 +137,13 @@ const SignUp: React.FC = () => {
 
                 <div className="relative">
                   <Field
-                    type="password"
-                    name="password"
-                    placeholder="Password"
+                    type="number"
+                    name="phone"
+                    placeholder="phone number"
                     className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
-                    name="password"
+                    name="phone"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -122,7 +154,7 @@ const SignUp: React.FC = () => {
                    ${isSubmitting ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    "Sign In"
+                    "Sign Up"
                   )}
                     `
                 }
@@ -131,14 +163,11 @@ const SignUp: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-4">
-                  <button className="text-sm text-blue-200 hover:underline">
-                    Forgot Password?
-                  </button>
-                  <Link href='/signup'>
+                  <Link href='/signin'>
                   <button
                     className="text-sm text-white dark:text-gray-300 hover:underline"
                   >
-                    Don’t have an account? Sign Up
+                    Already have an account? Log in
                   </button>
                   </Link>
                 </div>

@@ -13,6 +13,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const isRootPage = pathname === '/';
+  const isLoginPage = pathname === '/signin';
+  const isSignUp = pathname === '/signup'
 
   return (
     <html lang="en">
@@ -20,8 +22,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <AuthProvider>
           <AlertProvider>
             <CartProvider>
-            <div className={`${!isRootPage && 'pt-[6rem]'} `}>
-              {!isRootPage && <Header />}
+            <div className={`${!isRootPage && !isLoginPage && !isSignUp && 'pt-[6rem]'} `}>
+              {!isRootPage && !isLoginPage && !isSignUp && <Header />}
               <main className='inconsolata'>
                 {children}
               </main>

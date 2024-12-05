@@ -1,6 +1,5 @@
 export interface UserAttributes {
     id: string;
-    profileImage: string;
     phone: string;
     fullName: string;
     userName: string;

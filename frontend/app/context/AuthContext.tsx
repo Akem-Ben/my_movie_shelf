@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => void;
+  signIn: (email: string, password: string, remember?: boolean) => void;
   signUp: (email: string, password: string) => void;
   logout: () => void;
 }
@@ -14,7 +14,7 @@ export const AuthProvider: React.FC | any = ({ children }:any) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<any | null>(null);
 
-  const signIn = (email: string, password: string) => {
+  const signIn = (email: string, password: string, remember?: boolean) => {
     setIsAuthenticated(true);
   };
 

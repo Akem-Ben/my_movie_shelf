@@ -10,6 +10,8 @@ import * as Yup from 'yup';
 import hero from '../../public/hero.jpg';
 import { Facebook, Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
+import Link from 'next/link';
+import Button from '../components/Button';
 
 const SignUp: React.FC = () => {
   const { signUp } = useAuth();
@@ -26,104 +28,125 @@ const SignUp: React.FC = () => {
   });
 
   return (
-    <div
-      className="relative min-h-screen px-3 flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: `url(${hero.src})` }}
-    >
-      <motion.div
-        className="bg-gray-800/50 dark:bg-gray-800/80 p-6 rounded-lg shadow-lg max-w-md w-full"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-      >
-        <h2 className="text-3xl font-bold mb-4 text-center text-white">Sign Up</h2>
-        
-        <Formik
-          initialValues={{ email: '', password: '', confirmPassword: '' }}
-          validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            setSubmitting(true);
-            setTimeout(() => {
-              signUp(values.email, values.password);
-              setSubmitting(false);
-              router.push('/');
-            }, 2000);
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form className="flex flex-col space-y-4">
-              <Field
-                type="email"
-                name="email"
-                placeholder="Email"
-                className="border p-3 rounded w-full"
-              />
-              <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+    <div>
+      <Link href="/">
+      <button
+        className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+        Home
+      </button>
+      </Link>
+      <Link href="/movies">
+      <button
+        className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+        Movies
+      </button>
+      </Link>
+      <div className="h-screen sm:px-0 px-2 flex items-center justify-center">
+        <div className="rounded-lg max-w-md w-full">
+          <h1 className="text-[50px] font-bold mb-4 text-center text-white">
+            Sign Up
+          </h1>
 
-              <div className="relative">
-                <Field
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  placeholder="Password"
-                  className="border p-3 rounded w-full pr-10"
-                />
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-2"
-                  size="small"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-                <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
-              </div>
-
-              <div className="relative">
-                <Field
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  className="border p-3 rounded w-full pr-10"
-                />
-                <IconButton
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-2 top-2"
-                  size="small"
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-                <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
-              </div>
-
-              <motion.button
-                type="submit"
-                className="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition"
-                whileTap={{ scale: 0.95 }}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
-              </motion.button>
-            </Form>
-          )}
-        </Formik>
-
-        <div className="flex justify-center items-center mt-4">
-          <button
-            className="text-sm text-white dark:text-gray-300 hover:underline"
-            onClick={() => router.push('/signin')}
+          <Formik
+            initialValues={{ loginKey: "", password: "", remember: false }}
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              setSubmitting(true);
+              setTimeout(() => {
+                // signIn(values.loginKey, values.password, values.remember);
+                setSubmitting(false);
+                router.push("/");
+              }, 2000);
+            }}
           >
-            Already have an account? Sign In
-          </button>
-        </div>
+            {({ isSubmitting }) => (
+              <Form className="flex flex-col space-y-4">
+                <div className="relative">
+                  <Field
+                    type="text"
+                    name="loginKey"
+                    placeholder="Email or Username"
+                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                  />
+                  <ErrorMessage
+                    name="loginKey"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
 
-        <div className="flex items-center justify-center mt-6 space-x-4">
-          <button className="bg-white dark:bg-gray-700 p-3 rounded-full shadow hover:bg-gray-200 dark:hover:bg-gray-600">
-            <Google />
-          </button>
-          <button className="bg-white dark:bg-gray-700 p-3 rounded-full shadow hover:bg-gray-200 dark:hover:bg-gray-600">
-            <Facebook />
-          </button>
+                <div className="relative">
+                  <Field
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Field
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Field
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+              <div>
+                <Button title={`
+                   ${isSubmitting ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Sign In"
+                  )}
+                    `
+                }
+                width="full"
+                 />
+                </div>
+
+                <div className="flex justify-between items-center mt-4">
+                  <button className="text-sm text-blue-200 hover:underline">
+                    Forgot Password?
+                  </button>
+                  <Link href='/signup'>
+                  <button
+                    className="text-sm text-white dark:text-gray-300 hover:underline"
+                  >
+                    Don’t have an account? Sign Up
+                  </button>
+                  </Link>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

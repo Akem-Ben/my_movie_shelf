@@ -65,37 +65,40 @@ return (
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
         <InputField label={'Search Movies'} />
 
-      <FormControl variant="outlined" className="w-full sm:w-1/4 ml-2 text-white">
-        <InputLabel className="text-white">Filter Movies by Grenre</InputLabel>
-        <Select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          label="Category"
-          style={{
-            backgroundColor: '#224957',
-            color: 'white',
-            borderColor: '#224957',
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                color: '#224957',
-              },
+<FormControl variant="outlined" className="w-full sm:w-1/4 ml-2 text-white">
+    <>
+      <InputLabel className="text-white">Filter Movies by Genre</InputLabel>
+      <Select
+        value={selectedCategory}
+        onChange={handleCategoryChange}
+        label="Category"
+        style={{
+          backgroundColor: '#224957',
+          color: 'white',
+          borderColor: '#224957',
+        }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              color: '#224957',
             },
-          }}
-        >
-          <MenuItem value="">
-            <em className='text-gray-400'>All</em>
-          </MenuItem>
-          <MenuItem value="fruits">action</MenuItem>
-          <MenuItem value="beverages">romance</MenuItem>
-          <MenuItem value="breads">sci-fi</MenuItem>
-          <MenuItem value="condiments">thriler</MenuItem>
-          <MenuItem value="snacks">drama</MenuItem>
-          <MenuItem value="snacks">k-drama</MenuItem>
-          <MenuItem value="grains">other</MenuItem>
-        </Select>
-      </FormControl>
+          },
+        }}
+      >
+        <MenuItem value="">
+          <em className='text-gray-400'>All</em>
+        </MenuItem>
+        <MenuItem value="action">Action</MenuItem>
+        <MenuItem value="romance">Romance</MenuItem>
+        <MenuItem value="sci-fi">Sci-Fi</MenuItem>
+        <MenuItem value="thriller">Thriller</MenuItem>
+        <MenuItem value="drama">Drama</MenuItem>
+        <MenuItem value="k-drama">K-Drama</MenuItem>
+        <MenuItem value="other">Other</MenuItem>
+      </Select>
+    </>
+</FormControl>
+
 
         </div>
 
@@ -122,7 +125,7 @@ return (
           ) : (
             displayedProducts.map((product) => (
               <div key={product.id} className="">
-                <MovieCard imageSrc={product.imageUrl} title={product.title} date={product.title} owner={true}/>
+                <MovieCard imageSrc={product.imageUrl} title={product.title} date={product.title} owner={true} />
               </div>
             ))
           )}
@@ -155,6 +158,7 @@ return (
         className="rounded-md relative z-50 !w-80"
       >
       </Alerts>
+
 </>
       )
       }

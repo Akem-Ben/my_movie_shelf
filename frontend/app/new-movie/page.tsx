@@ -11,9 +11,7 @@ import Button from "../components/Button";
 import { Download } from "lucide-react";
 import ImageUploader from "../components/ImageUploader";
 
-const SignIn: React.FC = () => {
-  const { signIn } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
+const NewMovie: React.FC = () => {
   const router = useRouter();
 
   const validationSchema = Yup.object({
@@ -74,7 +72,7 @@ const SignIn: React.FC = () => {
 
                     <div className="relative">
                       <Field
-                        type="text"
+                        as="textarea"
                         name="description"
                         placeholder="Movie Description"
                         className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
@@ -174,4 +172,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default NewMovie;

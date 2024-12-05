@@ -1,13 +1,21 @@
+"use client"
+
 import { Pencil, Trash2, Heart } from "lucide-react";
+import EditMovieModal from "./Modal";
+import { useState } from "react";
 
 type MovieCardProp = {
     imageSrc: string;
     title: string;
     date: string;
     owner?: boolean;
+    isEdit?: boolean;
 }
 
-const MovieCard: React.FC<MovieCardProp> = ({ imageSrc, title, date, owner }) =>{
+const MovieCard: React.FC<MovieCardProp> = ({ imageSrc, title, date, owner, isEdit }) =>{
+  
+  const [editModal, setEditModal] = useState(false)
+
   return (
     <>
       <div
@@ -26,10 +34,11 @@ const MovieCard: React.FC<MovieCardProp> = ({ imageSrc, title, date, owner }) =>
             {title}
           </h4>
           <div className="flex gap-4">
-            <Heart className="text-white" style={{ width: "1rem", height: "1rem" }}/> {owner && <Pencil className="text-white" style={{ width: "1rem", height: "1rem" }}/>} {owner && <Trash2 className="text-white" style={{ width: "1rem", height: "1rem" }}/>}
+            <Heart className="text-white hover:cursor-pointer hover:text-gray-500" style={{ width: "1rem", height: "1rem" }}/> {owner && <Pencil className="text-white hover:cursor-pointer hover:text-gray-500" style={{ width: "1rem", height: "1rem" }} onClick={()=> {setEditModal(true), isEdit = true}}/>} {owner && <Trash2 className="text-white hover:cursor-pointer hover:text-gray-500" style={{ width: "1rem", height: "1rem" }}/>}
           </div>
           </div>
       </div>
+      {editModal && <EditMovieModal isOpen={()=> {setEditModal(false)}} />}
     </>
   );
 };

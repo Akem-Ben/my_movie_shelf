@@ -16,7 +16,7 @@ const InputField: React.FC<InputFieldProps> = ({ label }) => {
           label={label}
         //   value={searchTerm}
         //   onChange={handleSearch}
-          className="mb-2 sm:mb-0 sm:w-1/3 w-full bg-[#224957] text-white"
+          className="mb-2 rounded-lg sm:mb-0 sm:w-1/3 w-full bg-[#224957] text-white"
           InputLabelProps={{
             style: { color: 'white' },
             className: '',

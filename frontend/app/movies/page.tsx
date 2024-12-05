@@ -91,9 +91,9 @@ return (
           <MenuItem value="beverages">romance</MenuItem>
           <MenuItem value="breads">sci-fi</MenuItem>
           <MenuItem value="condiments">thriler</MenuItem>
-          <MenuItem value="grains">other</MenuItem>
           <MenuItem value="snacks">drama</MenuItem>
           <MenuItem value="snacks">k-drama</MenuItem>
+          <MenuItem value="grains">other</MenuItem>
         </Select>
       </FormControl>
 

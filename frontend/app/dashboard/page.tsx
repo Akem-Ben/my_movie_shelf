@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
       <h1 className="sm:text-[50px] text-[30px] font-bold mb-4 text-center text-white">
         Your movie list is empty
       </h1>
-      <Button title={"Add a new Movie"} width="40" />
+      <Link href="/new-movie"><Button title={"Add a new Movie"} width="40" /></Link>
     </div>
   </div>
 </div>

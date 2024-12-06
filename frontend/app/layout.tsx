@@ -13,18 +13,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const isRootPage = pathname === '/';
+  const isLoginPage = pathname === '/signin';
+  const isSignUp = pathname === '/signup'
 
   return (
     <html lang="en">
-      <body className="bg-gray-100 dark:bg-[#093545]">
+      <body className="bg-[#093545]">
         <AuthProvider>
           <AlertProvider>
             <CartProvider>
-              {!isRootPage && <Header />}
+            <div className={`${!isRootPage && !isLoginPage && !isSignUp && 'pt-[6rem]'} `}>
+              {!isRootPage && !isLoginPage && !isSignUp && <Header />}
               <main className='inconsolata'>
                 {children}
               </main>
               {!isRootPage && <Footer />}
+              </div>
             </CartProvider>
           </AlertProvider>
         </AuthProvider>

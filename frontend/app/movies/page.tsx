@@ -9,6 +9,8 @@ import { useCart } from '../context/CartContext';
 import { ArrowLeft, ArrowRight } from '@mui/icons-material';
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
+import InputField from '../components/Input';
+import MovieCard from '../components/MovieCard';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -59,43 +61,25 @@ const MOVIES = () => {
 
 return (
     <>
-      <div id='products' className="p-4 lg:px-[7rem]">
+      <div className="p-4 lg:px-[7rem]">
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-        <TextField
-          variant="outlined"
-          label="Search Products"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="mb-2 sm:mb-0 sm:w-1/3 w-full dark:bg-gray-800 dark:text-white"
-          InputLabelProps={{
-            style: { color: 'grey' },
-            className: 'dark:text-gray-300',
-          }}
-          InputProps={{
-            style: {
-              backgroundColor: '',
-              color: 'grey',
-              borderColor: 'rgba(255, 255, 255, 0.3)',
-            },
-            classes: { notchedOutline: 'dark:border-gray-500' },
-          }}
-        />
+        <InputField label={'Search Movies'} />
 
-      <FormControl variant="outlined" className="w-full sm:w-1/4 ml-2 dark:bg-gray-800 dark:text-white">
-        <InputLabel className="dark:text-gray-300">Filter by Movie Grenre</InputLabel>
+      <FormControl variant="outlined" className="w-full sm:w-1/4 ml-2 text-white">
+        <InputLabel className="text-white">Filter Movies by Grenre</InputLabel>
         <Select
           value={selectedCategory}
           onChange={handleCategoryChange}
           label="Category"
           style={{
-            backgroundColor: '',
-            color: 'gray',
-            borderColor: 'rgba(255, 255, 255, 0.3)',
+            backgroundColor: '#224957',
+            color: 'white',
+            borderColor: '#224957',
           }}
           MenuProps={{
             PaperProps: {
               style: {
-                color: 'grey',
+                color: '#224957',
               },
             },
           }}
@@ -107,9 +91,9 @@ return (
           <MenuItem value="beverages">romance</MenuItem>
           <MenuItem value="breads">sci-fi</MenuItem>
           <MenuItem value="condiments">thriler</MenuItem>
-          <MenuItem value="grains">other</MenuItem>
           <MenuItem value="snacks">drama</MenuItem>
           <MenuItem value="snacks">k-drama</MenuItem>
+          <MenuItem value="grains">other</MenuItem>
         </Select>
       </FormControl>
 
@@ -137,28 +121,15 @@ return (
             <p className='text-lg text-grey-400 h-[50vh] m-auto'>No products found</p>
           ) : (
             displayedProducts.map((product) => (
-              <div key={product.id} className="block bg-white dark:bg-gray-800 hover:scale-105 transition-all dark:border-blue-400 dark:border rounded-lg shadow-md p-4">
-                <Link href={`/product/${product.id}`}>
-                  <img src={product.imageUrl} alt={product.title} className="w-full h-48 object-cover rounded-md mb-2" />
-                  <h2 className="text-xl dark:text-white text-black font-bold mb-2">{product.title}</h2>
-                  <p className="text-lg font-semibold text-green-500 mb-1">${product.price}</p>
-                  <p className="text-sm line-through text-gray-500 mb-2">${product.priceSlash}</p>
-                </Link>
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  onClick={() => handleAddToCart(product)} 
-                  className="mt-2"
-                >
-                  Add to Cart
-                </Button>
+              <div key={product.id} className="">
+                <MovieCard imageSrc={product.imageUrl} title={product.title} date={product.title} />
               </div>
             ))
           )}
         </div>
 
         {!loading && totalPages > 1 && (
-          <div className="flex justify-end mt-5 my-10">
+          <div className="flex justify-center mt-10 my-10">
             <Button 
               disabled={currentPage === 1} 
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} 

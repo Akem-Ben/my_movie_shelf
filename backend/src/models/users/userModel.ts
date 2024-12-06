@@ -19,11 +19,6 @@ User.init(
       defaultValue: false
     },
 
-    profileImage: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-
     fullName: {
       type: DataTypes.STRING,
       allowNull: false,

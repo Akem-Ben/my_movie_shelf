@@ -14,6 +14,8 @@ const Dashboard: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
+  const { user } = useAuth()
+
   const validationSchema = Yup.object({
     loginKey: Yup.string()
       .required("Email/Username is required"),
@@ -27,7 +29,7 @@ const Dashboard: React.FC = () => {
       <h1 className="sm:text-[50px] text-[30px] font-bold mb-4 text-center text-white">
         Your movie list is empty
       </h1>
-      <Link href="/new-movie"><Button title={"Add a new Movie"} width="40" /></Link>
+      <Link href="/new-movie"><Button  width="40" >Add a new Movie</Button></Link>
     </div>
   </div>
 </div>

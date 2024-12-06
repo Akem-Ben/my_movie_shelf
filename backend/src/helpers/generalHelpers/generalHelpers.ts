@@ -64,7 +64,7 @@ const verifyRegistrationToken = async (token: string): Promise<any> => {
     return jwt.verify(token, `${APP_SECRET}`);
   } catch (error: any) {
     if (error.message === 'jwt expired') {
-      throw errorUtilities.createError('Please request a new verification email', 401);
+      throw errorUtilities.createError('Please request a new verification email', 400);
     }
     throw errorUtilities.createUnknownError(error);
   }
@@ -88,57 +88,61 @@ const dateFormatter = (dateString: Date) => {
 };
 
 
-const refreshUserToken = async (
-    userRefreshToken: string
-  ) => {
-    try{
-        let responseDetails: ResponseDetails = {
-            statusCode: 0,
-            message: '',
-        };
-    const decodedToken:any = jwt.verify(userRefreshToken, `${APP_SECRET}`);
+// const refreshUserToken = async (
+//     userRefreshToken: string
+//   ) => {
+//     try{
+//         let responseDetails: ResponseDetails = {
+//             statusCode: 0,
+//             message: '',
+//         };
+//     const decodedToken:any = jwt.verify(userRefreshToken, `${APP_SECRET}`);
 
-    if (!decodedToken) {
-        responseDetails.statusCode = 401;
-        responseDetails.message = 'Invalid Refresh Token';
-        return responseDetails;
-      }
+//     if (!decodedToken) {
+//         responseDetails.statusCode = 400;
+//         responseDetails.message = 'Invalid Refresh Token';
+//         return responseDetails;
+//       }
 
-      const userPayload = {
-        id: decodedToken.id,
-        email: decodedToken.email,
-      }
+//       const userPayload = {
+//         id: decodedToken.id,
+//         email: decodedToken.email,
+//       }
 
-      const newAccessToken = await generateTokens(userPayload, '3h')
-      const newRefreshToken = await generateTokens(userPayload, '30d')
+//       const newAccessToken = await generateTokens(userPayload, '3h')
+//       const newRefreshToken = await generateTokens(userPayload, '30d')
 
-      responseDetails.statusCode = 200;
-      responseDetails.message = 'Refresh Token is valid, new tokens generated';
-      responseDetails.data = {
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-    }
-    return responseDetails;
+//       responseDetails.statusCode = 200;
+//       responseDetails.message = 'Refresh Token is valid, new tokens generated';
+//       responseDetails.data = {
+//         accessToken: newAccessToken,
+//         refreshToken: newRefreshToken,
+//     }
+//     return responseDetails;
 
-    }catch (error: any) {
-        if (error.message === 'jwt expired') {
-          let responseDetails: ResponseDetails = {
-            statusCode: 0,
-            message: '',
-          };
-          responseDetails.statusCode = 403;
-          responseDetails.message = 'Please login again';
-          return responseDetails;
-        }
-      }
-  };
+//     }catch (error: any) {
+//         if (error.message === 'jwt expired') {
+//           let responseDetails: ResponseDetails = {
+//             statusCode: 0,
+//             message: '',
+//           };
+//           responseDetails.statusCode = 403;
+//           responseDetails.message = 'Please login again';
+//           return responseDetails;
+//         }
+//       }
+//   };
 
 
   //This function is used to manage queries (request.query) for the application  
   const queryFilter = async (searchTerm: string): Promise<Record<string, any>>  => {
-    const query: Record<string, any> | any = {};
 
+    const query: Record<string, any> | any = {};
+    
     if (searchTerm) {
+
+      if(searchTerm === 'all') return query
+
       if (!isNaN(Number(searchTerm))) {
         query[Op.or] = [
           { publishedDate: Number(searchTerm) },
@@ -146,6 +150,7 @@ const refreshUserToken = async (
       } else {
         query[Op.or] = [
           { title: { [Op.iLike]: `%${searchTerm.toLowerCase()}%` } },
+          { genre: { [Op.iLike]: `%${searchTerm.toLowerCase()}%` } },
           { movieProducer: { [Op.iLike]: `%${searchTerm.toLowerCase()}%` } },
         ];
       }
@@ -159,7 +164,7 @@ export default {
   hashPassword,
   validatePassword,
   generateTokens,
-  refreshUserToken,
+  // refreshUserToken,
   dateFormatter,
   verifyRegistrationToken,
   queryFilter

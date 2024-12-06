@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from 'react';
-import { useCart } from '../context/CartContext';
+import { useFavourites } from '../context/FavouritesContext';
 import { Delete } from '@mui/icons-material';
 import { Star } from 'lucide-react';
 
 const Favourites: React.FC = () => {
-  const { itemCount, cartItems, removeFromCart } = useCart();
+  const { itemCount, favouritesItems, removeFromFavourites } = useFavourites();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleCart = () => {
@@ -15,7 +15,7 @@ const Favourites: React.FC = () => {
   return (
     <div className="relative ">
       <button
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300 ease-in-out transform hover:scale-105"
+        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 transition-colors duration-300 ease-in-out transform hover:scale-105"
         onClick={toggleCart}
       >
         <Star className='dark:text-white'/>
@@ -27,11 +27,11 @@ const Favourites: React.FC = () => {
       {isOpen && (
         <div className="absolute z-20 right-0 w-[20rem] max-h-[14rem] overflow-auto p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg">
           <h3 className="font-bold text-lg text-gray-400">Favourites</h3>
-          {cartItems.length === 0 ? (
+          {favouritesItems.length === 0 ? (
             <p className='text-gray-600'>You have no movies in your favourite list</p>
           ) : (
             <ul>
-              {cartItems.map((item) => (
+              {favouritesItems.map((item:any) => (
                 <li key={item.id} className="flex items-center justify-between py-2 border mb-[2px] rounded-lg p-[5px]">
                   <div className="flex items-center">
                     <img src={item.imageUrl} alt={item.title} className="w-12 h-12 object-cover rounded-md mr-2" />
@@ -41,7 +41,7 @@ const Favourites: React.FC = () => {
                       <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                     </div>
                   </div>
-                  <button onClick={() => removeFromCart(item.id)} className="text-red-500">
+                  <button onClick={() => removeFromFavourites(item.id)} className="text-red-500">
                     <Delete/>
                   </button>
                 </li>

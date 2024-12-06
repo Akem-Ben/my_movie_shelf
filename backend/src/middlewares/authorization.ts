@@ -60,13 +60,6 @@ export const generalAuthFunction = async (
 
         const userDetails:any = await userDatabase.userDatabaseHelper.getOne(filter, projection)
 
-        // if(!userDetails.isVerified){
-        //     return response.status(403).json({
-        //       status: 'error',
-        //       message: `Account not verified, please verify your account before you can access this resource`
-        //     })
-        // }
-
         const compareRefreshTokens = refreshToken === userDetails.refreshToken
 
         if(compareRefreshTokens === false){
@@ -111,13 +104,6 @@ export const generalAuthFunction = async (
     const projection = { isVerified: 1 };
 
     const userDetails:any = await userDatabase.userDatabaseHelper.getOne(filter, projection)
-
-    // if(!userDetails.isVerified){
-    //     return response.status(403).json({
-    //       status: 'error',
-    //       message: `Account not verified, please verify your account`
-    //     })
-    // }
 
       request.user = verifiedUser;
 

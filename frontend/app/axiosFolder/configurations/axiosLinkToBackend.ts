@@ -8,16 +8,13 @@ interface Config {
 
 let cache: Config | null = null;
 
-const environment = import.meta.env.VITE_APP_ENVIRONMENT || "development";
-
 const config = (): Config => {
     if (!cache) {
+        const apiHost = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001/api";
+
         cache = Object.freeze({
             secrets: {
-                apiHost:
-                    environment === "development"
-                        ? "https://royal-blogs-tia-backend.onrender.com/"
-                        : "https://royal-blogs-tia-backend.onrender.com/"
+                apiHost,
             },
         });
     }
@@ -25,7 +22,3 @@ const config = (): Config => {
 };
 
 export default config;
-
-// https://royal-blogs-tia.vercel.app/
-//"https://localhost:3000/"
-// "https://royal-blogs-tia-backend.onrender.com/"

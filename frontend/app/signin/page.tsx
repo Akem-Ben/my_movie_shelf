@@ -6,33 +6,34 @@ import { useAuth } from "@/app/context/AuthContext";
 import { CircularProgress } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Link from 'next/link';
+import Link from "next/link";
 import Button from "../components/Button";
+import { useAlert } from "next-alert";
+import { Alerts } from "next-alert";
 
 const SignIn: React.FC = () => {
   const { signIn } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
 
+  const { addAlert } = useAlert();
+
   const validationSchema = Yup.object({
-    loginKey: Yup.string()
-      .required("Email/Username is required"),
-    password: Yup.string().required("Password is required")
+    loginKey: Yup.string().required("Email/Username is required"),
+    password: Yup.string().required("Password is required"),
   });
 
   return (
     <div>
       <Link href="/">
-      <button
-        className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-        Home
-      </button>
+        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+          Home
+        </button>
       </Link>
       <Link href="/movies">
-      <button
-        className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-        Movies
-      </button>
+        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+          Movies
+        </button>
       </Link>
       <div className="h-screen sm:px-0 px-2 flex items-center justify-center">
         <div className="rounded-lg max-w-md w-full">
@@ -43,13 +44,49 @@ const SignIn: React.FC = () => {
           <Formik
             initialValues={{ loginKey: "", password: "", remember: false }}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
-              setTimeout(() => {
-                signIn(values.loginKey, values.password, values.remember);
+
+              const body = {
+                loginKey: values.loginKey,
+                password: values.password,
+              };
+
+              try {
+                const response: Record<string, any> | any = await signIn(
+                  body,
+                  values.remember
+                );
+
+                if (response.status !== 200) {
+                  setSubmitting(false);
+                  return addAlert("Error", response.data.message, "error");
+                }
+
+                addAlert("Success", response.data.message, "success");
+
+                values.loginKey = "";
+                values.remember = false;
+                values.password = "";
+
                 setSubmitting(false);
-                router.push("/");
-              }, 2000);
+
+                return router.push("/dashboard");
+              }catch (error: any) {
+                setSubmitting(false);
+
+                values.loginKey = "";
+                values.remember = false;
+                values.password = "";
+                
+                if (error?.response) {
+                  addAlert("Error fetching users:", error.response.data, "error");
+                } else if (error?.request) {
+                  addAlert("No response received:", error.request, "error");
+                } else {
+                  addAlert("Error setting up request:", error.message, "error");
+                }
+              }
             }}
           >
             {({ isSubmitting }) => (
@@ -59,7 +96,7 @@ const SignIn: React.FC = () => {
                     type="text"
                     name="loginKey"
                     placeholder="Email or Username"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="loginKey"
@@ -73,7 +110,7 @@ const SignIn: React.FC = () => {
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="password"
@@ -93,29 +130,24 @@ const SignIn: React.FC = () => {
                     Remember me
                   </label>
                 </div>
-              <div>
-                <Button title={`
-                   ${isSubmitting ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    "Sign In"
-                  )}
-                    `
-                }
-                width="full"
-                 />
+                <div>
+                  <Button width="full">
+                    {isSubmitting ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "Sign In"
+                    )}
+                  </Button>
                 </div>
 
                 <div className="flex justify-between items-center mt-4">
                   <button className="text-sm text-blue-200 hover:underline">
                     Forgot Password?
                   </button>
-                  <Link href='/signup'>
-                  <button
-                    className="text-sm text-white dark:text-gray-300 hover:underline"
-                  >
-                    Don’t have an account? Sign Up
-                  </button>
+                  <Link href="/signup">
+                    <button className="text-sm text-white dark:text-gray-300 hover:underline">
+                      Don’t have an account? Sign Up
+                    </button>
                   </Link>
                 </div>
               </Form>
@@ -123,6 +155,12 @@ const SignIn: React.FC = () => {
           </Formik>
         </div>
       </div>
+      <Alerts
+        position="top-right"
+        direction="right"
+        timer={3000}
+        className="rounded-md relative z-50 !w-80"
+      ></Alerts>
     </div>
   );
 };

@@ -48,8 +48,6 @@ const createMovie = async (
 
   
     const { query } = request
-
-    console.log('query', query)
   
     const movies = await moviesServices.getAllMoviesInDatabase(
       query

@@ -3,10 +3,12 @@ import React, { useState } from "react";
 
 type InputFieldProps = {
   label: string;
+  searchTerm?: string | number;
+  handleSearch?: any;
   error?: string;
 };
 
-const InputField: React.FC<InputFieldProps> = ({ label }) => {
+const InputField: React.FC<InputFieldProps> = ({ label, searchTerm, handleSearch}) => {
   const [value, setValue] = useState("");
 
   return (
@@ -14,8 +16,8 @@ const InputField: React.FC<InputFieldProps> = ({ label }) => {
             <TextField
           variant="outlined"
           label={label}
-        //   value={searchTerm}
-        //   onChange={handleSearch}
+          value={searchTerm}
+          onChange={handleSearch}
           className="mb-2 rounded-lg sm:mb-0 sm:w-1/3 w-full bg-[#224957] text-white"
           InputLabelProps={{
             style: { color: 'white' },

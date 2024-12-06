@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Skeleton, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { products } from '../data/products';
-import { useCart } from '../context/CartContext';
-// import './globals.css';
+import { useFavourites } from '../context/FavouritesContext';
 import { ArrowLeft, ArrowRight } from '@mui/icons-material';
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
@@ -18,7 +17,6 @@ const MyMovies = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
-    const { addToCart } = useCart(); 
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const { addAlert } = useAlert();
@@ -30,10 +28,10 @@ const MyMovies = () => {
       }, 2000);
   
       return () => clearTimeout(timer);
-    }, [searchTerm, selectedCategory]);
+    }, []);
   
     const handleAddToCart = (product: any) => {
-      addToCart(product); 
+      // addToCart(product); 
       addAlert("Product added to cart successfully", "Proceed to checkout", "success");
     };
   

@@ -12,14 +12,14 @@ function rolePermit(roles) {
         const userRole = request.user.role;
         const userId = request.user.id;
         if (!userRole || !userId) {
-            return response.status(401).json({
+            return response.status(400).json({
                 status: 'error',
                 message: 'User Not Authorized. Please login again',
             });
         }
         const isAuthorized = roles.includes(userRole);
         if (!isAuthorized) {
-            return response.status(401).json({
+            return response.status(400).json({
                 status: 'error',
                 message: 'User Not Permitted to execute this action',
             });

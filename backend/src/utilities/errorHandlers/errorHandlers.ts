@@ -11,7 +11,7 @@ const createError = (message: string, statusCode: number) => ({
     message: 'Something went wrong, please try again later.',
     statusCode: 500,
     timestamp: new Date(),
-    // details: error,
+    details: error,
     isOperational: false
   });
 

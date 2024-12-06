@@ -54,7 +54,7 @@ const verifyRegistrationToken = async (token) => {
     }
     catch (error) {
         if (error.message === 'jwt expired') {
-            throw utilities_1.errorUtilities.createError('Please request a new verification email', 401);
+            throw utilities_1.errorUtilities.createError('Please request a new verification email', 400);
         }
         throw utilities_1.errorUtilities.createUnknownError(error);
     }
@@ -73,44 +73,45 @@ const dateFormatter = (dateString) => {
         time
     };
 };
-const refreshUserToken = async (userRefreshToken) => {
-    try {
-        let responseDetails = {
-            statusCode: 0,
-            message: '',
-        };
-        const decodedToken = jsonwebtoken_1.default.verify(userRefreshToken, `${envKeys_1.APP_SECRET}`);
-        if (!decodedToken) {
-            responseDetails.statusCode = 401;
-            responseDetails.message = 'Invalid Refresh Token';
-            return responseDetails;
-        }
-        const userPayload = {
-            id: decodedToken.id,
-            email: decodedToken.email,
-        };
-        const newAccessToken = await generateTokens(userPayload, '3h');
-        const newRefreshToken = await generateTokens(userPayload, '30d');
-        responseDetails.statusCode = 200;
-        responseDetails.message = 'Refresh Token is valid, new tokens generated';
-        responseDetails.data = {
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
-        };
-        return responseDetails;
-    }
-    catch (error) {
-        if (error.message === 'jwt expired') {
-            let responseDetails = {
-                statusCode: 0,
-                message: '',
-            };
-            responseDetails.statusCode = 403;
-            responseDetails.message = 'Please login again';
-            return responseDetails;
-        }
-    }
-};
+// const refreshUserToken = async (
+//     userRefreshToken: string
+//   ) => {
+//     try{
+//         let responseDetails: ResponseDetails = {
+//             statusCode: 0,
+//             message: '',
+//         };
+//     const decodedToken:any = jwt.verify(userRefreshToken, `${APP_SECRET}`);
+//     if (!decodedToken) {
+//         responseDetails.statusCode = 400;
+//         responseDetails.message = 'Invalid Refresh Token';
+//         return responseDetails;
+//       }
+//       const userPayload = {
+//         id: decodedToken.id,
+//         email: decodedToken.email,
+//       }
+//       const newAccessToken = await generateTokens(userPayload, '3h')
+//       const newRefreshToken = await generateTokens(userPayload, '30d')
+//       responseDetails.statusCode = 200;
+//       responseDetails.message = 'Refresh Token is valid, new tokens generated';
+//       responseDetails.data = {
+//         accessToken: newAccessToken,
+//         refreshToken: newRefreshToken,
+//     }
+//     return responseDetails;
+//     }catch (error: any) {
+//         if (error.message === 'jwt expired') {
+//           let responseDetails: ResponseDetails = {
+//             statusCode: 0,
+//             message: '',
+//           };
+//           responseDetails.statusCode = 403;
+//           responseDetails.message = 'Please login again';
+//           return responseDetails;
+//         }
+//       }
+//   };
 //This function is used to manage queries (request.query) for the application  
 const queryFilter = async (searchTerm) => {
     const query = {};
@@ -133,7 +134,7 @@ exports.default = {
     hashPassword,
     validatePassword,
     generateTokens,
-    refreshUserToken,
+    // refreshUserToken,
     dateFormatter,
     verifyRegistrationToken,
     queryFilter

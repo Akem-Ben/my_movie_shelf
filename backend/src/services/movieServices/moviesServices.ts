@@ -277,6 +277,8 @@ console.log('quer', queryDetails)
 
       filter.ownerId = ownerId
 
+      console.log('quer2', filter)
+
       const userMovies = await movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
 
       if (!userMovies || userMovies.rows.length === 0) {

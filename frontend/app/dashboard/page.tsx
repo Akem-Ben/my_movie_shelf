@@ -12,6 +12,8 @@ import { useMovie } from "../context/MovieContext";
 import MovieCard from "../components/MovieCard";
 import InputField from "../components/Input";
 import { CirclePlus } from 'lucide-react';
+import { useDebounce } from '../components/Debounce';
+
 
 const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,6 +23,10 @@ const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState('')
   const [totalPages, setTotalPages] = useState(1);
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const debouncedSelectedCategory = useDebounce(selectedCategory, 500);
+
 
 
   const { addAlert } = useAlert();
@@ -33,9 +39,12 @@ const Dashboard: React.FC = () => {
 
       const movies = await getUserMovies(search, currentPage);
 
-      if (searchTerm.length !== 0 || selectedCategory.length !==0 && movies.status !== 200){
-        setLoading(false);
-        return setUserMovies([])
+      if (debouncedSearchTerm || debouncedSelectedCategory) {
+        if (movies.status !== 200) {
+          console.log("hi", movies);
+          setLoading(false);
+          return setUserMovies([]);
+        }
       }
 
       if (movies.status !== 200) {
@@ -62,7 +71,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     allUserMovies()
-  }, [searchTerm, selectedCategory, currentPage]);
+  }, [debouncedSearchTerm, debouncedSelectedCategory, currentPage]);
 
   const handleAddToCart = (product: any) => {
     addToFavourites(product); 

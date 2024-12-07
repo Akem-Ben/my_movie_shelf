@@ -5,7 +5,7 @@ export const addMovie = async(body:any)=>{
     try{
       const response = await axios.post("/movies/create-movie", body,{
         headers: {
-            "Content-Type" : "multipart/form-data"
+            "Content-Type" : "application/json"
         }
       })
     return response
@@ -55,6 +55,22 @@ export const editMovie = async(id:string, body:Record<string, any>)=>{
 export const editMovieImage = async(id:string, image:any)=>{
   try{
     const response = await axios.put(`/movies/update-movies/${id}`, image, {
+      headers: {
+          "Content-Type" : "multipart/form-data"
+      }
+    })
+    return response
+    
+  }catch(error:any){
+    return error.response
+  }
+}
+
+
+
+export const uploadMovieImage = async(image:any)=>{
+  try{
+    const response = await axios.post(`/movies/upload-image`, image, {
       headers: {
           "Content-Type" : "multipart/form-data"
       }

@@ -1,26 +1,30 @@
+// ImageUploader.tsx
 import { Download } from "lucide-react";
 import React, { useState, useRef } from "react";
 
 type ImageUploaderProps = {
-    onUpload?: (image: File) => void;
-    bg?: string;
+  onUpload?: (image: File) => void; // Callback to pass image data to parent
+  bg?: string;
+};
 
-}
-
-const ImageUploader: React.FC<ImageUploaderProps>  = ({bg}) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload, bg }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedImage(e.target.files[0]);
+      const image = e.target.files[0];
+      setSelectedImage(image);
+      if (onUpload) onUpload(image); // Pass the image back to the parent
     }
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setSelectedImage(e.dataTransfer.files[0]);
+      const image = e.dataTransfer.files[0];
+      setSelectedImage(image);
+      if (onUpload) onUpload(image); // Pass the image back to the parent
     }
   };
 
@@ -30,17 +34,8 @@ const ImageUploader: React.FC<ImageUploaderProps>  = ({bg}) => {
 
   const handleDelete = () => {
     setSelectedImage(null);
+    if (onUpload) onUpload(null as any); // Notify parent if image is deleted
   };
-
-  const handleChange = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file input dialog
-    }
-  };
-
-  const handleImageSubmit = () => {
-    console.log('hi')
-  }
 
   return (
     <div
@@ -65,15 +60,6 @@ const ImageUploader: React.FC<ImageUploaderProps>  = ({bg}) => {
                 Delete
               </button>
             </div>
-  
-            <div className="flex justify-center mt-2">
-              <button
-                className="px-4 py-2 text-sm sm:text-base hover:text-gray-500 transition"
-                onClick={handleImageSubmit}
-              >
-                Submit
-              </button>
-            </div>
           </div>
         </div>
       ) : (
@@ -93,7 +79,6 @@ const ImageUploader: React.FC<ImageUploaderProps>  = ({bg}) => {
       )}
     </div>
   );
-  
 };
 
 export default ImageUploader;

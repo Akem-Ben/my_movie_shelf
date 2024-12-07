@@ -235,30 +235,30 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       };
 
 
-      const { userId } = queryDetails
+      const { ownerId } = queryDetails
 
-      if(!userId){
+      if(!ownerId){
         throw new Error("User ID is required to fetch Movies, Please login")
       }
       
       let size = 9
       let skip = 0
       let page = 1
+
       let filter:any = {}
 
+console.log('quer', queryDetails)
+
       if(queryDetails){
-      const searchTerm = queryDetails.search || "";
+      const searchTerm = queryDetails.query.search || "";
 
       filter = await generalHelpers.queryFilter(searchTerm);
 
-      skip = (Number(queryDetails.page) - 1) * size || 0;
+      skip = (Number(queryDetails.query.page) - 1) * size || 0;
 
-      page = (Number(queryDetails.page)) || 1
+      page = (Number(queryDetails.query.page)) || 1
 
     }
-
-    filter.ownerId = userId
-
       const options = {
         page,
         offset: skip,
@@ -274,6 +274,8 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         ownerId: 1,
         movieProducer: 1
       };
+
+      filter.ownerId = ownerId
 
       const userMovies = await movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
 

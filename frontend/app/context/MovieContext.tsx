@@ -1,12 +1,13 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { addMovie, allDatabaseMovies, allUserMovies, singleMovie, editMovie, editMovieImage, deleteMovie} from '../axiosFolder/axiosFunctions/movieAxios/movieAxios';
+import { addMovie, uploadMovieImage, allDatabaseMovies, allUserMovies, singleMovie, editMovie, editMovieImage, deleteMovie} from '../axiosFolder/axiosFunctions/movieAxios/movieAxios';
 
 
 interface MovieContextType {
-  addMovie: (body: Record<string, any>)=> void;
+  addUserMovie: (body: Record<string, any>)=> void;
   getAllMovies: (query:string, page?:number) => void;
   getUserMovies: (query?:string, page?:number) => void;
+  uploadImage: (image:any) => void
   getSingleMovie: (id:string) => void
   editMovie: (id:string, body:Record<string, any>) => void;
   editMovieImage: (id:string, image:any) => void
@@ -18,8 +19,6 @@ const MovieContext = createContext<MovieContextType | undefined | any>(undefined
 export const MovieProvider: React.FC | any = ({ children }:any) => {
   const [allMovies, setAllMovies] = useState<any | null>(null);
   const [userMovies, setUserMovies] = useState<any | null>(null);
-  // const [singleMovie, setSingleMovie] = useState<any | null>(null)
-
 
   const getAllMovies = async(query:string, page?:number) => {
     const response = await allDatabaseMovies(query, page);
@@ -30,6 +29,11 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
     return response
   };
 
+  const addUserMovie = async(body:Record<string, any>) => {
+    const response = await addMovie(body);
+    return response;
+  }
+
   const getUserMovies = async(query?:string, page?:number) => {
     const response = await allUserMovies(query, page)
     if(response.status !== 200){
@@ -38,6 +42,11 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
     setUserMovies(response.data.data.movies)
     return response
   };
+
+  const uploadImage = async(image:any) => {
+    const response = await uploadMovieImage(image)
+    return response
+  }
 
   const editUserMovie = async(id:string, body:Record<string, any>) => {
    const response = await editMovie(id, body)
@@ -54,7 +63,7 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
   }
 
   return (
-    <MovieContext.Provider value={{ getAllMovies, deleteUserMovie, getSingleMovie, allMovies, editUserMovie, setAllMovies, userMovies, setUserMovies, singleMovie, getUserMovies, editMovie }}>
+    <MovieContext.Provider value={{ getAllMovies, addUserMovie, uploadImage, deleteUserMovie, getSingleMovie, allMovies, editUserMovie, setAllMovies, userMovies, setUserMovies, singleMovie, getUserMovies, editMovie }}>
       {children}
     </MovieContext.Provider>
   );

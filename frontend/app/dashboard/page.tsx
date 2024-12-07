@@ -11,6 +11,7 @@ import { useFavourites } from "../context/FavouritesContext";
 import { useMovie } from "../context/MovieContext";
 import MovieCard from "../components/MovieCard";
 import InputField from "../components/Input";
+import { CirclePlus } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,6 +38,7 @@ const Dashboard: React.FC = () => {
         return setUserMovies([])
       }
       setUserMovies(movies.data.data.movies);
+      console.log('tst', movies)
       setTotalPages(movies.data.data.pagination.totalPages)
       setLoading(false);
     } catch (error: any) {
@@ -78,42 +80,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="p-6">
-      {loading ? (
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-         
-        { Array.from({ length: 9 }).map((_, index) => (
-          <Skeleton
-            key={index}
-            variant="rectangular"
-            width="100%"
-            height={250}
-            animation="pulse"
-            className="mb-4 rounded-lg"
-            style={{
-              backgroundColor: 'rgba(200, 200, 200, 0.2)',
-              borderRadius: '10px',
-              transform: 'scale(1)',
-              transition: 'transform 0.3s ease-in-out',
-            }}
-          />
-        ))
-      }
-        </div>
-
-      ) : userMovies === null || userMovies.length === 0 ? (
-        <div className="min-h-[calc(100vh-4rem)] sm:px-0 px-2 flex items-center justify-center">
-          <div className="rounded-lg flex items-center justify-center flex-col w-full">
-            <h1 className="sm:text-[50px] text-[30px] font-bold mb-4 text-center text-white">
-              Your movie list is empty
-            </h1>
-            <Link href="/new-movie">
-              <Button1 width="40">Add a new Movie</Button1>
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
+                <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
             <InputField
               label={'Search Titles, Year or Producer'}
               searchTerm={searchTerm}
@@ -150,12 +117,48 @@ const Dashboard: React.FC = () => {
               </Select>
             </FormControl>
           </div>
+      {loading ? (
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+         
+        { Array.from({ length: 9 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            variant="rectangular"
+            width="100%"
+            height={250}
+            animation="pulse"
+            className="mb-4 rounded-lg"
+            style={{
+              backgroundColor: 'rgba(200, 200, 200, 0.2)',
+              borderRadius: '10px',
+              transform: 'scale(1)',
+              transition: 'transform 0.3s ease-in-out',
+            }}
+          />
+        ))
+      }
+        </div>
+
+      ) : userMovies === null || userMovies.length === 0 ? (
+        <div className="min-h-[calc(100vh-4rem)] sm:px-0 px-2 flex items-center justify-center">
+          <div className="rounded-lg flex items-center justify-center flex-col w-full">
+            <h1 className="sm:text-[50px] text-[30px] font-bold mb-4 text-center text-white">
+              Your movie list is empty
+            </h1>
+            <Link href="/new-movie">
+              <Button1 width="40">Add a new Movie</Button1>
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <>
+        <Link href="/new-movie" className=""><div className="flex mb-[2rem] gap-2 text-white hover:cursor-pointer transition-colors ease-in-out transform hover:text-gray-500"><CirclePlus className="text-white"/> Add a New Movie</div></Link>
   
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {userMovies.map((movie: Record<string, any>) => (
               <div key={movie.id}>
                 <MovieCard
-                  imageSrc={""}
+                  imageSrc={`${movie.moviePoster}`}
                   title={movie.title}
                   date={movie.publishedDate}
                   owner={true}

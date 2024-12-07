@@ -10,9 +10,24 @@ import Link from "next/link";
 import Button from "../components/Button";
 import { Download } from "lucide-react";
 import ImageUploader from "../components/ImageUploader";
+import { useAlert, Alerts } from "next-alert";
+import { useMovie } from "../context/MovieContext";
 
 const NewMovie: React.FC = () => {
+
+  const [image, setImage] = useState<File | null>(null);
+
   const router = useRouter();
+
+  const { uploadImage, addUserMovie } = useMovie()
+
+  const { addAlert } = useAlert()
+
+
+  const handleImageUpload = (uploadedImage: File | null) => {
+    setImage(uploadedImage); // Update the state with the selected image
+  };
+
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Please input a title"),
@@ -33,7 +48,7 @@ const NewMovie: React.FC = () => {
           </div>
           <div className="flex justify-around flex-col sm:flex-col lg:flex-row mt-10">
             <div>
-            <ImageUploader />
+            <ImageUploader onUpload={handleImageUpload}/>
             </div>
             <div className="w-[40%]">
               <Formik
@@ -45,13 +60,64 @@ const NewMovie: React.FC = () => {
                   movieProducer: "",
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={async (values, { setSubmitting }) => {
+
+                  try{
+
+
                   setSubmitting(true);
-                  setTimeout(() => {
-                    // signIn(values.loginKey, values.password, values.remember);
+                  if(!image || image === null){
+                    setSubmitting(false)
+                    return addAlert('Error', 'Select an Image', 'error')
+                  }
+
+                 const ImageData = new FormData()
+
+                 ImageData.append('image', image)
+
+                  const uploadedImage = await uploadImage(ImageData)
+
+                  const formData = {
+                    ...values,
+                    moviePoster: uploadedImage.data.details,
+                  };
+
+                  const createMovie = await addUserMovie(formData)
+
+                  if(createMovie.status !== 201){
+                    setSubmitting(false)
+                    return addAlert('Error', `${createMovie.data.message}`, 'error')
+                  }
+                  setSubmitting(false)
+
+                  values.description = "";
+                  values.genre = "";
+                  values.movieProducer = "";
+                  values.publishedDate = "";
+                  values.title = "";
+
+                  addAlert('Success', 'Movie Added Successfully', 'success')
+
+                  return router.push('/dashboard')
+
+
+                  }catch (error: any) {
                     setSubmitting(false);
-                    router.push("/");
-                  }, 2000);
+    
+                    values.description = "";
+                    values.genre = "";
+                    values.movieProducer = "";
+                    values.publishedDate = "";
+                    values.title = "";
+                    
+                    if (error?.response) {
+                      addAlert("Error:", error.response.data, "error");
+                    } else if (error?.request) {
+                      addAlert("No response received:", error.request, "error");
+                    } else {
+                      addAlert("Error setting up request:", error.message, "error");
+                    }
+                  }
                 }}
               >
                 {({ isSubmitting }) => (
@@ -137,14 +203,8 @@ const NewMovie: React.FC = () => {
                       />
                     </div>
                     <div className="flex justify-center gap-3">
-                      <Button  bg="transparent">
-                   {
-                     isSubmitting ? (
-                       <CircularProgress size={24} color="inherit" />
-                     ) : (
-                       "Cancel"
-                     )
-                   }
+                      <Button type="button" onClick={()=> router.push('/dashboard')}  bg="transparent">
+                       Cancel
                       </Button>
                       <Button>
                    {
@@ -164,6 +224,12 @@ const NewMovie: React.FC = () => {
           </div>
         </div>
       </div>
+        <Alerts 
+        position={"bottom-right"} 
+        direction={"right"} 
+        timer={5000} 
+        className="rounded-md relative z-50 !w-80"
+        />
     </div>
   );
 };

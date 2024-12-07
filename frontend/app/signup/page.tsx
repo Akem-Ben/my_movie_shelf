@@ -99,7 +99,7 @@ const SignUp: React.FC = () => {
                 values.username = "";
                 
                 if (error?.response) {
-                  addAlert("Error fetching users:", error.response.data, "error");
+                  addAlert("Error:", error.response.data, "error");
                 } else if (error?.request) {
                   addAlert("No response received:", error.request, "error");
                 } else {

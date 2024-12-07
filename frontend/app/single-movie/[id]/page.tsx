@@ -110,8 +110,8 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
             <div className="flex flex-col lg:w-[60rem] lg:flex-row p-3 bg-[#092C39] gap-4 justify-between hover:cursor-pointer hover:scale-105 hover:bg-[#0829358C] transition-all rounded-lg shadow-md">
               <div className="lg:w-1/2 w-full">
                 <img
-                  src={"imageSrc"}
-                  alt={"title"}
+                  src={movieDetails.moviePoster}
+                  alt={movieDetails.title}
                   className="w-full h-[22rem] object-cover rounded-md mb-2"
                 />
               </div>

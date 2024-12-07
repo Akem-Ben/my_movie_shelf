@@ -217,7 +217,7 @@ const SignUp: React.FC = () => {
         </div>
       </div>
       <Alerts
-        position="top-right"
+        position="bottom-right"
         direction="right"
         timer={6000}
         className="rounded-md relative z-50 !w-80"

@@ -23,9 +23,9 @@ export const allDatabaseMovies = async(query?:string, page?:number)=>{
       }
 }
 
-export const allUserMovies = async() => {
+export const allUserMovies = async(query?:string, page?:number) => {
   try{
-      const response = await axios.get('/movies/user-movies')
+      const response = await axios.get(`/movies/user-movies?search=${query}&page=${page}`)
       return response
   }catch(error:any){
       return error.response
@@ -34,6 +34,7 @@ export const allUserMovies = async() => {
 
 export const singleMovie = async(id:string)=>{
   try{
+    console.log('ressss', id)
     const response = await axios.get(`/movies/single-movie/${id}`)
     return response
 }catch(error:any){

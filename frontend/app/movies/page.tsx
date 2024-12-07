@@ -78,11 +78,6 @@ const MOVIES = () => {
       setCurrentPage(1); 
     };
 
-    // const displayedProducts = filteredProducts.slice(
-    //   (currentPage - 1) * ITEMS_PER_PAGE,
-    //   currentPage * ITEMS_PER_PAGE
-    // );
-
 return (
     <>
       <div className="p-4 lg:px-[7rem]">
@@ -180,7 +175,7 @@ return (
           ) : (
             allMovies.map((movie:Record<string, any>) => (
               <div key={movie.id} className="">
-                <MovieCard imageSrc={""} title={movie.title} date={movie.publishedDate} />
+                <MovieCard imageSrc={""} title={movie.title} date={movie.publishedDate} id={movie.id} />
               </div>
             ))
           )}
@@ -207,7 +202,7 @@ return (
         )}
       </div>
       <Alerts
-        position="top-right"
+        position="bottom-right"
         direction="right"
         timer={3000}
         className="rounded-md relative z-50 !w-80"

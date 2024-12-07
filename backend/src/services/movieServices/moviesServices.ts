@@ -7,6 +7,7 @@ import { JwtPayload } from "jsonwebtoken";
 import validator from "validator";
 import sequelize, { Transaction } from "sequelize";
 import User from "../../models/users/userModel";
+import cloudinaryUpload from '../../utilities/uploads/cloudinary.utilities'
 
 const userCreateMovieService = errorUtilities.withErrorHandling(
   async (
@@ -243,7 +244,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       let size = 9
       let skip = 0
       let page = 1
-      let filter = {}
+      let filter:any = {}
 
       if(queryDetails){
       const searchTerm = queryDetails.search || "";
@@ -255,6 +256,8 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       page = (Number(queryDetails.page)) || 1
 
     }
+
+    filter.ownerId = userId
 
       const options = {
         page,
@@ -343,50 +346,6 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
     }
   );
 
-  // const deleteManyMovies = errorUtilities.withErrorHandling(
-  //   async (deleteDetails: Record<string, any>): Promise<any> => {
-  //     const responseHandler: ResponseDetails = {
-  //       statusCode: 0,
-  //       message: "",
-  //     };
-
-  //     const { userId, movieIds } = deleteDetails;
-
-  //     if (!productIds || productIds.length === 0) {
-  //       throw errorUtilities.createError(
-  //         "No Products selected for deletion. Please select Products.",
-  //         404
-  //       );
-  //     }
-
-  //     const shop = await shopDatabase.getOne(
-  //       { _id: shopId, ownerId: userId },
-  //       { _id: 1 }
-  //     );
-
-  //     if (!shop) {
-  //       throw errorUtilities.createError("Shop not found.", 404);
-  //     }
-
-  //     const operations = [
-  //       async (session: ClientSession) => {
-  //     await productDatabase.deleteMany({ _id: { $in: productIds } })
-  //       },
-  //       async (session: ClientSession) => {
-  //     await shopDatabase.updateOne({_id:shopId},{ $inc: { noOfProducts: -1 } })
-  //       }
-  //     ]
-
-  //     await performTransaction(operations);
-
-  //     responseHandler.statusCode = 200;
-  //     responseHandler.message = "Products deleted successfully";
-  //     return responseHandler;
-  //   }
-  // );
-
-
-
 
   const updateMovieImageService = errorUtilities.withErrorHandling(
     async (request: JwtPayload): Promise<any> => {
@@ -429,7 +388,36 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       return responseHandler;
     }
   );
+  
+  const uploadImageService = errorUtilities.withErrorHandling(
+    async (request: JwtPayload & { file?: Express.Multer.File }): Promise<ResponseDetails> => {
+      const responseHandler: ResponseDetails = {
+        statusCode: 0,
+        message: "",
+        data: ""
+      };
+  
+      try {
+        const file = request?.file?.path;
 
+        if (!file) {
+          throw new Error("No file provided for upload");
+        }
+  
+        responseHandler.statusCode = 200;
+        responseHandler.message = "Image uploaded successfully";
+        responseHandler.data = file
+  
+        return responseHandler;
+        
+      } catch (error: any) {
+        console.error("Image Upload Error:", error.message);
+        throw new Error(`Failed to upload image: ${error.message}`);
+      }
+    }
+  );
+
+  
 
 export default {
   userCreateMovieService,
@@ -438,7 +426,6 @@ export default {
   updateMovieService,
   getUserMovies,
   deleteSingleMovie,
-  // deleteSingleVendorProduct,
-  // deleteManyVendorProductsForAShop,
+  uploadImageService,
   updateMovieImageService
 };

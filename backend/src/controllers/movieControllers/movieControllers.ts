@@ -133,29 +133,29 @@ const createMovie = async (
     );
   };
   
+const imageUpload = async (
+  request: JwtPayload,
+  response: Response
+): Promise<any> => {
+  try {
+    const uploadedImage = await moviesServices.uploadImageService(
+      request
+    );
 
-  // const deleteManyMovies = async (
-  //   request: JwtPayload,
-  //   response: Response
-  // ): Promise<any> => {
-  //   const userId = request.user.id;
-  
-  //   const { shopId } = request.params
-  
-  //   const result = await vendorProductServices.deleteManyVendorProductsForAShop({
-  //     ...request.body,
-  //     userId,
-  //     shopId
-  //   });
-  
-  //   return responseUtilities.responseHandler(
-  //     response,
-  //     result.message,
-  //     result.statusCode,
-  //     result.details,
-  //     result.data
-  //   );
-  // };
+    return responseUtilities.responseHandler(
+      response,
+      uploadedImage.message,
+      uploadedImage.statusCode,
+      uploadedImage.data
+    );
+  } catch (error: any) {
+    console.error("Error in uploading image:", error.message);
+    return response.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+}
 
 
   const updateMovieImage = async (
@@ -189,7 +189,6 @@ const createMovie = async (
     updateMovie,
     allUserMovies,
     deleteSingleUserMovie,
-    updateMovieImage
-    // changeVendorProductStatus,
-    // updateVendorProductImage,
+    updateMovieImage,
+    imageUpload
   };

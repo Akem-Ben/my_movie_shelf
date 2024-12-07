@@ -3,9 +3,11 @@ import React, { useState, useRef } from "react";
 
 type ImageUploaderProps = {
     onUpload?: (image: File) => void;
+    bg?: string;
+
 }
 
-const ImageUploader = () => {
+const ImageUploader: React.FC<ImageUploaderProps>  = ({bg}) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -36,9 +38,13 @@ const ImageUploader = () => {
     }
   };
 
+  const handleImageSubmit = () => {
+    console.log('hi')
+  }
+
   return (
     <div
-      className="border relative gap-2 flex justify-center items-center flex-col text-center text-white px-36 py-36 border-dashed rounded-lg"
+      className={`border ${bg ? `bg-${bg}` : ""} relative gap-2 flex justify-center items-center flex-col text-center text-white px-10 py-10 sm:px-20 sm:py-20 md:px-24 md:py-24 lg:px-36 lg:py-36 border-dashed rounded-lg`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
@@ -47,22 +53,35 @@ const ImageUploader = () => {
           <img
             src={URL.createObjectURL(selectedImage)}
             alt="Selected"
-            className="w-32 h-32 object-cover rounded-md mb-4"
+            className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-md mb-4"
           />
-          <p>{selectedImage.name}</p>
-          <div className="flex justify-center mt-2">
-            <button
-              className="px-4 py-2 hover:text-gray-500 transition"
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
+          <p className="text-sm sm:text-base">{selectedImage.name}</p>
+          <div className="flex gap-3">
+            <div className="flex justify-center mt-2">
+              <button
+                className="px-4 py-2 text-sm sm:text-base hover:text-gray-500 transition"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            </div>
+  
+            <div className="flex justify-center mt-2">
+              <button
+                className="px-4 py-2 text-sm sm:text-base hover:text-gray-500 transition"
+                onClick={handleImageSubmit}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       ) : (
         <>
           <Download />
-          Click to select <br /> or drop an Image here
+          <p className="text-sm sm:text-base">
+            Click to select <br /> or drop an Image here
+          </p>
           <input
             type="file"
             accept="image/*"
@@ -74,6 +93,7 @@ const ImageUploader = () => {
       )}
     </div>
   );
+  
 };
 
 export default ImageUploader;

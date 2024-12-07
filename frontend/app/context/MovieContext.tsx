@@ -6,11 +6,11 @@ import { addMovie, allDatabaseMovies, allUserMovies, singleMovie, editMovie, edi
 interface MovieContextType {
   addMovie: (body: Record<string, any>)=> void;
   getAllMovies: (query:string, page?:number) => void;
-  getUserMovies: () => void;
+  getUserMovies: (query?:string, page?:number) => void;
   getSingleMovie: (id:string) => void
   editMovie: (id:string, body:Record<string, any>) => void;
   editMovieImage: (id:string, image:any) => void
-  deleteMovie: (id:string) => void
+  deleteUserMovie: (id:string) => void
 }
 
 const MovieContext = createContext<MovieContextType | undefined | any>(undefined);
@@ -18,7 +18,7 @@ const MovieContext = createContext<MovieContextType | undefined | any>(undefined
 export const MovieProvider: React.FC | any = ({ children }:any) => {
   const [allMovies, setAllMovies] = useState<any | null>(null);
   const [userMovies, setUserMovies] = useState<any | null>(null);
-  const [singleMovie, setSingleMovie] = useState<any | null>(null)
+  // const [singleMovie, setSingleMovie] = useState<any | null>(null)
 
 
   const getAllMovies = async(query:string, page?:number) => {
@@ -30,8 +30,12 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
     return response
   };
 
-  const getUserMovies = async(body:Record<string, any>) => {
-    const response = await allUserMovies()
+  const getUserMovies = async(query?:string, page?:number) => {
+    const response = await allUserMovies(query, page)
+    if(response.status !== 200){
+      return response
+    }
+    setUserMovies(response.data.data.movies)
     return response
   };
 
@@ -39,9 +43,18 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
    const response = await editMovie(id, body)
   };
 
+  const getSingleMovie = async(id:string) => {
+    const response = await singleMovie(id)
+    return response
+  }
+
+  const deleteUserMovie = async(id:string) => {
+    const response = await deleteMovie(id)
+    return response
+  }
 
   return (
-    <MovieContext.Provider value={{ getAllMovies, allMovies, editUserMovie, setAllMovies, userMovies, setUserMovies, singleMovie, setSingleMovie, getUserMovies, editMovie }}>
+    <MovieContext.Provider value={{ getAllMovies, deleteUserMovie, getSingleMovie, allMovies, editUserMovie, setAllMovies, userMovies, setUserMovies, singleMovie, getUserMovies, editMovie }}>
       {children}
     </MovieContext.Provider>
   );

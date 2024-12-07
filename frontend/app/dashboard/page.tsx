@@ -33,9 +33,14 @@ const Dashboard: React.FC = () => {
 
       const movies = await getUserMovies(search, currentPage);
 
-      if (movies.status !== 200) {
+      if (searchTerm.length !== 0 || selectedCategory.length !==0 && movies.status !== 200){
         setLoading(false);
         return setUserMovies([])
+      }
+
+      if (movies.status !== 200) {
+        setLoading(false);
+        return setUserMovies(null)
       }
       setUserMovies(movies.data.data.movies);
       console.log('tst', movies)
@@ -139,7 +144,7 @@ const Dashboard: React.FC = () => {
       }
         </div>
 
-      ) : userMovies === null || userMovies.length === 0 ? (
+      ) : userMovies === null ? (
         <div className="min-h-[calc(100vh-4rem)] sm:px-0 px-2 flex items-center justify-center">
           <div className="rounded-lg flex items-center justify-center flex-col w-full">
             <h1 className="sm:text-[50px] text-[30px] font-bold mb-4 text-center text-white">
@@ -150,7 +155,11 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
         </div>
-      ) : (
+      ) : userMovies.length === 0 ? (
+        <p className="text-lg text-grey-400 h-[50vh] m-auto text-white">
+        Movies not found
+      </p>
+      ):(
         <>
         <Link href="/new-movie" className=""><div className="flex mb-[2rem] gap-2 text-white hover:cursor-pointer transition-colors ease-in-out transform hover:text-gray-500"><CirclePlus className="text-white"/> Add a New Movie</div></Link>
   

@@ -67,7 +67,7 @@ const movieDatabaseHelper = {
 
   getMany: async (filter: any, projection?: any, options?: any) => {
     try {
-      const movies = await Movie.findAll({
+      const movies = await Movie.findAndCountAll({
         where: filter,
         attributes: projection,
         ...options,

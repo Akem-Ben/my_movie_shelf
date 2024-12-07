@@ -7,6 +7,7 @@ import { JwtPayload } from "jsonwebtoken";
 import validator from "validator";
 import sequelize, { Transaction } from "sequelize";
 import User from "../../models/users/userModel";
+import cloudinaryUpload from '../../utilities/uploads/cloudinary.utilities'
 
 const userCreateMovieService = errorUtilities.withErrorHandling(
   async (
@@ -94,26 +95,30 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
 
 
     const getAllMoviesInDatabase = errorUtilities.withErrorHandling(
-    async (queryDetails: Record<string, any>): Promise<any> => {
+    async (queryDetails?: Record<string, any>): Promise<any> => {
       const responseHandler: ResponseDetails = {
         statusCode: 0,
         message: "",
       };
 
+      let size = 9
+      let skip = 0
+      let page = 1
+      let filter = {}
+
+      if(queryDetails){
       const searchTerm = queryDetails.search || "";
-      
-      const query = await generalHelpers.queryFilter(searchTerm);
 
-      const size = Number(queryDetails.size) || 10;
+      filter = await generalHelpers.queryFilter(searchTerm);
 
-      const skip = (Number(queryDetails.page) - 1) * size || 0;
+      skip = (Number(queryDetails.page) - 1) * size || 0;
 
-      const filter = {
-        ...query,
-      };
+      page = (Number(queryDetails.page)) || 1
 
+    }
       const options = {
-        skip,
+        page,
+        offset: skip,
         limit: size,
       };
 
@@ -129,17 +134,28 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
 
       const movies = await movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
 
-      if (!movies || movies.length === 0) {
+
+      if (!movies || movies.rows.length === 0) {
         throw errorUtilities.createError(
           "No movies found.",
           404
         );
       }
 
+      const currentPage = Math.ceil(skip / size) + 1;
+      const totalPages = Math.ceil(movies.count / size);
+
       responseHandler.statusCode = 200;
       responseHandler.message = "movies fetched successfully";
       responseHandler.data = {
-        movies,
+        movies: movies.rows,
+        pagination: {
+          currentPage,
+          totalPages,
+          totalItems: movies.count,
+          pageSize: size,
+        }
+
       };
       return responseHandler;
     }
@@ -173,7 +189,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       }
 
       if (movie.ownerId != userId) {
-        throw errorUtilities.createError("You are not the owner of this movie, you can only edit movies you have created. Thank you.", 401);
+        throw errorUtilities.createError("You are not the owner of this movie, you can only edit movies you have created. Thank you.", 400);
       }
 
       let updateDetails: Record<string, any> = {};
@@ -218,7 +234,6 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         message: "",
       };
 
-      const searchTerm = queryDetails.search || "";
 
       const { userId } = queryDetails
 
@@ -226,19 +241,27 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         throw new Error("User ID is required to fetch Movies, Please login")
       }
       
-      const query = await generalHelpers.queryFilter(searchTerm);
+      let size = 9
+      let skip = 0
+      let page = 1
+      let filter:any = {}
 
-      const size = Number(queryDetails.size) || 10;
+      if(queryDetails){
+      const searchTerm = queryDetails.search || "";
 
-      const skip = (Number(queryDetails.page) - 1) * size || 0;
+      filter = await generalHelpers.queryFilter(searchTerm);
 
-      const filter = {
-        ownerId: userId,
-        ...query,
-      };
+      skip = (Number(queryDetails.page) - 1) * size || 0;
+
+      page = (Number(queryDetails.page)) || 1
+
+    }
+
+    filter.ownerId = userId
 
       const options = {
-        skip,
+        page,
+        offset: skip,
         limit: size,
       };
 
@@ -254,17 +277,26 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
 
       const userMovies = await movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
 
-      if (!userMovies || userMovies.length === 0) {
+      if (!userMovies || userMovies.rows.length === 0) {
         throw errorUtilities.createError(
           "You do not have any movies yet, add one.",
           404
         );
       }
 
+      const currentPage = Math.ceil(skip / size) + 1;
+      const totalPages = Math.ceil(userMovies.count / size);
+
       responseHandler.statusCode = 200;
       responseHandler.message = "movies fetched successfully";
       responseHandler.data = {
-        movies: userMovies,
+        movies: userMovies.rows,
+        pagination: {
+          currentPage,
+          totalPages,
+          totalItems: userMovies.count,
+          pageSize: size,
+        }
       };
       return responseHandler;
     }
@@ -288,7 +320,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       if (movie.ownerId != userId) {
         throw errorUtilities.createError(
           "You are not the owner of this movie. You cannot delete the movie",
-          403
+          400
         );
       }
 
@@ -313,50 +345,6 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       return responseHandler;
     }
   );
-
-  // const deleteManyMovies = errorUtilities.withErrorHandling(
-  //   async (deleteDetails: Record<string, any>): Promise<any> => {
-  //     const responseHandler: ResponseDetails = {
-  //       statusCode: 0,
-  //       message: "",
-  //     };
-
-  //     const { userId, movieIds } = deleteDetails;
-
-  //     if (!productIds || productIds.length === 0) {
-  //       throw errorUtilities.createError(
-  //         "No Products selected for deletion. Please select Products.",
-  //         404
-  //       );
-  //     }
-
-  //     const shop = await shopDatabase.getOne(
-  //       { _id: shopId, ownerId: userId },
-  //       { _id: 1 }
-  //     );
-
-  //     if (!shop) {
-  //       throw errorUtilities.createError("Shop not found.", 404);
-  //     }
-
-  //     const operations = [
-  //       async (session: ClientSession) => {
-  //     await productDatabase.deleteMany({ _id: { $in: productIds } })
-  //       },
-  //       async (session: ClientSession) => {
-  //     await shopDatabase.updateOne({_id:shopId},{ $inc: { noOfProducts: -1 } })
-  //       }
-  //     ]
-
-  //     await performTransaction(operations);
-
-  //     responseHandler.statusCode = 200;
-  //     responseHandler.message = "Products deleted successfully";
-  //     return responseHandler;
-  //   }
-  // );
-
-
 
 
   const updateMovieImageService = errorUtilities.withErrorHandling(
@@ -400,7 +388,36 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       return responseHandler;
     }
   );
+  
+  const uploadImageService = errorUtilities.withErrorHandling(
+    async (request: JwtPayload & { file?: Express.Multer.File }): Promise<ResponseDetails> => {
+      const responseHandler: ResponseDetails = {
+        statusCode: 0,
+        message: "",
+        data: ""
+      };
+  
+      try {
+        const file = request?.file?.path;
 
+        if (!file) {
+          throw new Error("No file provided for upload");
+        }
+  
+        responseHandler.statusCode = 200;
+        responseHandler.message = "Image uploaded successfully";
+        responseHandler.data = file
+  
+        return responseHandler;
+        
+      } catch (error: any) {
+        console.error("Image Upload Error:", error.message);
+        throw new Error(`Failed to upload image: ${error.message}`);
+      }
+    }
+  );
+
+  
 
 export default {
   userCreateMovieService,
@@ -409,7 +426,6 @@ export default {
   updateMovieService,
   getUserMovies,
   deleteSingleMovie,
-  // deleteSingleVendorProduct,
-  // deleteManyVendorProductsForAShop,
+  uploadImageService,
   updateMovieImageService
 };

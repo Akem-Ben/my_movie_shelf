@@ -137,29 +137,25 @@ const NewMovie: React.FC = () => {
                       />
                     </div>
                     <div className="flex justify-center gap-3">
-                      <Button
-                        title={`
-                   ${
+                      <Button  bg="transparent">
+                   {
                      isSubmitting ? (
                        <CircularProgress size={24} color="inherit" />
                      ) : (
                        "Cancel"
                      )
                    }
-                    `}
-                        bg="transparent"
-                      />
-                      <Button
-                        title={`
-                   ${
+                      </Button>
+                      <Button>
+                   {
                      isSubmitting ? (
                        <CircularProgress size={24} color="inherit" />
                      ) : (
                        "Submit"
                      )
                    }
-                    `}
-                      />
+                    </Button>
+
                     </div>
                   </Form>
                 )}

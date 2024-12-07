@@ -32,8 +32,7 @@ const userRegisterSchema = Joi.object({
     'string.pattern.base': 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number.'
   }),
   phone: Joi.string().required(),
-  userName: Joi.string().required(),
-  profileImage: Joi.string().required()
+  userName: Joi.string().required()
 });
 
 
@@ -48,7 +47,8 @@ const createMovieSchema = Joi.object({
   publishedDate: Joi.date().required(),
   description: Joi.string().required(),
   moviePoster: Joi.string().required(),
-  movieProducer: Joi.string().required()
+  movieProducer: Joi.string().required(),
+  genre: Joi.string().required()
 })
 
 

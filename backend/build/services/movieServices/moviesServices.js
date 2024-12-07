@@ -116,7 +116,7 @@ const updateMovieService = utilities_1.errorUtilities.withErrorHandling(async (u
         throw utilities_1.errorUtilities.createError("Movie not found", 404);
     }
     if (movie.ownerId != userId) {
-        throw utilities_1.errorUtilities.createError("You are not the owner of this movie, you can only edit movies you have created. Thank you.", 401);
+        throw utilities_1.errorUtilities.createError("You are not the owner of this movie, you can only edit movies you have created. Thank you.", 400);
     }
     let updateDetails = {};
     if (updatePayload.title) {
@@ -193,7 +193,7 @@ const deleteSingleMovie = utilities_1.errorUtilities.withErrorHandling(async (de
         throw utilities_1.errorUtilities.createError("Movie not found", 404);
     }
     if (movie.ownerId != userId) {
-        throw utilities_1.errorUtilities.createError("You are not the owner of this movie. You cannot delete the movie", 403);
+        throw utilities_1.errorUtilities.createError("You are not the owner of this movie. You cannot delete the movie", 400);
     }
     const payload = {
         id: movieId,

@@ -17,10 +17,6 @@ User.init({
         allowNull: false,
         defaultValue: false
     },
-    profileImage: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
     fullName: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,

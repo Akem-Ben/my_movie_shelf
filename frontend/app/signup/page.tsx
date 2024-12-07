@@ -1,48 +1,49 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
-import { CircularProgress } from '@mui/material';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import hero from '../../public/hero.jpg';
-import { Facebook, Google, Visibility, VisibilityOff } from '@mui/icons-material';
-import IconButton from '@mui/material/IconButton';
-import Link from 'next/link';
-import Button from '../components/Button';
+import React from "react";
+import { useRouter } from "next/navigation";
+import { CircularProgress } from "@mui/material";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import Link from "next/link";
+import Button from "../components/Button";
+import { useAuth } from "../context/AuthContext";
+import { useAlert } from "next-alert";
+import { Alerts } from "next-alert";
 
 const SignUp: React.FC = () => {
-  const { signUp } = useAuth();
+  const { addAlert } = useAlert();
+
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { signUp } = useAuth();
 
   const validationSchema = Yup.object({
-    email: Yup.string().email('Invalid email format').required('Email is required'),
-    password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password')], 'Passwords must match')
-      .required('Please retype your password'),
-      fullname: Yup.string().required('Please Enter your Fullname'),
-      username: Yup.string().required('Please choose a username'),
-      phone: Yup.number().required('Phone number is required')
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Please retype your password"),
+    fullname: Yup.string().required("Please Enter your Fullname"),
+    username: Yup.string().required("Please choose a username"),
+    phone: Yup.number().required("Phone number is required"),
   });
 
   return (
     <div>
       <Link href="/">
-      <button
-        className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-        Home
-      </button>
+        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+          Home
+        </button>
       </Link>
       <Link href="/movies">
-      <button
-        className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-        Movies
-      </button>
+        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+          Movies
+        </button>
       </Link>
       <div className="h-screen sm:px-0 px-2 flex items-center justify-center">
         <div className="rounded-lg max-w-md w-full">
@@ -51,15 +52,60 @@ const SignUp: React.FC = () => {
           </h1>
 
           <Formik
-            initialValues={{ email: "", fullname: "", username: "", password: "", phone: "" }}
+            initialValues={{
+              email: "",
+              fullname: "",
+              username: "",
+              password: "",
+              phone: "",
+            }}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
-              setTimeout(() => {
-                // signIn(values.loginKey, values.password, values.remember);
+              const body = {
+                email: values.email,
+                fullName: values.fullname,
+                password: values.password,
+                phone: values.phone.toString(),
+                userName: values.username,
+              };
+              try {
+                const register: Record<string, any> | any = await signUp(body);
+                if (register.status !== 201) {
+                  setSubmitting(false);
+                  return addAlert("Error", register.data.message, "error");
+                }
+                addAlert("Success", register.data.message, "success");
+
+                values.email = "";
+                values.fullname = "";
+                values.password = "";
+                values.phone = "";
+                values.username = "";
+
                 setSubmitting(false);
-                router.push("/");
-              }, 2000);
+
+                setTimeout(() => {
+                  return router.push("/signin");
+                }, 5000);
+
+              } catch (error: any) {
+                setSubmitting(false);
+
+                values.email = "";
+                values.fullname = "";
+                values.password = "";
+                values.phone = "";
+                values.username = "";
+                
+                if (error?.response) {
+                  addAlert("Error fetching users:", error.response.data, "error");
+                } else if (error?.request) {
+                  addAlert("No response received:", error.request, "error");
+                } else {
+                  addAlert("Error setting up request:", error.message, "error");
+                }
+              }
             }}
           >
             {({ isSubmitting }) => (
@@ -69,7 +115,7 @@ const SignUp: React.FC = () => {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="email"
@@ -83,7 +129,7 @@ const SignUp: React.FC = () => {
                     type="text"
                     name="fullname"
                     placeholder="Fullname"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="fullname"
@@ -97,7 +143,7 @@ const SignUp: React.FC = () => {
                     type="text"
                     name="username"
                     placeholder="Choose a Username"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="username"
@@ -111,7 +157,7 @@ const SignUp: React.FC = () => {
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="password"
@@ -120,13 +166,12 @@ const SignUp: React.FC = () => {
                   />
                 </div>
 
-                
                 <div className="relative">
                   <Field
                     type="password"
                     name="confirmPassword"
                     placeholder="confirm Password"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="confirmPassword"
@@ -140,7 +185,7 @@ const SignUp: React.FC = () => {
                     type="number"
                     name="phone"
                     placeholder="phone number"
-                    className="p-3 bg-[#224957] text-[#224957] rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
                   />
                   <ErrorMessage
                     name="phone"
@@ -149,26 +194,21 @@ const SignUp: React.FC = () => {
                   />
                 </div>
 
-              <div>
-                <Button title={`
-                   ${isSubmitting ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    "Sign Up"
-                  )}
-                    `
-                }
-                width="full"
-                 />
+                <div>
+                  <Button width="full">
+                    {isSubmitting ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "Sign Up"
+                    )}
+                  </Button>
                 </div>
 
                 <div className="flex justify-between items-center mt-4">
-                  <Link href='/signin'>
-                  <button
-                    className="text-sm text-white dark:text-gray-300 hover:underline"
-                  >
-                    Already have an account? Log in
-                  </button>
+                  <Link href="/signin">
+                    <button className="text-sm text-white dark:text-gray-300 hover:underline">
+                      Already have an account? Log in
+                    </button>
                   </Link>
                 </div>
               </Form>
@@ -176,6 +216,12 @@ const SignUp: React.FC = () => {
           </Formik>
         </div>
       </div>
+      <Alerts
+        position="bottom-right"
+        direction="right"
+        timer={6000}
+        className="rounded-md relative z-50 !w-80"
+      ></Alerts>
     </div>
   );
 };

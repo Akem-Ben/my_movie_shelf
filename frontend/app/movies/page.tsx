@@ -10,6 +10,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  CircularProgress,
 } from "@mui/material";
 import { products } from "../data/products";
 import { useFavourites } from "../context/FavouritesContext";
@@ -29,6 +30,13 @@ const MOVIES = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
+
+
+  const [homeLoading, setHomeLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [moviesLoading, setMoviesLoading] = useState(false)
+  const [logoutLoading, setLogoutLoading] = useState(false)
 
   const { addAlert } = useAlert();
 
@@ -96,33 +104,53 @@ const MOVIES = () => {
       <div className="p-4 lg:px-[7rem]">
         <div className="mb-[2rem]">
           <Link href="/">
-            <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-              Home
+            <button onClick={()=> setHomeLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+            {homeLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Home"
+          )}
             </button>
           </Link>
           {!user ? (
             <>
               <Link href="/signup">
-                <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                  Register
+                <button onClick={()=> setRegisterLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+                {registerLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Register"
+          )}
                 </button>
               </Link>
               <Link href="/signin">
-                <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                  Login
+                <button onClick={()=> setLoginLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+                {loginLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Login"
+          )}
                 </button>
               </Link>
             </>
           ) : (
             <>
               <Link href="/dashboard">
-                <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                  My Movies
+                <button onClick={()=> setMoviesLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+                {moviesLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Movies"
+          )}
                 </button>
               </Link>
               <Link href="/signin">
-                <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                  Logout
+                <button onClick={()=> setLogoutLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+                {logoutLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Logout"
+          )}
                 </button>
               </Link>
             </>

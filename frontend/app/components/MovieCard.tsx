@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
 import DeleteModal from "./DeleteModal";
+import { CircularProgress } from "@mui/material";
 
 type MovieCardProp = {
   imageSrc: string;
@@ -31,14 +32,18 @@ const MovieCard: React.FC<MovieCardProp> = ({
 
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const [movieCardLoading, setMovieCardLoading] = useState(false)
+
   const router = useRouter();
 
   const { addAlert } = useAlert();
 
   function singleMovieRedirect(id: string) {
+    setMovieCardLoading(true)
     if (realUser) {
       return router.push(`/single-movie/${id}`);
     } else {
+      setMovieCardLoading(false)
       return addAlert(
         "Error",
         "Only Logged in users can view movie details",
@@ -52,17 +57,25 @@ const MovieCard: React.FC<MovieCardProp> = ({
   return (
     <>
       <div className="block bg-[#092C39] h-[30rem] hover:cursor-pointer hover:scale-105 hover:bg-[#0829358C] transition-all rounded-lg shadow-md p-4">
-        <div onClick={() => singleMovieRedirect(id)}>
-          <img
-            src={imageSrc}
-            alt={title}
-            className="w-full h-[22rem] object-cover rounded-md mb-2"
-          />
-          <h2 className="text-xl text-white font-bold mb-2">{title}</h2>
-          <div className="flex items-center justify-between pr-4">
-            <h4 className="text-lg text-white font-light mb-2">{date}</h4>
-          </div>
-        </div>
+      <div onClick={() => singleMovieRedirect(id)}>
+  {movieCardLoading ? (
+    <div className="text-white h-[25rem] flex justify-center items-center">
+    <CircularProgress size={100} color="inherit" />
+    </div>
+  ) : (
+    <>
+      <img
+        src={imageSrc}
+        alt={title}
+        className="w-full h-[22rem] object-cover rounded-md mb-2"
+      />
+      <h2 className="text-xl text-white font-bold mb-2">{title}</h2>
+      <div className="flex items-center justify-between pr-4">
+        <h4 className="text-lg text-white font-light mb-2">{date}</h4>
+      </div>
+    </>
+  )}
+</div>
         <div className="flex gap-4">
           <Heart
             className="text-white hover:cursor-pointer hover:text-gray-500"

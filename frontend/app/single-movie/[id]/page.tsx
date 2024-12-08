@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Skeleton } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import { ArrowLeftFromLine, Heart, Pencil, Trash2 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useMovie } from "../../context/MovieContext";
@@ -42,6 +42,8 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
 
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const [backLoading, setBackLoading] = useState(false);
+
   const userSingleMovie = async () => {
     try {
       setLoading(true);
@@ -75,11 +77,21 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
 
   return (
     <div className="">
-      <div
-        onClick={() => router.back()}
-        className="flex transition-colors duration-300 ease-in-out transform text-white gap-2 hover:text-gray-500 hover:cursor-pointer"
-      >
-        <ArrowLeftFromLine className="text-white ml-4" /> Back
+      <div className="flex transition-colors duration-300 ease-in-out transform text-white gap-2">
+        <div
+          onClick={() => {
+            setBackLoading(true);
+            router.back();
+          }}
+          className="w-[7%] gap-2 flex hover:text-gray-500 hover:cursor-pointer"
+        >
+          <ArrowLeftFromLine className="text-white ml-4" />{" "}
+          {backLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Back"
+          )}
+        </div>
       </div>
       {loading ? (
         <div className="p-4 h-[100vh] flex justify-center items-center">
@@ -158,7 +170,7 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
                   <Trash2
                     className="text-white hover:cursor-pointer hover:text-gray-500"
                     style={{ width: "1rem", height: "1rem" }}
-                    onClick={()=> setDeleteModal(true)}
+                    onClick={() => setDeleteModal(true)}
                   />
                 )}
               </div>

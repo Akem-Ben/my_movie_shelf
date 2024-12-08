@@ -7,9 +7,10 @@ import ImageUploader from "./ImageUploader";
 
 type EditModalProps = {
     isOpen: ()=> void;
+    id: string;
 }
 
-const EditMovieModal:React.FC<EditModalProps> = ({isOpen}) => {
+const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
 
   const initialValues = {
     title: "",
@@ -33,7 +34,7 @@ const EditMovieModal:React.FC<EditModalProps> = ({isOpen}) => {
       <div className="flex flex-col lg:flex-row gap-4 w-[90%] max-w-5xl max-h-[90vh] bg-[#092C39] rounded-lg shadow-lg overflow-hidden">
         {/* Image Section */}
         <div className="flex-1 flex items-center justify-center bg-[#093545] p-4">
-          <ImageUploader bg={"#093545"} />
+          <ImageUploader onClose={isOpen} id={id} bg={"#093545"} isEdit={true} title="Click here to change movie image or drop new image here"/>
         </div>
 
         {/* Form Section */}

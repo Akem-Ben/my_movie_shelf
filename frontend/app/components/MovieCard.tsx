@@ -2,12 +2,13 @@
 
 import { Pencil, Trash2, Heart } from "lucide-react";
 import EditMovieModal from "./EditMovieModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
 import DeleteModal from "./DeleteModal";
 import { CircularProgress } from "@mui/material";
+import { useFavourites } from "../context/FavouritesContext";
 
 type MovieCardProp = {
   imageSrc: string;
@@ -16,6 +17,8 @@ type MovieCardProp = {
   date: string;
   owner?: boolean;
   isEdit?: boolean;
+  movie? : Record<string, any> | any;
+  loggedIn?: boolean;
 };
 
 const MovieCard: React.FC<MovieCardProp> = ({
@@ -25,6 +28,8 @@ const MovieCard: React.FC<MovieCardProp> = ({
   date,
   owner,
   isEdit,
+  movie,
+  loggedIn
 }) => {
   const user: any = localStorage.getItem("user");
 
@@ -37,6 +42,23 @@ const MovieCard: React.FC<MovieCardProp> = ({
   const router = useRouter();
 
   const { addAlert } = useAlert();
+
+  const [faved, setFaved] = useState(false)
+
+  const { toggleFavourites, favouritesItems } = useFavourites()
+
+  const favedSetup = (id: string) => {
+    const itemExists = favouritesItems.some(
+      (element: Record<string, any>) => element.id === id
+    );
+  
+    if (itemExists) {
+
+      setFaved(true)
+    } else {
+      setFaved(false)
+    }
+  };
 
   function singleMovieRedirect(id: string) {
     setMovieCardLoading(true)
@@ -53,6 +75,10 @@ const MovieCard: React.FC<MovieCardProp> = ({
   }
 
   const [editModal, setEditModal] = useState(false);
+
+  useEffect(()=>{
+    favedSetup(movie.id)
+  })
 
   return (
     <>
@@ -77,10 +103,13 @@ const MovieCard: React.FC<MovieCardProp> = ({
   )}
 </div>
         <div className="flex gap-4">
+          {loggedIn && (
           <Heart
-            className="text-white hover:cursor-pointer hover:text-gray-500"
+            className={`${faved ? "fill-red-800" : "text-white"} hover:cursor-pointer hover:text-gray-500`}
             style={{ width: "1rem", height: "1rem" }}
-          />{" "}
+            onClick={()=> {toggleFavourites(movie); favedSetup(id)}}
+          />
+          )}{" "}
           {owner && (
             <Pencil
               className="text-white z-100 hover:cursor-pointer hover:text-gray-500"
@@ -103,8 +132,7 @@ const MovieCard: React.FC<MovieCardProp> = ({
         <EditMovieModal
           isOpen={() => {
             setEditModal(false);
-          }}
-        />
+          } } id={id}/>
       )}
       <Alerts
         position="bottom-right"

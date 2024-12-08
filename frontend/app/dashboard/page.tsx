@@ -25,7 +25,7 @@ import { useDebounce } from "../components/Debounce";
 const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { addToFavourites } = useFavourites();
+  const { toggleFavourites } = useFavourites();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -80,8 +80,8 @@ const Dashboard: React.FC = () => {
     allUserMovies();
   }, [debouncedSearchTerm, debouncedSelectedCategory, currentPage]);
 
-  const handleAddToCart = (product: any) => {
-    addToFavourites(product);
+  const handleAddToFavourites = (product: any) => {
+    toggleFavourites(product);
     addAlert(
       "Product added to cart successfully",
       "Proceed to checkout",
@@ -183,13 +183,23 @@ const Dashboard: React.FC = () => {
         </p>
       ) : (
         <>
-          <div className="w-[12%]">
-            <Link href="/new-movie" onClick={()=> setNewMovie(true)} className="w-full">
-              <div className="flex w-full mb-[2rem] gap-2 text-white hover:cursor-pointer transition-colors ease-in-out transform hover:text-gray-500 ">
-                <CirclePlus className="text-white" /> {newMovie ? <CircularProgress size={24} color="inherit" /> : "Add a New Movie"}
-              </div>
-            </Link>
-          </div>
+        <div className="w-[90%] sm:w-[50%] md:w-[30%] lg:w-[20%] xl:w-[12%]">
+  <Link
+    href="/new-movie"
+    onClick={() => setNewMovie(true)}
+    className="w-full"
+  >
+    <div className="flex w-full mb-8 gap-2 text-white hover:cursor-pointer transition-colors ease-in-out transform hover:text-gray-500">
+      <CirclePlus className="text-white" />
+      {newMovie ? (
+        <CircularProgress size={24} color="inherit" />
+      ) : (
+        "Add a New Movie"
+      )}
+    </div>
+  </Link>
+</div>
+
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {userMovies.map((movie: Record<string, any>) => (
@@ -201,6 +211,8 @@ const Dashboard: React.FC = () => {
                   owner={true}
                   isEdit={true}
                   id={movie.id}
+                  movie={movie}
+                  loggedIn={true}
                 />
               </div>
             ))}

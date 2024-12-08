@@ -358,13 +358,15 @@ console.log('quer', queryDetails)
         message: "",
       };
 
-      const moviePoster = request?.file?.path;
+        const imageUpdate = request?.file?.path;
 
-      if (!moviePoster) {
-        throw errorUtilities.createError("Select an image please", 400);
-      }
+        if (!imageUpdate) {
+          throw errorUtilities.createError("Select an Image", 400);
+        }
 
       const { movieId } = request.params;
+
+      console.log('er', movieId)
 
       const movieCheck = await movieDatabase.movieDatabaseHelper.getOne(
         { id: movieId },
@@ -380,7 +382,7 @@ console.log('quer', queryDetails)
           id: movieId,
         },
         {
-          moviePoster
+          moviePoster: imageUpdate
         }
       );
 
@@ -405,7 +407,7 @@ console.log('quer', queryDetails)
         const file = request?.file?.path;
 
         if (!file) {
-          throw new Error("No file provided for upload");
+          throw errorUtilities.createError("Select an Image", 400);
         }
   
         responseHandler.statusCode = 200;

@@ -34,7 +34,6 @@ export const allUserMovies = async(query?:string, page?:number) => {
 
 export const singleMovie = async(id:string)=>{
   try{
-    console.log('ressss', id)
     const response = await axios.get(`/movies/single-movie/${id}`)
     return response
 }catch(error:any){
@@ -54,11 +53,13 @@ export const editMovie = async(id:string, body:Record<string, any>)=>{
 
 export const editMovieImage = async(id:string, image:any)=>{
   try{
-    const response = await axios.put(`/movies/update-movies/${id}`, image, {
+    const response = await axios.put(`/movies/update-movie-image/${id}`, image, 
+      {
       headers: {
           "Content-Type" : "multipart/form-data"
       }
-    })
+    }
+    )
     return response
     
   }catch(error:any){

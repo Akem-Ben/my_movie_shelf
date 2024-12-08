@@ -25,7 +25,7 @@ const NewMovie: React.FC = () => {
 
 
   const handleImageUpload = (uploadedImage: File | null) => {
-    setImage(uploadedImage); // Update the state with the selected image
+    setImage(uploadedImage);
   };
 
 

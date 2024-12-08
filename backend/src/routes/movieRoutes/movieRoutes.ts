@@ -13,6 +13,6 @@ router.get('/all-movies', movieControllers.allDatabaseMovies)
 router.put('/update-movie/:movieId', generalAuthFunction, movieControllers.updateMovie)
 router.get('/user-movies', generalAuthFunction, movieControllers.allUserMovies)
 router.delete('/delete-single/:movieId', generalAuthFunction, movieControllers.deleteSingleUserMovie)
-router.put('/update-movie-image/:movieId', generalAuthFunction, upload.single('moviePoster'), movieControllers.updateMovieImage)
+router.put('/update-movie-image/:movieId', generalAuthFunction, upload.single('image'), movieControllers.updateMovieImage)
 router.post('/upload-image', generalAuthFunction, upload.single('image'), movieControllers.imageUpload)
 export default router;

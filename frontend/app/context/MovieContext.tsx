@@ -10,7 +10,7 @@ interface MovieContextType {
   uploadImage: (image:any) => void
   getSingleMovie: (id:string) => void
   editMovie: (id:string, body:Record<string, any>) => void;
-  editMovieImage: (id:string, image:any) => void
+  editImage: (id:string, image:File) => void;
   deleteUserMovie: (id:string) => void
 }
 
@@ -48,6 +48,10 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
     return response
   }
 
+  const editImage = async(id:string, image:File) => {
+    const response = await editMovieImage(id, image)
+    return response
+  }
   const editUserMovie = async(id:string, body:Record<string, any>) => {
    const response = await editMovie(id, body)
   };
@@ -63,7 +67,7 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
   }
 
   return (
-    <MovieContext.Provider value={{ getAllMovies, addUserMovie, uploadImage, deleteUserMovie, getSingleMovie, allMovies, editUserMovie, setAllMovies, userMovies, setUserMovies, singleMovie, getUserMovies, editMovie }}>
+    <MovieContext.Provider value={{ getAllMovies, editImage, addUserMovie, uploadImage, deleteUserMovie, getSingleMovie, allMovies, editUserMovie, setAllMovies, userMovies, setUserMovies, singleMovie, getUserMovies, editMovie }}>
       {children}
     </MovieContext.Provider>
   );

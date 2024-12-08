@@ -21,11 +21,12 @@ import InputField from "../components/Input";
 import MovieCard from "../components/MovieCard";
 import { useMovie } from "../context/MovieContext";
 import { useAuth } from "../context/AuthContext";
+import Favourites from "../components/Favourites";
 
 const MOVIES = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { addToFavourites } = useFavourites();
+  const { toggleFavourites } = useFavourites();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -74,15 +75,6 @@ const MOVIES = () => {
     allMoviesInDatabase();
   }, [searchTerm, selectedCategory, currentPage]);
 
-  const handleAddToCart = (product: any) => {
-    addToFavourites(product);
-    addAlert(
-      "Product added to cart successfully",
-      "Proceed to checkout",
-      "success"
-    );
-  };
-
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
     setSearchTerm(event.target.value);
@@ -102,60 +94,79 @@ const MOVIES = () => {
   return (
     <>
       <div className="p-4 lg:px-[7rem]">
-        <div className="mb-[2rem]">
-          <Link href="/">
-            <button onClick={()=> setHomeLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-            {homeLoading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            "Home"
-          )}
-            </button>
-          </Link>
-          {!user ? (
-            <>
-              <Link href="/signup">
-                <button onClick={()=> setRegisterLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                {registerLoading ? (
+      <div className="mb-8 flex w-[100%] sm:w-[50%] md:w-[50%] lg:w-[40%] xl:w-[54%] flex-wrap items-center justify-around">
+  <Link href="/">
+    <button
+      onClick={() => setHomeLoading(true)}
+      className="text-base mt-4 sm:mt-0 sm:ml-4 text-white hover:underline"
+    >
+      {homeLoading ? (
+        <CircularProgress size={24} color="inherit" />
+      ) : (
+        "Home"
+      )}
+    </button>
+  </Link>
+  {!user ? (
+    <>
+      <Link href="/signup">
+        <button
+          onClick={() => setRegisterLoading(true)}
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+        >
+          {registerLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
             "Register"
           )}
-                </button>
-              </Link>
-              <Link href="/signin">
-                <button onClick={()=> setLoginLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                {loginLoading ? (
+        </button>
+      </Link>
+      <Link href="/signin">
+        <button
+          onClick={() => setLoginLoading(true)}
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+        >
+          {loginLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
             "Login"
           )}
-                </button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/dashboard">
-                <button onClick={()=> setMoviesLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                {moviesLoading ? (
+        </button>
+      </Link>
+    </>
+  ) : (
+    <>
+      <Link href="/dashboard">
+        <button
+          onClick={() => setMoviesLoading(true)}
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+        >
+          {moviesLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
-            "Movies"
+            "My Movies"
           )}
-                </button>
-              </Link>
-              <Link href="/signin">
-                <button onClick={()=> setLogoutLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-                {logoutLoading ? (
+        </button>
+      </Link>
+      <Link href="/signin">
+        <button
+          onClick={() => setLogoutLoading(true)}
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+        >
+          {logoutLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
             "Logout"
           )}
-                </button>
-              </Link>
-            </>
-          )}
-        </div>
+        </button>
+      </Link>
+      <div className="text-base mt-4 sm:mt-0 sm:ml-4">
+        <Favourites />
+      </div>
+    </>
+  )}
+</div>
+
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
           <InputField
             label={"Search Titles, Year or Producer"}
@@ -229,6 +240,8 @@ const MOVIES = () => {
                   title={movie.title}
                   date={movie.publishedDate}
                   id={movie.id}
+                  loggedIn={ user ? true : false }
+                  movie={movie}
                 />
               </div>
             ))

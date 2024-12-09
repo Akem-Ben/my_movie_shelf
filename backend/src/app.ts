@@ -32,27 +32,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
 // Set Cors
-// Define allowed origins
-const allowedOrigins = [
-  "https://my-movie-shelf-k8g7ogg8k-akembens-projects.vercel.app/",
-  "http://localhost:3000"
-];
-
-// Configure CORS
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true
-  })
-);
-
-app.options("*", cors());
+app.use(cors({
+  origin: '*',
+  credentials: true
+}))
 
 
 //Other Middlewares

@@ -8,8 +8,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
-import { useAlert } from "next-alert";
-import { Alerts } from "next-alert";
+import { useAlert, Alerts } from "next-alert";
 
 const SignUp: React.FC = () => {
   const { addAlert } = useAlert();

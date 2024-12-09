@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Movie = void 0;
 const sequelize_1 = require("sequelize");
 const database_1 = require("../../configurations/database");
-//action, romance, sci-fi, thriler, other, drama, k-drama
 class Movie extends sequelize_1.Model {
 }
 exports.Movie = Movie;

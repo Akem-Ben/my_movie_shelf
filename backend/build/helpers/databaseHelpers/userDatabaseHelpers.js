@@ -90,7 +90,8 @@ const userDatabaseHelper = {
                 phone: userData.phone,
                 isVerified: userData.isVerified,
                 refreshToken: userData.refreshToken,
-                noOfMovies: userData.numberOfMoviesAdded
+                noOfMovies: userData.numberOfMoviesAdded,
+                id: userData.id
             };
         }
         catch (error) {

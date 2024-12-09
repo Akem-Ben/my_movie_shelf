@@ -1,6 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
-// Environment configuration
 import config from './axiosLinkToBackend';
 
 const { apiHost } = config().secrets;
@@ -9,15 +8,13 @@ const customAxios = axios.create({
   baseURL: apiHost,
 });
 
-// Intercept responses
 customAxios.interceptors.response.use(
   (response) => handleResponse(response),
   (error) => handleError(error)
 );
 
-// Helper to handle successful responses
 const handleResponse = (response: AxiosResponse): AxiosResponse => {
-  // Update tokens if they exist in the response headers
+
   const newAccessToken = response.headers['x-access-token'];
   const newRefreshToken = response.headers['x-refresh-token'];
 
@@ -28,25 +25,20 @@ const handleResponse = (response: AxiosResponse): AxiosResponse => {
   return response;
 };
 
-// Helper to handle errors
 const handleError = async (error: AxiosError | any): Promise<AxiosError> => {
   if (error.response?.status === 401) {
-    // Attempt token renewal if refresh token is available
     const refreshToken = getRefreshToken();
 
     if (refreshToken) {
       try {
-        // Retry the original request
         return await retryWithNewTokens(error.config) as any
       } catch (retryError) {
-        // Clear storage and redirect if retry fails
         clearClientStorage();
         redirectToHomePage();
         return Promise.reject(retryError);
       }
     }
 
-    // No refresh token or failure in renewal
     clearClientStorage();
     redirectToHomePage();
   }
@@ -54,7 +46,6 @@ const handleError = async (error: AxiosError | any): Promise<AxiosError> => {
   return Promise.reject(error);
 };
 
-// Retry original request with new tokens
 const retryWithNewTokens = async (originalConfig: any): Promise<AxiosResponse> => {
   const newAccessToken = getAccessToken();
 
@@ -66,7 +57,6 @@ const retryWithNewTokens = async (originalConfig: any): Promise<AxiosResponse> =
   throw new Error('Failed to retry with new access token.');
 };
 
-// Intercept requests
 customAxios.interceptors.request.use(
   (config: any) => {
     const token = getAccessToken();
@@ -78,7 +68,6 @@ customAxios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Helper to get access token
 const getAccessToken = (): string | null => {
   if (typeof window !== 'undefined') {
     const user = localStorage.getItem('user')
@@ -91,7 +80,6 @@ const getAccessToken = (): string | null => {
   return null;
 };
 
-// Helper to get refresh token
 const getRefreshToken = (): string | null => {
   if (typeof window !== 'undefined') {
    const user = localStorage.getItem('user')
@@ -104,7 +92,6 @@ const getRefreshToken = (): string | null => {
   return null;
 };
 
-// Helper to store tokens
 const storeTokens = (accessToken: string, refreshToken: string): void => {
   if (typeof window !== 'undefined') {
     localStorage.setItem('accessToken', accessToken);
@@ -112,14 +99,12 @@ const storeTokens = (accessToken: string, refreshToken: string): void => {
   }
 };
 
-// Helper to clear client storage
 const clearClientStorage = (): void => {
   if (typeof window !== 'undefined') {
     localStorage.clear();
   }
 };
 
-// Redirect to home page
 const redirectToHomePage = (): void => {
   if (typeof window !== 'undefined') {
     window.location.href = '/';

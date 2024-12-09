@@ -1,13 +1,11 @@
 import { v4 } from "uuid";
 import { USERS_APP_BASE_URL } from "../../configurations/envKeys";
-import { movieDatabase, generalHelpers, userDatabase, performTransaction } from "../../helpers";
+import { movieDatabase, generalHelpers,  performTransaction } from "../../helpers";
 import { ResponseDetails } from "../../types/generalTypes";
-import { errorUtilities, mailUtilities, } from "../../utilities";
+import { errorUtilities  } from "../../utilities";
 import { JwtPayload } from "jsonwebtoken";
-import validator from "validator";
-import sequelize, { Transaction } from "sequelize";
 import User from "../../models/users/userModel";
-import cloudinaryUpload from '../../utilities/uploads/cloudinary.utilities'
+import { Transaction } from "sequelize";
 
 const userCreateMovieService = errorUtilities.withErrorHandling(
   async (
@@ -169,7 +167,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       };
 
       if (
-        (!updatePayload.title || updatePayload.productName === "") &&
+        (!updatePayload.title || updatePayload.title === "") &&
         (!updatePayload.publishedDate) &&
         (!updatePayload.description || updatePayload.description === "") &&
         (!updatePayload.movieProducer || updatePayload.movieProducer === "")
@@ -178,6 +176,15 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
           "At least one field must be selected for update",
           400
         );
+      }
+
+      if(updatePayload.publishedDate){
+        if(isNaN(Number(updatePayload.publishedDate))){
+          throw errorUtilities.createError(
+            "The Date of production must be a valid year",
+            400
+          );
+        }
       }
 
       const { userId, movieId } = updatePayload;
@@ -247,8 +254,6 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
 
       let filter:any = {}
 
-console.log('quer', queryDetails)
-
       if(queryDetails){
       const searchTerm = queryDetails.query.search || "";
 
@@ -277,8 +282,6 @@ console.log('quer', queryDetails)
 
       filter.ownerId = ownerId
 
-      console.log('quer2', filter)
-
       const userMovies = await movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
 
       if (!userMovies || userMovies.rows.length === 0) {
@@ -288,6 +291,7 @@ console.log('quer', queryDetails)
         );
       }
 
+      
       const currentPage = Math.ceil(skip / size) + 1;
       const totalPages = Math.ceil(userMovies.count / size);
 

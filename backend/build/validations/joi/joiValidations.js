@@ -25,7 +25,6 @@ const inputValidator = (schema) => {
         }
     };
 };
-//User Auth
 const userRegisterSchema = joi_1.default.object({
     fullName: joi_1.default.string().required(),
     email: joi_1.default.string().email().required(),
@@ -33,8 +32,7 @@ const userRegisterSchema = joi_1.default.object({
         'string.pattern.base': 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number.'
     }),
     phone: joi_1.default.string().required(),
-    userName: joi_1.default.string().required(),
-    profileImage: joi_1.default.string().required()
+    userName: joi_1.default.string().required()
 });
 const loginUserSchema = joi_1.default.object({
     loginKey: joi_1.default.string().required(),
@@ -45,7 +43,8 @@ const createMovieSchema = joi_1.default.object({
     publishedDate: joi_1.default.date().required(),
     description: joi_1.default.string().required(),
     moviePoster: joi_1.default.string().required(),
-    movieProducer: joi_1.default.string().required()
+    movieProducer: joi_1.default.string().required(),
+    genre: joi_1.default.string().required()
 });
 exports.default = {
     userRegisterSchema,

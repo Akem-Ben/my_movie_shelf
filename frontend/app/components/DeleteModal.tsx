@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useAlert, Alerts } from "next-alert";
 import { useMovie } from "../context/MovieContext";
 import { useRouter } from "next/navigation";
+import { useFavourites } from "../context/FavouritesContext";
 
 type DeleteModalProps = {
     isOpen?: ()=> void;
@@ -23,6 +24,8 @@ const DeleteModal:React.FC<DeleteModalProps> = ({isOpen, id}) => {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
 
+    const { removeFromFavourites, favouritesItems } = useFavourites();
+
     const deleteMovie = async(id:string)=>{
         try{
             setIsSubmitting(true)
@@ -34,13 +37,21 @@ const DeleteModal:React.FC<DeleteModalProps> = ({isOpen, id}) => {
                 return addAlert('Error', result.data.message, 'error')
             }
 
+            const itemExists = favouritesItems.some(
+              (element: Record<string, any>) => element.id === id
+            );
+
+            if(itemExists){
+              removeFromFavourites(id)
+            }
+            
             addAlert('success', result.data.message, 'success')
 
             setIsSubmitting(false)
 
             if(isOpen) isOpen()
 
-            getUserMovies()
+            getUserMovies("", 1)
 
             return router.push('/dashboard')
 

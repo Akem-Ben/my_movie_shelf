@@ -3,30 +3,32 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Button from "./Button";
 import { CircularProgress } from "@mui/material";
+import { useAlert, Alerts } from "next-alert";
 import ImageUploader from "./ImageUploader";
+import { useMovie } from "../context/MovieContext";
+import { useRouter } from "next/navigation";
 
 type EditModalProps = {
     isOpen: ()=> void;
     id: string;
+    movie: Record<string, any>;
 }
 
-const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
+const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id, movie }) => {
+
+  const router = useRouter()
+
+  const { addAlert } = useAlert()
+
+  const { editUserMovie, getUserMovies } = useMovie()
+
+  const [cancel, setCancel] = useState(false)
 
   const initialValues = {
     title: "",
-    genre: "",
+    publishedDate: "",
     description: "",
-  };
-
-  const validationSchema = Yup.object({
-    title: Yup.string().required("Title is required"),
-    genre: Yup.string().required("Genre is required"),
-    description: Yup.string().required("Description is required"),
-  });
-
-  const handleSubmit = (values: typeof initialValues) => {
-    console.log("Updated Movie Details:", values);
-    // setIsOpen(false); // Close modal after submission
+    movieProducer: ""
   };
 
   return (
@@ -40,12 +42,51 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
         {/* Form Section */}
         <div className="flex-1 p-6 overflow-y-auto">
           <h2 className="text-lg font-bold text-center text-white mb-4">
-            You can edit any of these fields
+            You can edit any one or more of these fields
           </h2>
           <Formik
             initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={async (values, { setSubmitting })=> {
+              setSubmitting(true)
+              
+              try {
+                const edit: Record<string, any> | any = await editUserMovie(movie.id, values);
+                if (edit.status !== 200) {
+                  setSubmitting(false);
+                  return addAlert("Error", edit.data.message, "error");
+                }
+                addAlert("Success", edit.data.message, "success");
+
+                values.title = "";
+                values.publishedDate = "";
+                values.description = "";
+                values.movieProducer = "";
+
+                setSubmitting(false);
+
+                getUserMovies("", 1)
+
+                isOpen()
+
+                return router.push('/dashboard')
+
+              } catch (error: any) {
+                setSubmitting(false);
+
+                values.title = "";
+                values.publishedDate = "";
+                values.description = "";
+                values.movieProducer = "";
+
+                if (error?.response) {
+                  addAlert("Error:", error.response.data, "error");
+                } else if (error?.request) {
+                  addAlert("No response received:", error.request, "error");
+                } else {
+                  addAlert("Error setting up request:", error.message, "error");
+                }
+              }
+            }}
           >
             {({ errors, touched, isSubmitting }) => (
               <Form className="flex flex-col gap-4">
@@ -53,7 +94,7 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
                   <Field
                     type="text"
                     name="title"
-                    placeholder="Title"
+                    placeholder={`Current Title: ${movie?.title}`}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
@@ -61,7 +102,7 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
                   <Field
                     type="text"
                     name="publishedDate"
-                    placeholder="Year of Production (e.g 1997)"
+                    placeholder={`Current Year of Production: ${movie.publishedDate}`}
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
@@ -69,20 +110,20 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
                   <Field
                     as="textarea"
                     name="description"
-                    placeholder="Description"
+                    placeholder={`Current Description: ${movie.description}`}
                     className="w-full p-2 border border-gray-300 rounded resize-none"
                     rows={4}
                   />
                   <Field
                     type="text"
                     name="movieProducer"
-                    placeholder="Producer"
+                    placeholder={`Current Movie Producer: ${movie.movieProducer}`}
                     className="w-full p-2 mt-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div className="flex justify-center gap-3 mt-4">
-                  <Button bg="transparent" onClick={isOpen}>
-                    {isSubmitting ? (
+                  <Button bg="transparent" onClick={()=> {setCancel(true); isOpen()}}>
+                    {cancel ? (
                       <CircularProgress size={24} color="inherit" />
                     ) : (
                       "Cancel"
@@ -101,6 +142,12 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id }) => {
           </Formik>
         </div>
       </div>
+      <Alerts
+        position="bottom-right"
+        direction="right"
+        timer={6000}
+        className="rounded-md relative z-50 !w-80"
+      ></Alerts>
     </div>
   );
 };

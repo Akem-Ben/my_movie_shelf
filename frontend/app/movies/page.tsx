@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Skeleton,
-  TextField,
   Button,
   Select,
   MenuItem,
@@ -12,7 +11,6 @@ import {
   FormControl,
   CircularProgress,
 } from "@mui/material";
-import { products } from "../data/products";
 import { useFavourites } from "../context/FavouritesContext";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 import { useAlert } from "next-alert";
@@ -20,13 +18,11 @@ import { Alerts } from "next-alert";
 import InputField from "../components/Input";
 import MovieCard from "../components/MovieCard";
 import { useMovie } from "../context/MovieContext";
-import { useAuth } from "../context/AuthContext";
 import Favourites from "../components/Favourites";
 
 const MOVIES = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { toggleFavourites } = useFavourites();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -53,8 +49,7 @@ const MOVIES = () => {
       }
       setAllMovies(movies.data.data.movies);
       setTotalPages(movies.data.data.pagination.totalPages);
-      setLoading(false);
-      console.log("mvz", movies.data.data);
+      return setLoading(false);
     } catch (error: any) {
       if (error?.response) {
         addAlert("Error fetching users:", error.response.data, "error");
@@ -69,7 +64,13 @@ const MOVIES = () => {
     }
   };
 
-  const user = localStorage.getItem("user");
+  const [user, setUser] = useState<any | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    }
+  }, []);
 
   useEffect(() => {
     allMoviesInDatabase();

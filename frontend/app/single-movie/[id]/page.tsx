@@ -9,17 +9,9 @@ import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
 import EditMovieModal from "../../components/EditMovieModal";
 import DeleteModal from "../../components/DeleteModal";
+import { useFavourites } from "../../context/FavouritesContext";
 
-type SingleMovieProps = {
-  isOpen: () => void;
-  imageSrc: string;
-  title: string;
-  date: string;
-  owner?: boolean;
-  isEdit?: boolean;
-};
-
-const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
+const SingleMovie: React.FC = () => {
   const router = useRouter();
 
   const { getSingleMovie } = useMovie();
@@ -30,9 +22,18 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
 
   const [editModal, setEditModal] = useState<any>(false);
 
-  const getUser: Record<string, any> | any = localStorage.getItem("user");
+  const [user, setUser] = useState<any | null>(null);
 
-  const user = JSON.parse(getUser);
+  const [mainMovie, setMainMovie] = useState<any | null>(null);
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const storedUser = localStorage.getItem("user");
+    const singleMovie = localStorage.getItem("movie");
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+    setMainMovie(singleMovie ? JSON.parse(singleMovie) : null);
+  }
+}, []);
 
   const id: any = pathname.split("/").pop();
 
@@ -43,6 +44,22 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
   const [deleteModal, setDeleteModal] = useState(false);
 
   const [backLoading, setBackLoading] = useState(false);
+
+  const { toggleFavourites, favouritesItems } = useFavourites();
+
+  const [faved, setFaved] = useState(false);
+
+  const favedSetup = (id: string) => {
+    const itemExists = favouritesItems.some(
+      (element: Record<string, any>) => element.id === id
+    );
+
+    if (itemExists) {
+      setFaved(true);
+    } else if (!itemExists) {
+      setFaved(false);
+    }
+  };
 
   const userSingleMovie = async () => {
     try {
@@ -56,7 +73,7 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
         return setMovieDetails(null);
       }
       setMovieDetails(movie.data.data.movie);
-      setLoading(false);
+      return setLoading(false);
     } catch (error: any) {
       if (error?.response) {
         addAlert("Error fetching users:", error.response.data, "error");
@@ -74,6 +91,10 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
   useEffect(() => {
     userSingleMovie();
   }, []);
+
+  useEffect(() => {
+    favedSetup(mainMovie.id);
+  }, [toggleFavourites, mainMovie.id]);
 
   return (
     <div className="">
@@ -154,9 +175,15 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
               </div>
               <div className="flex gap-4">
                 <Heart
-                  className="text-white hover:cursor-pointer hover:text-gray-500"
+                  className={`${
+                    faved ? "fill-[#2BD17E]" : "text-white"
+                  } hover:cursor-pointer hover:text-gray-500`}
                   style={{ width: "1rem", height: "1rem" }}
-                />{" "}
+                  onClick={() => {
+                    toggleFavourites(mainMovie);
+                    favedSetup(mainMovie.id)
+                  }}
+                />
                 {user.user.id === movieDetails.ownerId && (
                   <Pencil
                     className="text-white z-100 hover:cursor-pointer hover:text-gray-500"
@@ -180,6 +207,8 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
                 isOpen={() => {
                   setEditModal(false);
                 }}
+                id={id}
+                movie={mainMovie}
               />
             )}
 
@@ -204,4 +233,4 @@ const SingleMovieModal: React.FC<SingleMovieProps> = ({ isOpen }) => {
   );
 };
 
-export default SingleMovieModal;
+export default SingleMovie;

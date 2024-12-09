@@ -5,7 +5,6 @@ export interface UserAttributes {
     userName: string;
     email: string;
     password:string;
-    isVerified: boolean;
     role: string;
     refreshToken: string;
     numberOfMoviesAdded: number;

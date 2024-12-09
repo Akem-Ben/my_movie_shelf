@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { addMovie, uploadMovieImage, allDatabaseMovies, allUserMovies, singleMovie, editMovie, editMovieImage, deleteMovie} from '../axiosFolder/axiosFunctions/movieAxios/movieAxios';
 
 
@@ -54,6 +54,7 @@ export const MovieProvider: React.FC | any = ({ children }:any) => {
   }
   const editUserMovie = async(id:string, body:Record<string, any>) => {
    const response = await editMovie(id, body)
+   return response
   };
 
   const getSingleMovie = async(id:string) => {

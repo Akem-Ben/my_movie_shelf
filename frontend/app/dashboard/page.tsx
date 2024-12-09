@@ -25,11 +25,11 @@ import { useDebounce } from "../components/Debounce";
 const Dashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { toggleFavourites } = useFavourites();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
+  const [redirectLoading, setRedirectLoading] = useState(false)
 
   const [newMovie, setNewMovie,] = useState(false)
 
@@ -79,15 +79,6 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     allUserMovies();
   }, [debouncedSearchTerm, debouncedSelectedCategory, currentPage]);
-
-  const handleAddToFavourites = (product: any) => {
-    toggleFavourites(product);
-    addAlert(
-      "Product added to cart successfully",
-      "Proceed to checkout",
-      "success"
-    );
-  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -173,7 +164,13 @@ const Dashboard: React.FC = () => {
               Your movie list is empty
             </h1>
             <Link href="/new-movie">
-              <Button1 width="40">Add a new Movie</Button1>
+              <Button1 width="40" onClick={()=> setRedirectLoading(true)}>
+              {redirectLoading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "Add a new Movie"
+                    )}
+                </Button1>
             </Link>
           </div>
         </div>

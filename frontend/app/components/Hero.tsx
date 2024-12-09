@@ -5,12 +5,23 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import heroImg from '../../public/landingPage/movie.jpeg';
 import { CircularProgress } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Hero: React.FC = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
   const [loginLoading, setLoginLoading] = useState(false)
   const [viewMoviesLoading, setViewMoviesLoading] = useState(false)
 
+
+  const router = useRouter()
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [router]);
 
   return (
     <section className="flex items-center justify-center w-full lg:h-[100vh] h-[100vh] overflow-hidden bg-gray-800">

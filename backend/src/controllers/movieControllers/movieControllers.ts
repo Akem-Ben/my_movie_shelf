@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { moviesServices, userAuthService } from "../../services";
+import {  Response } from "express";
+import { moviesServices } from "../../services";
 import { responseUtilities } from "../../utilities";
 import { JwtPayload } from "jsonwebtoken";
 

@@ -43,7 +43,7 @@ export const singleMovie = async(id:string)=>{
 
 export const editMovie = async(id:string, body:Record<string, any>)=>{
   try{
-    const response = await axios.put(`/movies/update-movies/${id}`, body)
+    const response = await axios.put(`/movies/update-movie/${id}`, body)
     return response
     
   }catch(error:any){

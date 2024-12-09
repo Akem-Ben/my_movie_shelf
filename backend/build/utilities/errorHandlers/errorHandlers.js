@@ -7,10 +7,10 @@ const createError = (message, statusCode) => ({
     isOperational: true,
 });
 const createUnknownError = (error) => ({
-    message: 'Something went wrong, please try again later.',
+    message: `Something went wrong: ${error.message}`,
     statusCode: 500,
     timestamp: new Date(),
-    // details: error,
+    details: error.message,
     isOperational: false
 });
 const withErrorHandling = (fn) => async (...args) => {
@@ -18,11 +18,9 @@ const withErrorHandling = (fn) => async (...args) => {
         return await fn(...args);
     }
     catch (error) {
-        console.log('err', error);
         if (error.isOperational) {
             return createError(error.message, error.statusCode);
         }
-        console.log('err', error.message);
         return createUnknownError(error);
     }
 };

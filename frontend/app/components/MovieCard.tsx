@@ -17,7 +17,7 @@ type MovieCardProp = {
   date: string;
   owner?: boolean;
   isEdit?: boolean;
-  movie? : Record<string, any> | any;
+  movie?: Record<string, any> | any;
   loggedIn?: boolean;
 };
 
@@ -29,43 +29,48 @@ const MovieCard: React.FC<MovieCardProp> = ({
   owner,
   isEdit,
   movie,
-  loggedIn
+  loggedIn,
 }) => {
-  const user: any = localStorage.getItem("user");
+  const [realUser, setRealUser] = useState<any>(null);
 
-  const realUser = JSON.parse(user);
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setRealUser(JSON.parse(user));
+    }
+  }, []);
 
   const [deleteModal, setDeleteModal] = useState(false);
 
-  const [movieCardLoading, setMovieCardLoading] = useState(false)
+  const [movieCardLoading, setMovieCardLoading] = useState(false);
 
   const router = useRouter();
 
   const { addAlert } = useAlert();
 
-  const [faved, setFaved] = useState(false)
+  const [faved, setFaved] = useState(false);
 
-  const { toggleFavourites, favouritesItems } = useFavourites()
+  const { toggleFavourites, favouritesItems } = useFavourites();
 
   const favedSetup = (id: string) => {
     const itemExists = favouritesItems.some(
       (element: Record<string, any>) => element.id === id
     );
-  
-    if (itemExists) {
 
-      setFaved(true)
-    } else {
-      setFaved(false)
+    if (itemExists) {
+      setFaved(true);
+    } else if (!itemExists) {
+      setFaved(false);
     }
   };
 
   function singleMovieRedirect(id: string) {
-    setMovieCardLoading(true)
+    setMovieCardLoading(true);
     if (realUser) {
+      localStorage.setItem("movie", JSON.stringify(movie));
       return router.push(`/single-movie/${id}`);
     } else {
-      setMovieCardLoading(false)
+      setMovieCardLoading(false);
       return addAlert(
         "Error",
         "Only Logged in users can view movie details",
@@ -76,39 +81,47 @@ const MovieCard: React.FC<MovieCardProp> = ({
 
   const [editModal, setEditModal] = useState(false);
 
-  useEffect(()=>{
-    favedSetup(movie.id)
-  })
+  useEffect(() => {
+    favedSetup(movie.id);
+  }, [toggleFavourites, movie.id]);
 
   return (
     <>
       <div className="block bg-[#092C39] h-[30rem] hover:cursor-pointer hover:scale-105 hover:bg-[#0829358C] transition-all rounded-lg shadow-md p-4">
-      <div onClick={() => singleMovieRedirect(id)}>
-  {movieCardLoading ? (
-    <div className="text-white h-[25rem] flex justify-center items-center">
-    <CircularProgress size={100} color="inherit" />
-    </div>
-  ) : (
-    <>
-      <img
-        src={imageSrc}
-        alt={title}
-        className="w-full h-[22rem] object-cover rounded-md mb-2"
-      />
-      <h2 className="text-xl text-white font-bold mb-2">{title}</h2>
-      <div className="flex items-center justify-between pr-4">
-        <h4 className="text-lg text-white font-light mb-2">{date}</h4>
-      </div>
-    </>
-  )}
-</div>
+        <div onClick={() => singleMovieRedirect(id)}>
+          {movieCardLoading ? (
+            <div className="text-white h-[25rem] flex justify-center items-center">
+              <CircularProgress size={100} color="inherit" />
+            </div>
+          ) : (
+            <>
+              <img
+                src={imageSrc}
+                alt={title}
+                className="w-full h-[22rem] object-cover rounded-md mb-2"
+              />
+              <h2 className="text-xl text-white font-bold mb-2">
+                {title.slice(0, 15)}...{" "}
+                <span className="text-base">click to see more</span>
+              </h2>
+              <div className="flex items-center justify-between pr-4">
+                <h4 className="text-lg text-white font-light mb-2">{date}</h4>
+              </div>
+            </>
+          )}
+        </div>
         <div className="flex gap-4">
           {loggedIn && (
-          <Heart
-            className={`${faved ? "fill-red-800" : "text-white"} hover:cursor-pointer hover:text-gray-500`}
-            style={{ width: "1rem", height: "1rem" }}
-            onClick={()=> {toggleFavourites(movie); favedSetup(id)}}
-          />
+            <Heart
+              className={`${
+                faved ? "fill-[#2BD17E]" : "text-white"
+              } hover:cursor-pointer hover:text-gray-500`}
+              style={{ width: "1rem", height: "1rem" }}
+              onClick={() => {
+                toggleFavourites(movie);
+                favedSetup(movie.id);
+              }}
+            />
           )}{" "}
           {owner && (
             <Pencil
@@ -121,7 +134,7 @@ const MovieCard: React.FC<MovieCardProp> = ({
           )}{" "}
           {owner && (
             <Trash2
-            onClick={()=> setDeleteModal(true)}
+              onClick={() => setDeleteModal(true)}
               className="text-white hover:cursor-pointer hover:text-gray-500"
               style={{ width: "1rem", height: "1rem" }}
             />
@@ -132,7 +145,10 @@ const MovieCard: React.FC<MovieCardProp> = ({
         <EditMovieModal
           isOpen={() => {
             setEditModal(false);
-          } } id={id}/>
+          }}
+          id={id}
+          movie={movie}
+        />
       )}
       <Alerts
         position="bottom-right"

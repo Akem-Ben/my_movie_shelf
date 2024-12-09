@@ -1,5 +1,4 @@
 import { v4 } from "uuid";
-import { USERS_APP_BASE_URL } from "../../configurations/envKeys";
 import { userDatabase, generalHelpers } from "../../helpers";
 import { ResponseDetails } from "../../types/generalTypes";
 import { errorUtilities, mailUtilities } from "../../utilities";
@@ -53,23 +52,10 @@ const userRegistrationService = errorUtilities.withErrorHandling(
     const newUser: Record<string, any> =
       await userDatabase.userDatabaseHelper.create(signupPayload);
 
-    const tokenPayload = {
-      id: newUser.id,
-      role: newUser.role,
-      email: newUser.email,
-    };
-
-    const verificationToken = await generalHelpers.generateTokens(
-      tokenPayload,
-      "1h"
-    );
-
     await mailUtilities.sendMail(
       newUser.email,
-      "Click the button below to verify your account",
-      "PLEASE VERIFY YOUR ACCOUNT",
-      `${USERS_APP_BASE_URL}/verification/${verificationToken}`,
-      "Verify"
+      "Welcome to My Movie Shelf, a platform where you host your favourite movies and view the favourite movies of others as well. We are glad to have you join us. Enjoy the community!",
+      "WELCOME",
     );
 
     const userWithoutPassword =
@@ -79,7 +65,7 @@ const userRegistrationService = errorUtilities.withErrorHandling(
 
     responseHandler.statusCode = 201;
     responseHandler.message =
-      "User registered successfully. A verification mail has been sent to your account, please click on the link in the mail to verify your account. The link is valid for one hour only. Thank you.";
+      `User registered successfully. Welcome to My Movie Shelf ${userName}. Please login and let the fun begin!!`;
     responseHandler.data = userWithoutPassword;
     return responseHandler;
   }
@@ -133,12 +119,10 @@ const userLoginService = errorUtilities.withErrorHandling(async (loginPayload: R
     delete userWithoutPassword.refreshToken
 
     const dateDetails = generalHelpers.dateFormatter(new Date())
-    const mailMessage = `Hi ${existingUser.fullName}, <br /> There was a login to your account on ${dateDetails.date} by ${dateDetails.time}. If you did not initiate this login, click the button below to restrict your account. If it was you, please ignore. The link will expire in one hour.`;
-    const mailLink = `${USERS_APP_BASE_URL}/restrict-account/${existingUser.id}`
-    const mailButtonText = 'Restrict Account'
+    const mailMessage = `Hi ${existingUser.fullName}, <br /> There was a login to your account on ${dateDetails.date} by ${dateDetails.time}. If you did not initiate this login, please send a mail to my-movie-shelf@info.com to restrict your account`
     const mailSubject = "Activity Detected on Your Account";
 
-    await mailUtilities.sendMail(existingUser.email, mailMessage, mailSubject, mailLink, mailButtonText)
+    await mailUtilities.sendMail(existingUser.email, mailMessage, mailSubject)
 
     responseHandler.statusCode = 200;
 

@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
-const envKeys_1 = require("../../configurations/envKeys");
 const helpers_1 = require("../../helpers");
 const utilities_1 = require("../../utilities");
 const validator_1 = __importDefault(require("validator"));
@@ -33,22 +32,16 @@ const userRegistrationService = utilities_1.errorUtilities.withErrorHandling(asy
         ...userPayload,
         id: (0, uuid_1.v4)(),
         isVerified: false,
-        role: "user",
+        role: "User",
         password: await helpers_1.generalHelpers.hashPassword(password),
     };
     const newUser = await helpers_1.userDatabase.userDatabaseHelper.create(signupPayload);
-    const tokenPayload = {
-        id: newUser.id,
-        role: newUser.role,
-        email: newUser.email,
-    };
-    const verificationToken = await helpers_1.generalHelpers.generateTokens(tokenPayload, "1h");
-    await utilities_1.mailUtilities.sendMail(newUser.email, "Click the button below to verify your account", "PLEASE VERIFY YOUR ACCOUNT", `${envKeys_1.USERS_APP_BASE_URL}/verification/${verificationToken}`, "Verify");
+    await utilities_1.mailUtilities.sendMail(newUser.email, "Welcome to My Movie Shelf, a platform where you host your favourite movies and view the favourite movies of others as well. We are glad to have you join us. Enjoy the community!", "WELCOME");
     const userWithoutPassword = await helpers_1.userDatabase.userDatabaseHelper.extractUserDetails(newUser);
     delete userWithoutPassword.refreshToken;
     responseHandler.statusCode = 201;
     responseHandler.message =
-        "User registered successfully. A verification mail has been sent to your account, please click on the link in the mail to verify your account. The link is valid for one hour only. Thank you.";
+        `User registered successfully. Welcome to My Movie Shelf ${userName}. Please login and let the fun begin!!`;
     responseHandler.data = userWithoutPassword;
     return responseHandler;
 });
@@ -67,9 +60,6 @@ const userLoginService = utilities_1.errorUtilities.withErrorHandling(async (log
     if (!existingUser) {
         throw utilities_1.errorUtilities.createError("Invalid email/username", 400);
     }
-    // if(!existingUser.isVerified){
-    //     throw errorUtilities.createError(`User is not verified. Click on the link in the verification mail sent to ${existingUser.email} or request for another verification mail`, 400);
-    // }
     const verifyPassword = await helpers_1.generalHelpers.validatePassword(password, existingUser.password);
     if (!verifyPassword) {
         throw utilities_1.errorUtilities.createError("Incorrect Password", 400);
@@ -86,11 +76,9 @@ const userLoginService = utilities_1.errorUtilities.withErrorHandling(async (log
     const userWithoutPassword = await helpers_1.userDatabase.userDatabaseHelper.extractUserDetails(existingUser);
     delete userWithoutPassword.refreshToken;
     const dateDetails = helpers_1.generalHelpers.dateFormatter(new Date());
-    const mailMessage = `Hi ${existingUser.fullName}, <br /> There was a login to your account on ${dateDetails.date} by ${dateDetails.time}. If you did not initiate this login, click the button below to restrict your account. If it was you, please ignore. The link will expire in one hour.`;
-    const mailLink = `${envKeys_1.USERS_APP_BASE_URL}/restrict-account/${existingUser.id}`;
-    const mailButtonText = 'Restrict Account';
+    const mailMessage = `Hi ${existingUser.fullName}, <br /> There was a login to your account on ${dateDetails.date} by ${dateDetails.time}. If you did not initiate this login, please send a mail to my-movie-shelf@info.com to restrict your account`;
     const mailSubject = "Activity Detected on Your Account";
-    await utilities_1.mailUtilities.sendMail(existingUser.email, mailMessage, mailSubject, mailLink, mailButtonText);
+    await utilities_1.mailUtilities.sendMail(existingUser.email, mailMessage, mailSubject);
     responseHandler.statusCode = 200;
     responseHandler.message = `Welcome back ${userWithoutPassword.fullName}`;
     responseHandler.data = {

@@ -12,11 +12,6 @@ User.init({
         primaryKey: true,
         allowNull: false,
     },
-    isVerified: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
     fullName: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,

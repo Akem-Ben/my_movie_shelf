@@ -2,13 +2,10 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/context/AuthContext";
 import { CircularProgress } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Link from "next/link";
 import Button from "../components/Button";
-import { Download } from "lucide-react";
 import ImageUploader from "../components/ImageUploader";
 import { useAlert, Alerts } from "next-alert";
 import { useMovie } from "../context/MovieContext";
@@ -29,12 +26,20 @@ const NewMovie: React.FC = () => {
   };
 
 
-  const validationSchema = Yup.object({
+  const currentYear = new Date().getFullYear();
+
+  const validationSchema = Yup.object().shape({
     title: Yup.string().required("Please input a title"),
-    description: Yup.string().required("Please input a description"),
+    description: Yup.string()
+  .required("Please input a description")
+  .max(500, "Description must not exceed 500 characters"),
     genre: Yup.string().required("Please select a genre"),
-    publishedDate: Yup.string().required("Please input a publishedDate"),
-    movieProducer: Yup.string().required("Please input a movieProducer"),
+    publishedDate: Yup.number()
+    .typeError("Date of production must be a valid year")
+    .min(1000, "Date of production must be a 4-digit year")
+    .max(currentYear, `Date of production cannot exceed the current year (${currentYear})`)
+    .required("Please input the date of production of the movie"),
+    movieProducer: Yup.string().required("Please input the movie director"),
   });
 
   return (
@@ -140,7 +145,7 @@ const NewMovie: React.FC = () => {
                       <Field
                         as="textarea"
                         name="description"
-                        placeholder="Movie Description"
+                        placeholder="Movie Description (Not more than 255 characters)"
                         className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
                       />
                       <ErrorMessage

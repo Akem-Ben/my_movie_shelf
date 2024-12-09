@@ -1,16 +1,16 @@
 import { Transaction, Sequelize } from "sequelize";
-import { database } from "../../configurations/database"; // Update with your Sequelize instance import
+import { database } from "../../configurations/database";
 
 const performTransaction = async (
     operations: ((transaction: Transaction) => Promise<void>)[]
   ) => {
-    const sequelize: Sequelize = database; // Your Sequelize instance
+    const sequelize: Sequelize = database;
   
     const transaction = await sequelize.transaction();
   
     try {
       for (const operation of operations) {
-        await operation(transaction); // Pass the transaction to each operation
+        await operation(transaction);
       }
   
       await transaction.commit();

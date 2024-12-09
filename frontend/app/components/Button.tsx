@@ -9,13 +9,15 @@ type ButtonProp = {
 
 const Button: React.FC<ButtonProp> = ({ onClick, type, children, bg, width }) => {
   const containerStyle: React.CSSProperties = {
-    width: width ? `${width}rem` : '8rem',
+    width: width ? `${width}rem` : '100%',
+    maxWidth: '10rem',
     backgroundColor: bg || '#2BD17E',
     border: bg === 'transparent' ? '1px solid #2BD17E' : 'none',
     borderRadius: '0.5rem',
     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease, border 0.3s ease',
+    overflow: 'hidden',
   };
 
   const buttonStyle: React.CSSProperties = {
@@ -54,3 +56,4 @@ const Button: React.FC<ButtonProp> = ({ onClick, type, children, bg, width }) =>
 };
 
 export default Button;
+

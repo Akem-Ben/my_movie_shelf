@@ -106,11 +106,11 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div
         className={`border ${
           bg ? `bg-${bg}` : ""
-        } relative gap-2 flex justify-center items-center flex-col text-center text-white px-10 py-10 sm:px-20 sm:py-20 md:px-24 md:py-24 lg:px-36 lg:py-36 border-dashed rounded-lg`}
+        } relative flex flex-col justify-center items-center text-center text-white px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-12 border-dashed rounded-lg`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
@@ -119,67 +119,38 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             <img
               src={URL.createObjectURL(selectedImage)}
               alt="Selected"
-              className="w-24 bg-yellow-700 h-24 sm:w-32 sm:h-32 object-cover rounded-md mb-4"
+              className="w-20 h-20 sm:w-28 sm:h-28 object-cover rounded-md mb-4"
             />
             <p className="text-sm sm:text-base">
               {selectedImage.name.slice(0, 17)}...
             </p>
-            <div className="flex gap-3">
-              <div className="flex justify-center mt-2">
-                {!submitting && (
-                <button
-                  className="px-4 py-2 text-sm sm:text-base hover:text-gray-500 transition"
-                  onClick={handleDelete}
-                >
-                  <Trash2
-                    className="text-white hover:cursor-pointer hover:text-gray-500 transition"
-                    style={{ width: "1rem", height: "1rem" }}
-                  />
-                </button>
-                )}
-                {isEdit && (
-                  <div className="flex justify-center mt-2">
-                    <button
-                      className="px-4 py-2 text-sm sm:text-base hover:text-gray-500 transition"
-                      onClick={handleEditImage}
-                    >
-                      {
-                       submitting ? (
-                       <CircularProgress size={24} color="inherit" />
-                     ) : (
-                       "Submit"
-                     )
-                   }
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+            <button
+              className="px-4 py-2 text-sm hover:text-gray-500 transition"
+              onClick={handleDelete}
+            >
+              Remove
+            </button>
           </div>
         ) : (
           <>
             <Download />
             <p className="text-sm sm:text-base">
-              {title ? title : `Click to choose Image or drop Image here`}
+              {title || `Click to choose Image or drop Image here`}
             </p>
             <input
               type="file"
               accept="image/*"
-              className="absolute w-[100%] h-[100%] opacity-0 cursor-pointer"
+              className="absolute w-full h-full opacity-0 cursor-pointer"
               onChange={handleFileChange}
               ref={fileInputRef}
             />
           </>
         )}
       </div>
-      <Alerts
-        position={"bottom-right"}
-        direction={"right"}
-        timer={5000}
-        className="rounded-md relative z-50 !w-80"
-      />
     </div>
   );
+  
+  
 };
 
 export default ImageUploader;

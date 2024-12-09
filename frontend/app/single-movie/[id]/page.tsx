@@ -157,7 +157,7 @@ const SingleMovie: React.FC = () => {
       ) : (
         <div className="bg-[#093545] text-white gap-4 justify-center flex items-center">
           <div className="block h-[100vh] p-4">
-            <div className="flex flex-col lg:w-[60rem] lg:flex-row p-3 bg-[#092C39] gap-4 justify-between hover:cursor-pointer hover:scale-105 hover:bg-[#0829358C] transition-all rounded-lg shadow-md">
+            <div className="flex flex-col lg:w-[60rem] lg:flex-row p-3 bg-[#092C39] hover:bg-[#224957] gap-4 justify-between hover:cursor-pointer hover:scale-105 hover:bg-[#0829358C] transition-all rounded-lg shadow-md">
               <div className="lg:w-1/2 w-full">
                 <img
                   src={movieDetails.moviePoster}

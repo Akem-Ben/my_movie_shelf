@@ -95,7 +95,7 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id, movie }) => {
                     type="text"
                     name="title"
                     placeholder={`Current Title: ${movie?.title}`}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full bg-[#224957] text-white p-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div>
@@ -103,7 +103,7 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id, movie }) => {
                     type="text"
                     name="publishedDate"
                     placeholder={`Current Year of Production: ${movie.publishedDate}`}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 bg-[#224957] text-white border border-gray-300 rounded"
                   />
                 </div>
                 <div>
@@ -111,14 +111,14 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id, movie }) => {
                     as="textarea"
                     name="description"
                     placeholder={`Current Description: ${movie.description}`}
-                    className="w-full p-2 border border-gray-300 rounded resize-none"
+                    className="w-full p-2 bg-[#224957] text-white border border-gray-300 rounded resize-none"
                     rows={4}
                   />
                   <Field
                     type="text"
                     name="movieProducer"
                     placeholder={`Current Movie Producer: ${movie.movieProducer}`}
-                    className="w-full p-2 mt-2 border border-gray-300 rounded"
+                    className="w-full p-2 bg-[#224957] text-white mt-2 border border-gray-300 rounded"
                   />
                 </div>
                 <div className="flex justify-center gap-3 mt-4">

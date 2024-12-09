@@ -11,36 +11,36 @@ import { useAlert, Alerts } from "next-alert";
 import { useMovie } from "../context/MovieContext";
 
 const NewMovie: React.FC = () => {
-
   const [image, setImage] = useState<File | null>(null);
 
   const router = useRouter();
 
-  const { uploadImage, addUserMovie } = useMovie()
+  const { uploadImage, addUserMovie } = useMovie();
 
-  const [cancel, setCancel] = useState(false)
+  const [cancel, setCancel] = useState(false);
 
-  const { addAlert } = useAlert()
-
+  const { addAlert } = useAlert();
 
   const handleImageUpload = (uploadedImage: File | null) => {
     setImage(uploadedImage);
   };
-
 
   const currentYear = new Date().getFullYear();
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Please input a title"),
     description: Yup.string()
-  .required("Please input a description")
-  .max(500, "Description must not exceed 500 characters"),
+      .required("Please input a description")
+      .max(500, "Description must not exceed 500 characters"),
     genre: Yup.string().required("Please select a genre"),
     publishedDate: Yup.number()
-    .typeError("Date of production must be a valid year")
-    .min(1000, "Date of production must be a 4-digit year")
-    .max(currentYear, `Date of production cannot exceed the current year (${currentYear})`)
-    .required("Please input the date of production of the movie"),
+      .typeError("Date of production must be a valid year")
+      .min(1000, "Date of production must be a 4-digit year")
+      .max(
+        currentYear,
+        `Date of production cannot exceed the current year (${currentYear})`
+      )
+      .required("Please input the date of production of the movie"),
     movieProducer: Yup.string().required("Please input the movie director"),
   });
 
@@ -65,62 +65,66 @@ const NewMovie: React.FC = () => {
               }}
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting }) => {
-                try{
+                try {
+                  setSubmitting(true);
+                  if (!image || image === null) {
+                    setSubmitting(false);
+                    return addAlert("Error", "Select an Image", "error");
+                  }
 
+                  const ImageData = new FormData();
 
-                    setSubmitting(true);
-                    if(!image || image === null){
-                      setSubmitting(false)
-                      return addAlert('Error', 'Select an Image', 'error')
-                    }
-  
-                   const ImageData = new FormData()
-  
-                   ImageData.append('image', image)
-  
-                    const uploadedImage = await uploadImage(ImageData)
-  
-                    const formData = {
-                      ...values,
-                      moviePoster: uploadedImage.data.details,
-                    };
-  
-                    const createMovie = await addUserMovie(formData)
-  
-                    if(createMovie.status !== 201){
-                      setSubmitting(false)
-                      return addAlert('Error', `${createMovie.data.message}`, 'error')
-                    }
-                    setSubmitting(false)
-  
-                    values.description = "";
-                    values.genre = "";
-                    values.movieProducer = "";
-                    values.publishedDate = "";
-                    values.title = "";
-  
-                    addAlert('Success', 'Movie Added Successfully', 'success')
-  
-                    return router.push('/dashboard')
-  
-  
-                    }catch (error: any) {
-                      setSubmitting(false);
-      
-                      values.description = "";
-                      values.genre = "";
-                      values.movieProducer = "";
-                      values.publishedDate = "";
-                      values.title = "";
-                      
-                      if (error?.response) {
-                        addAlert("Error:", error.response.data, "error");
-                      } else if (error?.request) {
-                        addAlert("No response received:", error.request, "error");
-                      } else {
-                        addAlert("Error setting up request:", error.message, "error");
-                      }
-                    }
+                  ImageData.append("image", image);
+
+                  const uploadedImage = await uploadImage(ImageData);
+
+                  const formData = {
+                    ...values,
+                    moviePoster: uploadedImage.data.details,
+                  };
+
+                  const createMovie = await addUserMovie(formData);
+
+                  if (createMovie.status !== 201) {
+                    setSubmitting(false);
+                    return addAlert(
+                      "Error",
+                      `${createMovie.data.message}`,
+                      "error"
+                    );
+                  }
+                  setSubmitting(false);
+
+                  values.description = "";
+                  values.genre = "";
+                  values.movieProducer = "";
+                  values.publishedDate = "";
+                  values.title = "";
+
+                  addAlert("Success", "Movie Added Successfully", "success");
+
+                  return router.push("/dashboard");
+                } catch (error: any) {
+                  setSubmitting(false);
+
+                  values.description = "";
+                  values.genre = "";
+                  values.movieProducer = "";
+                  values.publishedDate = "";
+                  values.title = "";
+
+                  if (error?.response) {
+                    addAlert("Error:", error.response.data, "error");
+                  } else if (error?.request) {
+                    addAlert("No response received:", error.request, "error");
+                  } else {
+                    addAlert(
+                      "Error setting up request:",
+                      error.message,
+                      "error"
+                    );
+                  }
+                }
               }}
             >
               {({ isSubmitting }) => (
@@ -129,22 +133,32 @@ const NewMovie: React.FC = () => {
                     type="text"
                     name="title"
                     placeholder="Movie Title"
-                    className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
-                  <ErrorMessage name="title" component="div" className="text-red-500 text-sm" />
-  
+                  <ErrorMessage
+                    name="title"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+
                   <Field
                     as="textarea"
                     name="description"
                     placeholder="Movie Description (Not more than 255 characters)"
-                    className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957]
+focus:bg-[#224957] text-white rounded-lg w-full"
                   />
-                  <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
-  
+                  <ErrorMessage
+                    name="description"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+
                   <Field
                     as="select"
                     name="genre"
-                    className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full"
+                    className="p-3 bg-[#224957]
+focus:bg-[#224957] text-white rounded-lg w-full"
                   >
                     <option value="" disabled>
                       Select Genre
@@ -157,35 +171,48 @@ const NewMovie: React.FC = () => {
                     <option value="k-drama">K-Drama</option>
                     <option value="other">Other</option>
                   </Field>
-                  <ErrorMessage name="genre" component="div" className="text-red-500 text-sm" />
-  
+                  <ErrorMessage
+                    name="genre"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+
                   <Field
                     type="text"
                     name="publishedDate"
                     placeholder="Year Produced (e.g 1997)"
-                    className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957]
+focus:bg-[#224957] text-white rounded-lg w-full"
                   />
                   <ErrorMessage
                     name="publishedDate"
                     component="div"
                     className="text-red-500 text-sm"
                   />
-  
+
                   <Field
                     type="text"
                     name="movieProducer"
                     placeholder="Movie Producer"
-                    className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957]
+focus:bg-[#224957] text-white rounded-lg w-full"
                   />
                   <ErrorMessage
                     name="movieProducer"
                     component="div"
                     className="text-red-500 text-sm"
                   />
-  
+
                   <div className="flex justify-center gap-3">
-                    <Button type="button" onClick={() => {setCancel(true); router.push("/dashboard")}} bg="transparent">
-                    {cancel ? (
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setCancel(true);
+                        router.push("/dashboard");
+                      }}
+                      bg="transparent"
+                    >
+                      {cancel ? (
                         <CircularProgress size={24} color="inherit" />
                       ) : (
                         "Cancel"

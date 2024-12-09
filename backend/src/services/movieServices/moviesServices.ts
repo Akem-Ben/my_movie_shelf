@@ -1,13 +1,11 @@
 import { v4 } from "uuid";
 import { USERS_APP_BASE_URL } from "../../configurations/envKeys";
-import { movieDatabase, generalHelpers, userDatabase, performTransaction } from "../../helpers";
+import { movieDatabase, generalHelpers,  performTransaction } from "../../helpers";
 import { ResponseDetails } from "../../types/generalTypes";
-import { errorUtilities, mailUtilities, } from "../../utilities";
+import { errorUtilities  } from "../../utilities";
 import { JwtPayload } from "jsonwebtoken";
-import validator from "validator";
-import sequelize, { Transaction } from "sequelize";
 import User from "../../models/users/userModel";
-import cloudinaryUpload from '../../utilities/uploads/cloudinary.utilities'
+import { Transaction } from "sequelize";
 
 const userCreateMovieService = errorUtilities.withErrorHandling(
   async (
@@ -169,7 +167,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       };
 
       if (
-        (!updatePayload.title || updatePayload.productName === "") &&
+        (!updatePayload.title || updatePayload.title === "") &&
         (!updatePayload.publishedDate) &&
         (!updatePayload.description || updatePayload.description === "") &&
         (!updatePayload.movieProducer || updatePayload.movieProducer === "")
@@ -178,6 +176,15 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
           "At least one field must be selected for update",
           400
         );
+      }
+
+      if(updatePayload.publishedDate){
+        if(isNaN(Number(updatePayload.publishedDate))){
+          throw errorUtilities.createError(
+            "The Date of production must be a valid year",
+            400
+          );
+        }
       }
 
       const { userId, movieId } = updatePayload;
@@ -235,30 +242,28 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
       };
 
 
-      const { userId } = queryDetails
+      const { ownerId } = queryDetails
 
-      if(!userId){
+      if(!ownerId){
         throw new Error("User ID is required to fetch Movies, Please login")
       }
       
       let size = 9
       let skip = 0
       let page = 1
+
       let filter:any = {}
 
       if(queryDetails){
-      const searchTerm = queryDetails.search || "";
+      const searchTerm = queryDetails.query.search || "";
 
       filter = await generalHelpers.queryFilter(searchTerm);
 
-      skip = (Number(queryDetails.page) - 1) * size || 0;
+      skip = (Number(queryDetails.query.page) - 1) * size || 0;
 
-      page = (Number(queryDetails.page)) || 1
+      page = (Number(queryDetails.query.page)) || 1
 
     }
-
-    filter.ownerId = userId
-
       const options = {
         page,
         offset: skip,
@@ -275,6 +280,8 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         movieProducer: 1
       };
 
+      filter.ownerId = ownerId
+
       const userMovies = await movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
 
       if (!userMovies || userMovies.rows.length === 0) {
@@ -284,6 +291,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         );
       }
 
+      
       const currentPage = Math.ceil(skip / size) + 1;
       const totalPages = Math.ceil(userMovies.count / size);
 
@@ -354,13 +362,15 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         message: "",
       };
 
-      const moviePoster = request?.file?.path;
+        const imageUpdate = request?.file?.path;
 
-      if (!moviePoster) {
-        throw errorUtilities.createError("Select an image please", 400);
-      }
+        if (!imageUpdate) {
+          throw errorUtilities.createError("Select an Image", 400);
+        }
 
       const { movieId } = request.params;
+
+      console.log('er', movieId)
 
       const movieCheck = await movieDatabase.movieDatabaseHelper.getOne(
         { id: movieId },
@@ -376,7 +386,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
           id: movieId,
         },
         {
-          moviePoster
+          moviePoster: imageUpdate
         }
       );
 
@@ -401,7 +411,7 @@ const userCreateMovieService = errorUtilities.withErrorHandling(
         const file = request?.file?.path;
 
         if (!file) {
-          throw new Error("No file provided for upload");
+          throw errorUtilities.createError("Select an Image", 400);
         }
   
         responseHandler.statusCode = 200;

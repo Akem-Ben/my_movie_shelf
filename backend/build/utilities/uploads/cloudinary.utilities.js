@@ -3,16 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cloud = void 0;
 const multer_1 = __importDefault(require("multer"));
 const multer_storage_cloudinary_1 = require("multer-storage-cloudinary");
 const cloudinary_1 = require("cloudinary");
 const dotenv_1 = __importDefault(require("dotenv"));
 const envKeys_1 = require("../../configurations/envKeys");
 dotenv_1.default.config();
-cloudinary_1.v2.config({
+exports.cloud = cloudinary_1.v2.config({
     cloud_name: envKeys_1.CLOUDINARY_NAME,
-    api_key: envKeys_1.API_KEY,
-    api_secret: envKeys_1.API_SECRET
+    api_key: envKeys_1.CLOUDINARY_API_KEY,
+    api_secret: envKeys_1.CLOUDINARY_API_SECRET
 });
 const storage = new multer_storage_cloudinary_1.CloudinaryStorage({
     cloudinary: cloudinary_1.v2,

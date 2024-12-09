@@ -14,6 +14,10 @@ import { Alerts } from "next-alert";
 const SignIn: React.FC = () => {
   const { signIn } = useAuth();
 
+  const [homeLoading, setHomeLoading] = useState(false);
+  const [moviesLoading, setMoviesLoading] = useState(false);
+  const [signupLoading, setSignupLoading] = useState(false);
+
   const router = useRouter();
 
   const { addAlert } = useAlert();
@@ -26,13 +30,21 @@ const SignIn: React.FC = () => {
   return (
     <div>
       <Link href="/">
-        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-          Home
+        <button onClick={()=> setHomeLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+        {homeLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Home"
+          )}
         </button>
       </Link>
       <Link href="/movies">
-        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-          Movies
+        <button onClick={()=> setMoviesLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+        {moviesLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Movies"
+          )}
         </button>
       </Link>
       <div className="h-screen sm:px-0 px-2 flex items-center justify-center">
@@ -140,13 +152,18 @@ const SignIn: React.FC = () => {
                   </Button>
                 </div>
 
-                <div className="flex justify-between items-center mt-4">
-                  <button className="text-sm text-blue-200 hover:underline">
+                <div className="flex text-white justify-between items-center mt-4">
+                  <button className="text-sm">
                     Forgot Password?
                   </button>
-                  <Link href="/signup">
-                    <button className="text-sm text-white dark:text-gray-300 hover:underline">
-                      Don’t have an account? Sign Up
+                  <Link href="/signup" className="text-sm text-white"  onClick={() => setSignupLoading(true)}>
+                    Don’t have an account?
+                    <button className="text-sm ml-2 text-white">
+                      {signupLoading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        "Sign Up"
+                      )}
                     </button>
                   </Link>
                 </div>

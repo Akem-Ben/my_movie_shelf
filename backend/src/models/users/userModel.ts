@@ -13,12 +13,6 @@ User.init(
       allowNull: false,
     },
 
-    isVerified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
-
     fullName: {
       type: DataTypes.STRING,
       allowNull: false,

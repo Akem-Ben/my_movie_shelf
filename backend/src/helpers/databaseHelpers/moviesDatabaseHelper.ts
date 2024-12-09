@@ -70,6 +70,7 @@ const movieDatabaseHelper = {
       const movies = await Movie.findAndCountAll({
         where: filter,
         attributes: projection,
+        order: [['updatedAt', 'DESC']],
         ...options,
       });
       return movies;
@@ -77,6 +78,7 @@ const movieDatabaseHelper = {
       throw new Error(`Error fetching Movies: ${error.message}`);
     }
   },
+  
 
   extractMovieDetails: async (movieData: Record<string, any>) => {
     try {

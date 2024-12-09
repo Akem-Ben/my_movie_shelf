@@ -24,7 +24,6 @@ const inputValidator = (schema: Joi.Schema):any => {
     };
   };
 
-//User Auth
 const userRegisterSchema = Joi.object({
   fullName: Joi.string().required(),
   email: Joi.string().email().required(),

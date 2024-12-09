@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { registerUser, loginUser } from '../axiosFolder/axiosFunctions/userAxios/userAxios';
 
 
@@ -22,7 +22,10 @@ export const AuthProvider: React.FC | any = ({ children }:any) => {
       return response
     }
     setUser(response.data.data)
-      localStorage.setItem("user", JSON.stringify(response.data.data))
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user", JSON.stringify(response.data.data));
+    }
+    
     return response
   };
 
@@ -32,9 +35,13 @@ export const AuthProvider: React.FC | any = ({ children }:any) => {
   };
 
   const logout = () => {
-    return localStorage.removeItem('user')
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("movie");
+      localStorage.removeItem("user");
+    }
+    setUser(null);
   };
-
+  
   return (
     <AuthContext.Provider value={{ signIn, user, setUser, signUp, logout }}>
       {children}

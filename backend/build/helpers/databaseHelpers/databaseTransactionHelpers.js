@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = require("../../configurations/database"); // Update with your Sequelize instance import
+const database_1 = require("../../configurations/database");
 const performTransaction = async (operations) => {
-    const sequelize = database_1.database; // Your Sequelize instance
+    const sequelize = database_1.database;
     const transaction = await sequelize.transaction();
     try {
         for (const operation of operations) {
-            await operation(transaction); // Pass the transaction to each operation
+            await operation(transaction);
         }
         await transaction.commit();
         console.log("Transaction committed successfully");

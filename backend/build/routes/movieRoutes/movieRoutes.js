@@ -15,5 +15,6 @@ router.get('/all-movies', controllers_1.movieControllers.allDatabaseMovies);
 router.put('/update-movie/:movieId', authorization_1.generalAuthFunction, controllers_1.movieControllers.updateMovie);
 router.get('/user-movies', authorization_1.generalAuthFunction, controllers_1.movieControllers.allUserMovies);
 router.delete('/delete-single/:movieId', authorization_1.generalAuthFunction, controllers_1.movieControllers.deleteSingleUserMovie);
-router.put('/update-movie-image/:movieId', authorization_1.generalAuthFunction, cloudinary_utilities_1.default.single('moviePoster'), controllers_1.movieControllers.updateMovieImage);
+router.put('/update-movie-image/:movieId', authorization_1.generalAuthFunction, cloudinary_utilities_1.default.single('image'), controllers_1.movieControllers.updateMovieImage);
+router.post('/upload-image', authorization_1.generalAuthFunction, cloudinary_utilities_1.default.single('image'), controllers_1.movieControllers.imageUpload);
 exports.default = router;

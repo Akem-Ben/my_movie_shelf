@@ -2,24 +2,44 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/context/AuthContext";
 import { CircularProgress } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Link from "next/link";
 import Button from "../components/Button";
-import { Download } from "lucide-react";
 import ImageUploader from "../components/ImageUploader";
+import { useAlert, Alerts } from "next-alert";
+import { useMovie } from "../context/MovieContext";
 
 const NewMovie: React.FC = () => {
+
+  const [image, setImage] = useState<File | null>(null);
+
   const router = useRouter();
 
-  const validationSchema = Yup.object({
+  const { uploadImage, addUserMovie } = useMovie()
+
+  const { addAlert } = useAlert()
+
+
+  const handleImageUpload = (uploadedImage: File | null) => {
+    setImage(uploadedImage);
+  };
+
+
+  const currentYear = new Date().getFullYear();
+
+  const validationSchema = Yup.object().shape({
     title: Yup.string().required("Please input a title"),
-    description: Yup.string().required("Please input a description"),
+    description: Yup.string()
+  .required("Please input a description")
+  .max(500, "Description must not exceed 500 characters"),
     genre: Yup.string().required("Please select a genre"),
-    publishedDate: Yup.string().required("Please input a publishedDate"),
-    movieProducer: Yup.string().required("Please input a movieProducer"),
+    publishedDate: Yup.number()
+    .typeError("Date of production must be a valid year")
+    .min(1000, "Date of production must be a 4-digit year")
+    .max(currentYear, `Date of production cannot exceed the current year (${currentYear})`)
+    .required("Please input the date of production of the movie"),
+    movieProducer: Yup.string().required("Please input the movie director"),
   });
 
   return (
@@ -33,7 +53,7 @@ const NewMovie: React.FC = () => {
           </div>
           <div className="flex justify-around flex-col sm:flex-col lg:flex-row mt-10">
             <div>
-            <ImageUploader />
+            <ImageUploader onUpload={handleImageUpload}/>
             </div>
             <div className="w-[40%]">
               <Formik
@@ -45,13 +65,64 @@ const NewMovie: React.FC = () => {
                   movieProducer: "",
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={async (values, { setSubmitting }) => {
+
+                  try{
+
+
                   setSubmitting(true);
-                  setTimeout(() => {
-                    // signIn(values.loginKey, values.password, values.remember);
+                  if(!image || image === null){
+                    setSubmitting(false)
+                    return addAlert('Error', 'Select an Image', 'error')
+                  }
+
+                 const ImageData = new FormData()
+
+                 ImageData.append('image', image)
+
+                  const uploadedImage = await uploadImage(ImageData)
+
+                  const formData = {
+                    ...values,
+                    moviePoster: uploadedImage.data.details,
+                  };
+
+                  const createMovie = await addUserMovie(formData)
+
+                  if(createMovie.status !== 201){
+                    setSubmitting(false)
+                    return addAlert('Error', `${createMovie.data.message}`, 'error')
+                  }
+                  setSubmitting(false)
+
+                  values.description = "";
+                  values.genre = "";
+                  values.movieProducer = "";
+                  values.publishedDate = "";
+                  values.title = "";
+
+                  addAlert('Success', 'Movie Added Successfully', 'success')
+
+                  return router.push('/dashboard')
+
+
+                  }catch (error: any) {
                     setSubmitting(false);
-                    router.push("/");
-                  }, 2000);
+    
+                    values.description = "";
+                    values.genre = "";
+                    values.movieProducer = "";
+                    values.publishedDate = "";
+                    values.title = "";
+                    
+                    if (error?.response) {
+                      addAlert("Error:", error.response.data, "error");
+                    } else if (error?.request) {
+                      addAlert("No response received:", error.request, "error");
+                    } else {
+                      addAlert("Error setting up request:", error.message, "error");
+                    }
+                  }
                 }}
               >
                 {({ isSubmitting }) => (
@@ -74,7 +145,7 @@ const NewMovie: React.FC = () => {
                       <Field
                         as="textarea"
                         name="description"
-                        placeholder="Movie Description"
+                        placeholder="Movie Description (Not more than 255 characters)"
                         className="p-3 bg-[#224957] text-gray-400 rounded-lg w-full focus:bg-white"
                       />
                       <ErrorMessage
@@ -137,14 +208,8 @@ const NewMovie: React.FC = () => {
                       />
                     </div>
                     <div className="flex justify-center gap-3">
-                      <Button  bg="transparent">
-                   {
-                     isSubmitting ? (
-                       <CircularProgress size={24} color="inherit" />
-                     ) : (
-                       "Cancel"
-                     )
-                   }
+                      <Button type="button" onClick={()=> router.push('/dashboard')}  bg="transparent">
+                       Cancel
                       </Button>
                       <Button>
                    {
@@ -164,6 +229,12 @@ const NewMovie: React.FC = () => {
           </div>
         </div>
       </div>
+        <Alerts 
+        position={"bottom-right"} 
+        direction={"right"} 
+        timer={5000} 
+        className="rounded-md relative z-50 !w-80"
+        />
     </div>
   );
 };

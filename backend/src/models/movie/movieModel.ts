@@ -2,7 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import { database } from "../../configurations/database";
 import { MovieAttributes } from "types/modelTypes";
 
-//action, romance, sci-fi, thriler, other, drama, k-drama
+
 export class Movie extends Model<MovieAttributes> {}
 
 Movie.init(

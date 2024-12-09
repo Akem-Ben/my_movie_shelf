@@ -48,12 +48,6 @@ const generalAuthFunction = async (request, response, next) => {
                 const filter = { id: refreshVerifiedUser.id };
                 const projection = { refreshToken: 1, isVerified: 1 };
                 const userDetails = await helpers_1.userDatabase.userDatabaseHelper.getOne(filter, projection);
-                // if(!userDetails.isVerified){
-                //     return response.status(403).json({
-                //       status: 'error',
-                //       message: `Account not verified, please verify your account before you can access this resource`
-                //     })
-                // }
                 const compareRefreshTokens = refreshToken === userDetails.refreshToken;
                 if (compareRefreshTokens === false) {
                     return response.status(401).json({
@@ -82,12 +76,6 @@ const generalAuthFunction = async (request, response, next) => {
         const filter = { id: verifiedUser.id };
         const projection = { isVerified: 1 };
         const userDetails = await helpers_1.userDatabase.userDatabaseHelper.getOne(filter, projection);
-        // if(!userDetails.isVerified){
-        //     return response.status(403).json({
-        //       status: 'error',
-        //       message: `Account not verified, please verify your account`
-        //     })
-        // }
         request.user = verifiedUser;
         return next();
     }

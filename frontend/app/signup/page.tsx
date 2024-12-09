@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -8,11 +8,13 @@ import * as Yup from "yup";
 import Link from "next/link";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
-import { useAlert } from "next-alert";
-import { Alerts } from "next-alert";
+import { useAlert, Alerts } from "next-alert";
 
 const SignUp: React.FC = () => {
   const { addAlert } = useAlert();
+  const [homeLoading, setHomeLoading] = useState(false);
+  const [moviesLoading, setMoviesLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const router = useRouter();
 
@@ -36,13 +38,27 @@ const SignUp: React.FC = () => {
   return (
     <div>
       <Link href="/">
-        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-          Home
+        <button
+          onClick={() => setHomeLoading(true)}
+          className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline"
+        >
+          {homeLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Home"
+          )}
         </button>
       </Link>
       <Link href="/movies">
-        <button className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
-          Movies
+        <button
+          onClick={() => setMoviesLoading(true)}
+          className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline"
+        >
+          {moviesLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Movies"
+          )}
         </button>
       </Link>
       <div className="h-screen sm:px-0 px-2 flex items-center justify-center">
@@ -88,7 +104,6 @@ const SignUp: React.FC = () => {
                 setTimeout(() => {
                   return router.push("/signin");
                 }, 5000);
-
               } catch (error: any) {
                 setSubmitting(false);
 
@@ -97,9 +112,9 @@ const SignUp: React.FC = () => {
                 values.password = "";
                 values.phone = "";
                 values.username = "";
-                
+
                 if (error?.response) {
-                  addAlert("Error fetching users:", error.response.data, "error");
+                  addAlert("Error:", error.response.data, "error");
                 } else if (error?.request) {
                   addAlert("No response received:", error.request, "error");
                 } else {
@@ -205,9 +220,18 @@ const SignUp: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-4">
-                  <Link href="/signin">
-                    <button className="text-sm text-white dark:text-gray-300 hover:underline">
-                      Already have an account? Log in
+                  <Link
+                    href="/signin"
+                    className="text-sm text-white"
+                    onClick={() => setLoginLoading(true)}
+                  >
+                    Already have an account?
+                    <button className="ml-2 text-sm text-white">
+                      {loginLoading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        "Log in"
+                      )}
                     </button>
                   </Link>
                 </div>

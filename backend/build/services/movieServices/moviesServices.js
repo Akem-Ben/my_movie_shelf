@@ -68,15 +68,19 @@ const getAllMoviesInDatabase = utilities_1.errorUtilities.withErrorHandling(asyn
         statusCode: 0,
         message: "",
     };
-    const searchTerm = queryDetails.search || "";
-    const query = await helpers_1.generalHelpers.queryFilter(searchTerm);
-    const size = Number(queryDetails.size) || 10;
-    const skip = (Number(queryDetails.page) - 1) * size || 0;
-    const filter = {
-        ...query,
-    };
+    let size = 9;
+    let skip = 0;
+    let page = 1;
+    let filter = {};
+    if (queryDetails) {
+        const searchTerm = queryDetails.search || "";
+        filter = await helpers_1.generalHelpers.queryFilter(searchTerm);
+        skip = (Number(queryDetails.page) - 1) * size || 0;
+        page = (Number(queryDetails.page)) || 1;
+    }
     const options = {
-        skip,
+        page,
+        offset: skip,
         limit: size,
     };
     const projection = {
@@ -89,13 +93,21 @@ const getAllMoviesInDatabase = utilities_1.errorUtilities.withErrorHandling(asyn
         movieProducer: 1
     };
     const movies = await helpers_1.movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
-    if (!movies || movies.length === 0) {
+    if (!movies || movies.rows.length === 0) {
         throw utilities_1.errorUtilities.createError("No movies found.", 404);
     }
+    const currentPage = Math.ceil(skip / size) + 1;
+    const totalPages = Math.ceil(movies.count / size);
     responseHandler.statusCode = 200;
     responseHandler.message = "movies fetched successfully";
     responseHandler.data = {
-        movies,
+        movies: movies.rows,
+        pagination: {
+            currentPage,
+            totalPages,
+            totalItems: movies.count,
+            pageSize: size,
+        }
     };
     return responseHandler;
 });
@@ -104,11 +116,16 @@ const updateMovieService = utilities_1.errorUtilities.withErrorHandling(async (u
         statusCode: 0,
         message: "",
     };
-    if ((!updatePayload.title || updatePayload.productName === "") &&
+    if ((!updatePayload.title || updatePayload.title === "") &&
         (!updatePayload.publishedDate) &&
         (!updatePayload.description || updatePayload.description === "") &&
         (!updatePayload.movieProducer || updatePayload.movieProducer === "")) {
         throw utilities_1.errorUtilities.createError("At least one field must be selected for update", 400);
+    }
+    if (updatePayload.publishedDate) {
+        if (isNaN(Number(updatePayload.publishedDate))) {
+            throw utilities_1.errorUtilities.createError("The Date of production must be a valid year", 400);
+        }
     }
     const { userId, movieId } = updatePayload;
     const movie = await helpers_1.movieDatabase.movieDatabaseHelper.getOne({ id: movieId });
@@ -146,20 +163,23 @@ const getUserMovies = utilities_1.errorUtilities.withErrorHandling(async (queryD
         statusCode: 0,
         message: "",
     };
-    const searchTerm = queryDetails.search || "";
-    const { userId } = queryDetails;
-    if (!userId) {
+    const { ownerId } = queryDetails;
+    if (!ownerId) {
         throw new Error("User ID is required to fetch Movies, Please login");
     }
-    const query = await helpers_1.generalHelpers.queryFilter(searchTerm);
-    const size = Number(queryDetails.size) || 10;
-    const skip = (Number(queryDetails.page) - 1) * size || 0;
-    const filter = {
-        ownerId: userId,
-        ...query,
-    };
+    let size = 9;
+    let skip = 0;
+    let page = 1;
+    let filter = {};
+    if (queryDetails) {
+        const searchTerm = queryDetails.query.search || "";
+        filter = await helpers_1.generalHelpers.queryFilter(searchTerm);
+        skip = (Number(queryDetails.query.page) - 1) * size || 0;
+        page = (Number(queryDetails.query.page)) || 1;
+    }
     const options = {
-        skip,
+        page,
+        offset: skip,
         limit: size,
     };
     const projection = {
@@ -171,14 +191,23 @@ const getUserMovies = utilities_1.errorUtilities.withErrorHandling(async (queryD
         ownerId: 1,
         movieProducer: 1
     };
+    filter.ownerId = ownerId;
     const userMovies = await helpers_1.movieDatabase.movieDatabaseHelper.getMany(filter, projection, options);
-    if (!userMovies || userMovies.length === 0) {
+    if (!userMovies || userMovies.rows.length === 0) {
         throw utilities_1.errorUtilities.createError("You do not have any movies yet, add one.", 404);
     }
+    const currentPage = Math.ceil(skip / size) + 1;
+    const totalPages = Math.ceil(userMovies.count / size);
     responseHandler.statusCode = 200;
     responseHandler.message = "movies fetched successfully";
     responseHandler.data = {
-        movies: userMovies,
+        movies: userMovies.rows,
+        pagination: {
+            currentPage,
+            totalPages,
+            totalItems: userMovies.count,
+            pageSize: size,
+        }
     };
     return responseHandler;
 });
@@ -212,50 +241,17 @@ const deleteSingleMovie = utilities_1.errorUtilities.withErrorHandling(async (de
     responseHandler.message = "Movie deleted successfully";
     return responseHandler;
 });
-// const deleteManyMovies = errorUtilities.withErrorHandling(
-//   async (deleteDetails: Record<string, any>): Promise<any> => {
-//     const responseHandler: ResponseDetails = {
-//       statusCode: 0,
-//       message: "",
-//     };
-//     const { userId, movieIds } = deleteDetails;
-//     if (!productIds || productIds.length === 0) {
-//       throw errorUtilities.createError(
-//         "No Products selected for deletion. Please select Products.",
-//         404
-//       );
-//     }
-//     const shop = await shopDatabase.getOne(
-//       { _id: shopId, ownerId: userId },
-//       { _id: 1 }
-//     );
-//     if (!shop) {
-//       throw errorUtilities.createError("Shop not found.", 404);
-//     }
-//     const operations = [
-//       async (session: ClientSession) => {
-//     await productDatabase.deleteMany({ _id: { $in: productIds } })
-//       },
-//       async (session: ClientSession) => {
-//     await shopDatabase.updateOne({_id:shopId},{ $inc: { noOfProducts: -1 } })
-//       }
-//     ]
-//     await performTransaction(operations);
-//     responseHandler.statusCode = 200;
-//     responseHandler.message = "Products deleted successfully";
-//     return responseHandler;
-//   }
-// );
 const updateMovieImageService = utilities_1.errorUtilities.withErrorHandling(async (request) => {
     const responseHandler = {
         statusCode: 0,
         message: "",
     };
-    const moviePoster = request?.file?.path;
-    if (!moviePoster) {
-        throw utilities_1.errorUtilities.createError("Select an image please", 400);
+    const imageUpdate = request?.file?.path;
+    if (!imageUpdate) {
+        throw utilities_1.errorUtilities.createError("Select an Image", 400);
     }
     const { movieId } = request.params;
+    console.log('er', movieId);
     const movieCheck = await helpers_1.movieDatabase.movieDatabaseHelper.getOne({ id: movieId }, { id: 1 });
     if (!movieCheck) {
         throw utilities_1.errorUtilities.createError("Movie not found", 404);
@@ -263,7 +259,7 @@ const updateMovieImageService = utilities_1.errorUtilities.withErrorHandling(asy
     const newMovie = await helpers_1.movieDatabase.movieDatabaseHelper.updateOne({
         id: movieId,
     }, {
-        moviePoster
+        moviePoster: imageUpdate
     });
     responseHandler.statusCode = 200;
     responseHandler.message = "Movie image changed successfully";
@@ -272,6 +268,27 @@ const updateMovieImageService = utilities_1.errorUtilities.withErrorHandling(asy
     };
     return responseHandler;
 });
+const uploadImageService = utilities_1.errorUtilities.withErrorHandling(async (request) => {
+    const responseHandler = {
+        statusCode: 0,
+        message: "",
+        data: ""
+    };
+    try {
+        const file = request?.file?.path;
+        if (!file) {
+            throw utilities_1.errorUtilities.createError("Select an Image", 400);
+        }
+        responseHandler.statusCode = 200;
+        responseHandler.message = "Image uploaded successfully";
+        responseHandler.data = file;
+        return responseHandler;
+    }
+    catch (error) {
+        console.error("Image Upload Error:", error.message);
+        throw new Error(`Failed to upload image: ${error.message}`);
+    }
+});
 exports.default = {
     userCreateMovieService,
     getSingleMovie,
@@ -279,7 +296,6 @@ exports.default = {
     updateMovieService,
     getUserMovies,
     deleteSingleMovie,
-    // deleteSingleVendorProduct,
-    // deleteManyVendorProductsForAShop,
+    uploadImageService,
     updateMovieImageService
 };

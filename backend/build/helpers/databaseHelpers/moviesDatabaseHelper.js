@@ -70,9 +70,10 @@ const movieDatabaseHelper = {
     },
     getMany: async (filter, projection, options) => {
         try {
-            const movies = await movieModel_1.default.findAll({
+            const movies = await movieModel_1.default.findAndCountAll({
                 where: filter,
                 attributes: projection,
+                order: [['updatedAt', 'DESC']],
                 ...options,
             });
             return movies;

@@ -4,9 +4,10 @@ type ButtonProp = {
   onClick?: () => void;
   bg?: string;
   width?: string;
+  type?: string | any
 };
 
-const Button: React.FC<ButtonProp> = ({ onClick, children, bg, width }) => {
+const Button: React.FC<ButtonProp> = ({ onClick, type, children, bg, width }) => {
   const containerStyle: React.CSSProperties = {
     width: width ? `${width}rem` : '8rem',
     backgroundColor: bg || '#2BD17E',
@@ -45,7 +46,7 @@ const Button: React.FC<ButtonProp> = ({ onClick, children, bg, width }) => {
         })
       }
     >
-      <button onClick={onClick} style={buttonStyle}>
+      <button type={type} onClick={onClick} style={buttonStyle}>
         {children}
       </button>
     </div>

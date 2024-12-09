@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { moviesServices, userAuthService } from "../../services";
+import {  Response } from "express";
+import { moviesServices } from "../../services";
 import { responseUtilities } from "../../utilities";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -25,8 +25,6 @@ const createMovie = async (
     response: Response
   ): Promise<any> => {
     const { movieId } = request.params;
-
-    console.log('id', movieId)
   
     const movieSearch = await moviesServices.getSingleMovie({
       movieId,
@@ -94,10 +92,10 @@ const createMovie = async (
   
     const { query } = request
 
-    const userId = request.user.id
+    const ownerId = request.user.id
   
     const movies = await moviesServices.getUserMovies({
-      userId,
+      ownerId,
       query
     });
   

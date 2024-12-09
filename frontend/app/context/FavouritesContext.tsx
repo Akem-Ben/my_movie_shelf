@@ -1,25 +1,34 @@
-"use client"
+"use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface FavouritesItems {
-  id: number;
+  id: string;
   title: string;
-  price: number;
-  imageUrl: string;
-  quantity?: number;
+  date: number | any;
+  imageSrc: string;
 }
 
 interface FavouritesContextType {
   favouritesItems: FavouritesItems[];
   itemCount: number;
-  addToFavourites: (item: FavouritesItems) => void;
-  removeFromFavourites: (id: number) => void; 
+  toggleFavourites: (movie: Record<string, any> | any) => void;
+  removeFromFavourites: (id: string) => void
 }
 
-const FavouritesContext = createContext<FavouritesContextType | undefined | any>(undefined);
+const FavouritesContext = createContext<
+  FavouritesContextType | undefined | any
+>(undefined);
 
-export const FavouritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const FavouritesProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [favouritesItems, setFavouritesItems] = useState<FavouritesItems[]>([]);
 
   useEffect(() => {
@@ -37,30 +46,37 @@ export const FavouritesProvider: React.FC<{ children: ReactNode }> = ({ children
     }
   }, [favouritesItems]);
 
-  const addToFavourites = (item: FavouritesItems) => {
-    const confirmItem:any = favouritesItems.find((element:any) => element.id === item.id);
+  const toggleFavourites = (item: FavouritesItems) => {
+    const itemExists = favouritesItems.some(
+      (element: FavouritesItems) => element.id === item.id
+    );
   
-    if (confirmItem) {
+    if (itemExists) {
+
       setFavouritesItems((prev) =>
-        prev.map((element:any) =>
-          element.id === item.id
-            ? { ...element, quantity: element.quantity + 1 }
-            : element
-        )
+        prev.filter((element: FavouritesItems) => element.id !== item.id)
       );
     } else {
-      setFavouritesItems((prev) => [...prev, { ...item, quantity: 1 }]);
+      setFavouritesItems((prev) => [...prev, { ...item }]);
     }
   };
+  
 
-  const removeFromFavourites = (id: number) => {
-    setFavouritesItems((prev) => prev.filter(item => item.id !== id));
+  const removeFromFavourites = (id: string) => {
+    setFavouritesItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const itemCount = favouritesItems.length;
 
   return (
-    <FavouritesContext.Provider value={{ favouritesItems, itemCount, addToFavourites, removeFromFavourites }}>
+    <FavouritesContext.Provider
+      value={{
+        favouritesItems,
+        itemCount,
+        toggleFavourites,
+        removeFromFavourites,
+      }}
+    >
       {children}
     </FavouritesContext.Provider>
   );
@@ -69,7 +85,7 @@ export const FavouritesProvider: React.FC<{ children: ReactNode }> = ({ children
 export const useFavourites = (): FavouritesContextType => {
   const context = useContext(FavouritesContext);
   if (!context) {
-    throw new Error('useFavoutites must be used within a FavouritesProvider');
+    throw new Error("useFavoutites must be used within a FavouritesProvider");
   }
   return context;
 };

@@ -15,7 +15,7 @@ export const cloud = cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    params: async (req, file) => {
+    params: async (req:any, file:any) => {
       try {
         return {
           folder: "my_movie_shelf",
@@ -31,7 +31,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({
     storage: storage,
-    fileFilter: (req: Request, file, cb) => {
+    fileFilter: (req: Request, file:any, cb:any) => {
         try{
       if (
         file.mimetype === "image/png" ||

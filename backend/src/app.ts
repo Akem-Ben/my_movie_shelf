@@ -34,7 +34,7 @@ app.use(compression());
 // Set Cors
 // Define allowed origins
 const allowedOrigins = [
-  "https://my-movie-shelf-git-development-akembens-projects.vercel.app",
+  "https://my-movie-shelf-k8g7ogg8k-akembens-projects.vercel.app/",
   "http://localhost:3000"
 ];
 

@@ -113,7 +113,7 @@ const MOVIES = () => {
       <Link href="/signup">
         <button
           onClick={() => setRegisterLoading(true)}
-          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white  hover:underline"
         >
           {registerLoading ? (
             <CircularProgress size={24} color="inherit" />
@@ -125,7 +125,7 @@ const MOVIES = () => {
       <Link href="/signin">
         <button
           onClick={() => setLoginLoading(true)}
-          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white  hover:underline"
         >
           {loginLoading ? (
             <CircularProgress size={24} color="inherit" />
@@ -140,7 +140,7 @@ const MOVIES = () => {
       <Link href="/dashboard">
         <button
           onClick={() => setMoviesLoading(true)}
-          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white  hover:underline"
         >
           {moviesLoading ? (
             <CircularProgress size={24} color="inherit" />
@@ -152,7 +152,7 @@ const MOVIES = () => {
       <Link href="/signin">
         <button
           onClick={() => setLogoutLoading(true)}
-          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white dark:text-gray-300 hover:underline"
+          className="text-base mt-4 sm:mt-0 sm:ml-4 text-white  hover:underline"
         >
           {logoutLoading ? (
             <CircularProgress size={24} color="inherit" />
@@ -168,7 +168,7 @@ const MOVIES = () => {
   )}
 </div>
 
-        <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
+        <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-between items-center">
           <InputField
             label={"Search Titles, Year or Producer"}
             searchTerm={searchTerm}

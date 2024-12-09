@@ -87,7 +87,7 @@ const MovieCard: React.FC<MovieCardProp> = ({
 
   return (
     <>
-      <div className="block bg-[#092C39] h-[30rem] hover:cursor-pointer hover:scale-105 hover:bg-[#0829358C] transition-all rounded-lg shadow-md p-4">
+      <div className="block bg-[#092C39] h-[30rem] hover:cursor-pointer hover:scale-105 hover:bg-[#224957] transition-all rounded-lg shadow-md p-4">
         <div onClick={() => singleMovieRedirect(id)}>
           {movieCardLoading ? (
             <div className="text-white h-[25rem] flex justify-center items-center">
@@ -102,7 +102,7 @@ const MovieCard: React.FC<MovieCardProp> = ({
               />
               <h2 className="text-xl text-white font-bold mb-2">
                 {title.slice(0, 15)}...{" "}
-                <span className="text-base">click to see more</span>
+                <span className="text-sm">click to see more</span>
               </h2>
               <div className="flex items-center justify-between pr-4">
                 <h4 className="text-lg text-white font-light mb-2">{date}</h4>

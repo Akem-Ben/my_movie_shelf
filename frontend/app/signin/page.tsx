@@ -30,7 +30,7 @@ const SignIn: React.FC = () => {
   return (
     <div>
       <Link href="/">
-        <button onClick={()=> setHomeLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+        <button onClick={()=> setHomeLoading(true)} className="text-base mt-10 ml-10 text-white  hover:underline">
         {homeLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
@@ -39,7 +39,7 @@ const SignIn: React.FC = () => {
         </button>
       </Link>
       <Link href="/movies">
-        <button onClick={()=> setMoviesLoading(true)} className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline">
+        <button onClick={()=> setMoviesLoading(true)} className="text-base mt-10 ml-10 text-white  hover:underline">
         {moviesLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (
@@ -108,7 +108,7 @@ const SignIn: React.FC = () => {
                     type="text"
                     name="loginKey"
                     placeholder="Email or Username"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white focus:bg-[#224957] rounded-lg w-full"
                   />
                   <ErrorMessage
                     name="loginKey"
@@ -122,7 +122,7 @@ const SignIn: React.FC = () => {
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white focus:bg-[#224957] rounded-lg w-full"
                   />
                   <ErrorMessage
                     name="password"
@@ -142,8 +142,8 @@ const SignIn: React.FC = () => {
                     Remember me
                   </label>
                 </div>
-                <div>
-                  <Button width="full">
+                <div className="flex justify-center items-center">
+                  <Button>
                     {isSubmitting ? (
                       <CircularProgress size={24} color="inherit" />
                     ) : (
@@ -153,7 +153,7 @@ const SignIn: React.FC = () => {
                 </div>
 
                 <div className="flex text-white justify-between items-center mt-4">
-                  <button className="text-sm">
+                  <button className="text-sm hover:cursor-pointer" disabled>
                     Forgot Password?
                   </button>
                   <Link href="/signup" className="text-sm text-white"  onClick={() => setSignupLoading(true)}>

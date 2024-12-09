@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="p-4 h-[100vh]">
       {userMovies && (
-        <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
+        <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-between items-center">
           <InputField
             label={"Search Titles, Year or Producer"}
             searchTerm={searchTerm}

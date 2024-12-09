@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className="bg-[#093545]">
+      <body className="bg-[#093545] font-montserrat">
         <AuthProvider>
           <MovieProvider>
           <AlertProvider>

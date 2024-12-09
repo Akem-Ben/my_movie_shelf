@@ -40,7 +40,7 @@ const SignUp: React.FC = () => {
       <Link href="/">
         <button
           onClick={() => setHomeLoading(true)}
-          className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline"
+          className="text-base mt-10 ml-10 text-white  hover:underline"
         >
           {homeLoading ? (
             <CircularProgress size={24} color="inherit" />
@@ -52,7 +52,7 @@ const SignUp: React.FC = () => {
       <Link href="/movies">
         <button
           onClick={() => setMoviesLoading(true)}
-          className="text-base mt-10 ml-10 text-white dark:text-gray-300 hover:underline"
+          className="text-base mt-10 ml-10 text-white  hover:underline"
         >
           {moviesLoading ? (
             <CircularProgress size={24} color="inherit" />
@@ -130,7 +130,7 @@ const SignUp: React.FC = () => {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
                   <ErrorMessage
                     name="email"
@@ -144,7 +144,7 @@ const SignUp: React.FC = () => {
                     type="text"
                     name="fullname"
                     placeholder="Fullname"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
                   <ErrorMessage
                     name="fullname"
@@ -158,7 +158,7 @@ const SignUp: React.FC = () => {
                     type="text"
                     name="username"
                     placeholder="Choose a Username"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
                   <ErrorMessage
                     name="username"
@@ -172,7 +172,7 @@ const SignUp: React.FC = () => {
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
                   <ErrorMessage
                     name="password"
@@ -186,7 +186,7 @@ const SignUp: React.FC = () => {
                     type="password"
                     name="confirmPassword"
                     placeholder="confirm Password"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
                   <ErrorMessage
                     name="confirmPassword"
@@ -200,7 +200,7 @@ const SignUp: React.FC = () => {
                     type="number"
                     name="phone"
                     placeholder="phone number"
-                    className="p-3 bg-[#224957] text-gray-500 rounded-lg w-full focus:bg-white"
+                    className="p-3 bg-[#224957] text-white rounded-lg w-full focus:bg-[#224957]"
                   />
                   <ErrorMessage
                     name="phone"
@@ -209,8 +209,8 @@ const SignUp: React.FC = () => {
                   />
                 </div>
 
-                <div>
-                  <Button width="full">
+                <div className="flex justify-center items-center">
+                  <Button>
                     {isSubmitting ? (
                       <CircularProgress size={24} color="inherit" />
                     ) : (

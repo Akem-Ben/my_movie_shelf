@@ -94,7 +94,7 @@ const MOVIES = () => {
 
   return (
     <>
-      <div className="p-4 lg:px-[7rem]">
+      <div className="p-4 lg:px-[7rem] h-[100vh]">
       <div className="mb-8 flex w-[100%] sm:w-[50%] md:w-[50%] lg:w-[40%] xl:w-[54%] flex-wrap items-center justify-around">
   <Link href="/">
     <button

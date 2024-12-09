@@ -26,15 +26,6 @@ const SingleMovie: React.FC = () => {
 
   const [mainMovie, setMainMovie] = useState<any | null>(null);
 
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    const storedUser = localStorage.getItem("user");
-    const singleMovie = localStorage.getItem("movie");
-    setUser(storedUser ? JSON.parse(storedUser) : null);
-    setMainMovie(singleMovie ? JSON.parse(singleMovie) : null);
-  }
-}, []);
-
   const id: any = pathname.split("/").pop();
 
   const [loading, setLoading] = useState(true);
@@ -92,9 +83,35 @@ useEffect(() => {
     userSingleMovie();
   }, []);
 
+
   useEffect(() => {
-    favedSetup(mainMovie.id);
-  }, [toggleFavourites, mainMovie.id]);
+
+    const setupFavourites = async () => {
+
+      if (typeof window !== "undefined") {
+        try {
+          const storedUser = localStorage.getItem("user");
+          const singleMovie = localStorage.getItem("movie");
+  
+          if (storedUser && singleMovie) {
+            const parsedStoredUser = JSON.parse(storedUser);
+            const parsedMovie = JSON.parse(singleMovie);
+
+            setUser(parsedStoredUser);
+            setMainMovie(parsedMovie);
+  
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            favedSetup(parsedMovie.id);
+          }
+        } catch (error) {
+          console.error("Error setting up favourites:", error);
+        }
+      }
+    };
+  
+    setupFavourites();
+  }, [toggleFavourites]);
+  
 
   return (
     <div className="">
@@ -104,9 +121,9 @@ useEffect(() => {
             setBackLoading(true);
             router.back();
           }}
-          className="w-[7%] gap-2 flex hover:text-gray-500 hover:cursor-pointer"
+          className="w-[7%] pl-4 gap-2 flex hover:text-gray-500 hover:cursor-pointer"
         >
-          <ArrowLeftFromLine className="text-white ml-4" />{" "}
+          <ArrowLeftFromLine className="text-white text-3xl ml-10" />{" "}
           {backLoading ? (
             <CircularProgress size={24} color="inherit" />
           ) : (

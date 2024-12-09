@@ -15,7 +15,6 @@ import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
 import Link from "next/link";
 import Button1 from "../components/Button";
-import { useFavourites } from "../context/FavouritesContext";
 import { useMovie } from "../context/MovieContext";
 import MovieCard from "../components/MovieCard";
 import InputField from "../components/Input";
@@ -29,9 +28,9 @@ const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [redirectLoading, setRedirectLoading] = useState(false)
+  const [redirectLoading, setRedirectLoading] = useState(false);
 
-  const [newMovie, setNewMovie,] = useState(false)
+  const [newMovie, setNewMovie] = useState(false);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const debouncedSelectedCategory = useDebounce(selectedCategory, 500);
@@ -96,48 +95,50 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      {userMovies &&(
-      <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-        <InputField
-          label={"Search Titles, Year or Producer"}
-          searchTerm={searchTerm}
-          handleSearch={handleSearch}
-        />
+    <div className="p-4 h-[100vh]">
+      {userMovies && (
+        <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
+          <InputField
+            label={"Search Titles, Year or Producer"}
+            searchTerm={searchTerm}
+            handleSearch={handleSearch}
+          />
 
-        <FormControl
-          variant="outlined"
-          className="w-full sm:w-1/4 ml-2 text-white"
-        >
-          <InputLabel className="text-white">Filter Movies by Genre</InputLabel>
-          <Select
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-            label="Category"
-            style={{
-              backgroundColor: "#224957",
-              color: "white",
-              borderColor: "#224957",
-            }}
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  color: "#224957",
-                },
-              },
-            }}
+          <FormControl
+            variant="outlined"
+            className="w-full sm:w-1/4 ml-2 text-white"
           >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="action">Action</MenuItem>
-            <MenuItem value="romance">Romance</MenuItem>
-            <MenuItem value="sci-fi">Sci-fi</MenuItem>
-            <MenuItem value="thriller">Thriller</MenuItem>
-            <MenuItem value="drama">Drama</MenuItem>
-            <MenuItem value="k-drama">K-drama</MenuItem>
-            <MenuItem value="other">Other</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+            <InputLabel className="text-white">
+              Filter Movies by Genre
+            </InputLabel>
+            <Select
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              label="Category"
+              style={{
+                backgroundColor: "#224957",
+                color: "white",
+                borderColor: "#224957",
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    color: "#224957",
+                  },
+                },
+              }}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="action">Action</MenuItem>
+              <MenuItem value="romance">Romance</MenuItem>
+              <MenuItem value="sci-fi">Sci-fi</MenuItem>
+              <MenuItem value="thriller">Thriller</MenuItem>
+              <MenuItem value="drama">Drama</MenuItem>
+              <MenuItem value="k-drama">K-drama</MenuItem>
+              <MenuItem value="other">Other</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
       )}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -160,18 +161,18 @@ const Dashboard: React.FC = () => {
         </div>
       ) : userMovies === null ? (
         <div className="min-h-[calc(100vh-4rem)] sm:px-0 px-2 flex items-center justify-center">
-          <div className="rounded-lg flex items-center justify-center flex-col w-full">
-            <h1 className="sm:text-[50px] text-[30px] font-bold mb-4 text-center text-white">
+          <div className="rounded-lg flex items-center justify-center flex-col w-[60%] max-w-[20rem]">
+            <h1 className="sm:text-[30px] text-[40px] font-bold mb-4 text-center text-white">
               Your movie list is empty
             </h1>
             <Link href="/new-movie">
-              <Button1 width="40" onClick={()=> setRedirectLoading(true)}>
-              {redirectLoading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : (
-                      "Add a new Movie"
-                    )}
-                </Button1>
+              <Button1 width="100" onClick={() => setRedirectLoading(true)}>
+                {redirectLoading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Add a new Movie"
+                )}
+              </Button1>
             </Link>
           </div>
         </div>
@@ -181,23 +182,22 @@ const Dashboard: React.FC = () => {
         </p>
       ) : (
         <>
-        <div className="w-[90%] sm:w-[50%] md:w-[30%] lg:w-[20%] xl:w-[12%]">
-  <Link
-    href="/new-movie"
-    onClick={() => setNewMovie(true)}
-    className="w-full"
-  >
-    <div className="flex w-full mb-8 gap-2 text-white hover:cursor-pointer transition-colors ease-in-out transform hover:text-gray-500">
-      <CirclePlus className="text-white" />
-      {newMovie ? (
-        <CircularProgress size={24} color="inherit" />
-      ) : (
-        "Add a New Movie"
-      )}
-    </div>
-  </Link>
-</div>
-
+          <div className="w-[90%] sm:w-[50%] md:w-[30%] lg:w-[20%] xl:w-[12%]">
+            <Link
+              href="/new-movie"
+              onClick={() => setNewMovie(true)}
+              className="w-full"
+            >
+              <div className="flex w-full mb-8 gap-2 text-white hover:cursor-pointer transition-colors ease-in-out transform hover:text-gray-500">
+                <CirclePlus className="text-white" />
+                {newMovie ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Add a New Movie"
+                )}
+              </div>
+            </Link>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {userMovies.map((movie: Record<string, any>) => (

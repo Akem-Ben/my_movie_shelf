@@ -59,9 +59,8 @@ const Dashboard: React.FC = () => {
         return setUserMovies(null);
       }
       setUserMovies(movies.data.data.movies);
-      console.log("tst", movies);
       setTotalPages(movies.data.data.pagination.totalPages);
-      setLoading(false);
+      return setLoading(false);
     } catch (error: any) {
       if (error?.response) {
         addAlert("Error fetching movies:", error.response.data, "error");
@@ -98,6 +97,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="p-6">
+      {userMovies &&(
       <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
         <InputField
           label={"Search Titles, Year or Producer"}
@@ -138,6 +138,7 @@ const Dashboard: React.FC = () => {
           </Select>
         </FormControl>
       </div>
+      )}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, index) => (

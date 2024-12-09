@@ -10,8 +10,8 @@ let cache: Config | null = null;
 
 const config = (): Config => {
     if (!cache) {
-        const apiHost = "http://localhost:3001/api"
-        // "https://my-movie-shelf.onrender.com/" ;
+        const apiHost = "https://my-movie-shelf.onrender.com"
+        // "http://localhost:3001/api"
 
         cache = Object.freeze({
             secrets: {

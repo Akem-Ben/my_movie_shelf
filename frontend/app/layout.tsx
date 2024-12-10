@@ -17,10 +17,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const isLoginPage = pathname === '/signin';
   const isSignUp = pathname === '/signup'
   const isMoviesPage = pathname === '/movies'
+  const dashboard = pathname === '/dashboard'
 
   return (
     <html lang="en">
-      <body className="bg-[#093545] font-montserrat">
+      <body className="bg-[#093545] font-montserrat flex flex-col flex-grow">
         <AuthProvider>
           <MovieProvider>
           <AlertProvider>

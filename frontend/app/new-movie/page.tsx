@@ -193,7 +193,7 @@ focus:bg-[#224957] text-white rounded-lg w-full"
                   <Field
                     type="text"
                     name="movieProducer"
-                    placeholder="Movie Producer"
+                    placeholder="Movie Director(s)"
                     className="p-3 bg-[#224957]
 focus:bg-[#224957] text-white rounded-lg w-full"
                   />

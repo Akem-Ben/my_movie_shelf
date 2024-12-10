@@ -11,7 +11,6 @@ import {
   FormControl,
   CircularProgress,
 } from "@mui/material";
-import { useFavourites } from "../context/FavouritesContext";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 import { useAlert } from "next-alert";
 import { Alerts } from "next-alert";
@@ -94,7 +93,7 @@ const MOVIES = () => {
 
   return (
     <>
-      <div className="p-4 lg:px-[7rem] h-[100vh]">
+      <div className="p-4 lg:px-[7rem] mb-10 flex-grow">
       <div className="mb-8 flex w-[100%] sm:w-[50%] md:w-[50%] lg:w-[40%] xl:w-[54%] flex-wrap items-center justify-around">
   <Link href="/">
     <button
@@ -254,7 +253,7 @@ const MOVIES = () => {
             <Button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="mr-2"
+              className="mr-2 hover:bg-green-700 hover:text-white"
             >
               <ArrowLeft />
               Previous
@@ -264,6 +263,7 @@ const MOVIES = () => {
               onClick={() =>
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
+              className="hover:bg-green-700 hover:text-white"
             >
               Next
               <ArrowRight />

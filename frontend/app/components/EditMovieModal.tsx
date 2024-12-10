@@ -117,7 +117,7 @@ const EditMovieModal:React.FC<EditModalProps> = ({ isOpen, id, movie }) => {
                   <Field
                     type="text"
                     name="movieProducer"
-                    placeholder={`Current Movie Producer: ${movie.movieProducer}`}
+                    placeholder={`Current Movie Director(s): ${movie.movieProducer}`}
                     className="w-full p-2 bg-[#224957] text-white mt-2 border border-gray-300 rounded"
                   />
                 </div>

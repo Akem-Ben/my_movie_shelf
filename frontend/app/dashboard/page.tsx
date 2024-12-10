@@ -47,7 +47,6 @@ const Dashboard: React.FC = () => {
 
       if (debouncedSearchTerm || debouncedSelectedCategory) {
         if (movies.status !== 200) {
-          console.log("hi", movies);
           setLoading(false);
           return setUserMovies([]);
         }
@@ -95,7 +94,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-4 h-[100vh]">
+    <div className="p-4 flex-grow mb-10">
       {userMovies && (
         <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-between items-center">
           <InputField
@@ -221,7 +220,7 @@ const Dashboard: React.FC = () => {
               <Button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                className="mr-2"
+                className="mr-2 hover:bg-green-700 hover:text-white"
               >
                 <ArrowLeft />
                 Previous
@@ -231,6 +230,7 @@ const Dashboard: React.FC = () => {
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
+                className="hover:bg-green-700 hover:text-white"
               >
                 Next
                 <ArrowRight />

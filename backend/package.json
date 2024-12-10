@@ -22,8 +22,6 @@
     "compression": "^1.7.5",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "cron": "^3.2.1",
-    "cross-env": "^7.0.3",
     "dotenv": "^16.4.6",
     "eslint": "^9.16.0",
     "express": "^4.21.1",

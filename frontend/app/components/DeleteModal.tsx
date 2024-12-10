@@ -7,6 +7,7 @@ import { useAlert, Alerts } from "next-alert";
 import { useMovie } from "../context/MovieContext";
 import { useRouter } from "next/navigation";
 import { useFavourites } from "../context/FavouritesContext";
+import { usePathname } from 'next/navigation';
 
 type DeleteModalProps = {
     isOpen?: ()=> void;
@@ -25,6 +26,8 @@ const DeleteModal:React.FC<DeleteModalProps> = ({isOpen, id}) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const { removeFromFavourites, favouritesItems } = useFavourites();
+
+    const pathname = usePathname();
 
     const deleteMovie = async(id:string)=>{
         try{
@@ -52,8 +55,10 @@ const DeleteModal:React.FC<DeleteModalProps> = ({isOpen, id}) => {
             if(isOpen) isOpen()
 
             getUserMovies("", 1)
+            
+            const dashboard = pathname === '/dashboard'
 
-            return router.push('/dashboard')
+            return dashboard ? window.location.reload() : router.push('/dashboard')
 
         }catch (error: any) {
             setIsSubmitting(false);

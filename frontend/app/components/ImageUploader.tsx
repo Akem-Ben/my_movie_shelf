@@ -5,6 +5,7 @@ import { useAlert, Alerts } from "next-alert";
 import { useMovie } from "../context/MovieContext";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { usePathname } from 'next/navigation';
 
 type ImageUploaderProps = {
   onUpload?: (image: File) => void;
@@ -26,6 +27,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [submitting, setSubmitting] = useState(false)
+  const pathname = usePathname();
 
   const router = useRouter()
 
@@ -89,7 +91,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
       onClose()
 
-      return router.push('/dashboard')
+      const dashboard = pathname === '/dashboard'
+
+      return dashboard ? window.location.reload() : router.push('/dashboard')
+
 
 
     } catch (error: any) {
@@ -124,12 +129,23 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             <p className="text-sm sm:text-base">
               {selectedImage.name.slice(0, 17)}...
             </p>
+            <div className="flex">
+            <button
+              className="px-4 py-2 text-sm hover:text-gray-500 transition"
+              onClick={handleEditImage}
+            >
+             {submitting ? (
+              <CircularProgress size={24} color="inherit" />
+             ):("Submit")
+             }
+            </button>
             <button
               className="px-4 py-2 text-sm hover:text-gray-500 transition"
               onClick={handleDelete}
             >
               Remove
             </button>
+            </div>
           </div>
         ) : (
           <>

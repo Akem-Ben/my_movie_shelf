@@ -9,7 +9,6 @@ type InputFieldProps = {
 };
 
 const InputField: React.FC<InputFieldProps> = ({ label, searchTerm, handleSearch}) => {
-  const [value, setValue] = useState("");
 
   return (
     <>
@@ -25,21 +24,21 @@ const InputField: React.FC<InputFieldProps> = ({ label, searchTerm, handleSearch
           }}
           sx={{
             "& .MuiOutlinedInput-root": {
-              backgroundColor: "#224957", // Default background
+              backgroundColor: "#224957",
               color: "grey",
               borderColor: "#224957",
               "&:hover": {
-                backgroundColor: "#0829358C", // Background on hover
+                backgroundColor: "#0829358C",
                 borderColor: 'white'
               },
               "&.Mui-focused": {
-                backgroundColor: "white", // Background on focus
-                borderColor: "#224957", // Optional border color
-                color: "#224957", // Optional color
+                backgroundColor: "white",
+                borderColor: "#224957",
+                color: "#224957",
               },
             },
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#224957", // Border color for dark mode
+              borderColor: "#224957",
             },
           }}
 

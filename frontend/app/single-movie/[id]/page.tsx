@@ -167,26 +167,26 @@ const SingleMovie: React.FC = () => {
               </div>
               <div className="lg:w-1/2 w-full">
                 <h2 className="text-xl text-white font-bold mb-2">
-                  Title: {movieDetails.title}
+                  <strong className="font-semibold">Title</strong>: {movieDetails.title}
                 </h2>
                 <div className="flex items-center justify-between pr-4">
                   <h4 className="text-lg text-white font-light mb-2">
-                    Year of Release: {movieDetails.publishedDate}
+                    <strong className="font-semibold">Year of Release</strong>: {movieDetails.publishedDate}
                   </h4>
                 </div>
                 <div className="flex items-center justify-between pr-4">
                   <h4 className="text-lg text-white font-light mb-2">
-                    Genre: {movieDetails.genre}
+                    <strong className="font-semibold">Genre</strong>: {movieDetails.genre}
                   </h4>
                 </div>
                 <div className="flex items-center justify-between pr-4">
                   <h4 className="text-lg text-white font-light mb-2">
-                    Producer: {movieDetails.movieProducer}
+                    <strong className="font-semibold">Director(s)</strong>: {movieDetails.movieProducer}
                   </h4>
                 </div>
                 <div className="flex items-center justify-between pr-4">
                   <h4 className="text-lg text-white font-light mb-2">
-                    Description: {movieDetails.description}
+                    <strong className="font-semibold">Description</strong>: {movieDetails.description}
                   </h4>
                 </div>
               </div>

@@ -72,7 +72,8 @@ const getAccessToken = (): string | null => {
   if (typeof window !== 'undefined') {
     const user = localStorage.getItem('user')
     if(user){
-     const accessToken = JSON.parse(user).accessToken
+      const access = JSON.parse(user)
+     const accessToken = access.accessToken
      return accessToken
     }
     return null
@@ -84,7 +85,8 @@ const getRefreshToken = (): string | null => {
   if (typeof window !== 'undefined') {
    const user = localStorage.getItem('user')
    if(user){
-    const refreshToken = JSON.parse(user).refreshToken
+    const refresh = JSON.parse(user)
+    const refreshToken = refresh.refreshToken
     return refreshToken
    }
    return null

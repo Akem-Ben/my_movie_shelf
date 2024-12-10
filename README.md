@@ -3,7 +3,7 @@
 ### Name: Akemini Ndaobong
 ### Email: akemini.ndaobong@gmail.com
 
-### Deployed Frontend: https://my-movie-shelf-git-development-akembens-projects.vercel.app/
+### Deployed Frontend: https://my-movie-shelf.vercel.app/
 ### Deployed Backend: https://my-movie-shelf.onrender.com
 
 ### Loom Video Links:

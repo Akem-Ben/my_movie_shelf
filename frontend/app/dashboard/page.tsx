@@ -32,8 +32,8 @@ const Dashboard: React.FC = () => {
 
   const [newMovie, setNewMovie] = useState(false);
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const debouncedSelectedCategory = useDebounce(selectedCategory, 500);
+  const debouncedSearchTerm = useDebounce(searchTerm, 2000);
+  const debouncedSelectedCategory = useDebounce(selectedCategory, 2000);
 
   const { addAlert } = useAlert();
 

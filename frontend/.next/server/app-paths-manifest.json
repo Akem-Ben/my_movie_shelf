@@ -1,8 +1,8 @@
 {
-  "/movies/page": "app/movies/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/signin/page": "app/signin/page.js",
-  "/page": "app/page.js",
   "/single-movie/[id]/page": "app/single-movie/[id]/page.js",
-  "/new-movie/page": "app/new-movie/page.js"
+  "/page": "app/page.js",
+  "/movies/page": "app/movies/page.js",
+  "/new-movie/page": "app/new-movie/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/signin/page": "app/signin/page.js"
 }
